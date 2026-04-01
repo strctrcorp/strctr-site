@@ -19,11 +19,11 @@
       --blue: #6da5ff;
       --blue-2: #c7d9ff;
       --blue-soft: rgba(109,165,255,0.12);
+      --green: #65f0a1;
       --shadow: 0 22px 64px rgba(0,0,0,0.52);
       --radius: 24px;
       --max: 1180px;
     }
-
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
@@ -36,7 +36,6 @@
       letter-spacing: 0.01em;
       overflow-x: hidden;
     }
-
     body::before {
       content: "";
       position: fixed;
@@ -49,16 +48,13 @@
       opacity: 0.22;
       z-index: 0;
     }
-
     a { color: inherit; text-decoration: none; }
-
     .container {
       position: relative;
       z-index: 1;
       width: min(var(--max), calc(100% - 32px));
       margin: 0 auto;
     }
-
     .topbar {
       position: sticky;
       top: 0;
@@ -67,7 +63,6 @@
       background: rgba(0,0,0,0.72);
       border-bottom: 1px solid rgba(255,255,255,0.05);
     }
-
     .topbar-inner {
       display: flex;
       align-items: center;
@@ -75,7 +70,6 @@
       gap: 16px;
       min-height: 74px;
     }
-
     .brand {
       display: flex;
       align-items: center;
@@ -85,7 +79,6 @@
       text-transform: uppercase;
       color: #f3f6fb;
     }
-
     .nav {
       display: flex;
       align-items: center;
@@ -93,7 +86,6 @@
       color: var(--muted);
       font-size: 14px;
     }
-
     .nav a,
     .actions a,
     .btn,
@@ -102,18 +94,14 @@
     .signal-step,
     .logo,
     .logo-wrap,
-    .tier-card {
-      transition: 180ms ease;
-    }
-
+    .tier-card,
+    .terminal-row { transition: 180ms ease; }
     .nav a:hover { color: var(--text); }
-
     .actions {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
     .btn {
       display: inline-flex;
       align-items: center;
@@ -129,28 +117,21 @@
       cursor: pointer;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
     }
-
     .btn:hover {
       transform: translateY(-1px);
       background: rgba(255,255,255,0.05);
       border-color: rgba(255,255,255,0.16);
     }
-
     .btn.primary {
       border-color: rgba(109,165,255,0.22);
       background: linear-gradient(180deg, rgba(109,165,255,0.14), rgba(109,165,255,0.06));
       box-shadow: 0 0 28px rgba(109,165,255,0.10), inset 0 1px 0 rgba(255,255,255,0.04);
     }
-
     .btn.primary:hover {
       background: linear-gradient(180deg, rgba(109,165,255,0.18), rgba(109,165,255,0.08));
       box-shadow: 0 0 38px rgba(109,165,255,0.14), inset 0 1px 0 rgba(255,255,255,0.05);
     }
-
-    .hero {
-      padding: 96px 0 72px;
-    }
-
+    .hero { padding: 96px 0 72px; }
     .ticker {
       display: flex;
       gap: 22px;
@@ -163,9 +144,7 @@
       text-transform: uppercase;
       letter-spacing: 0.16em;
     }
-
     .ticker strong { color: var(--text); font-weight: 600; }
-
     h1 {
       margin: 46px 0 0;
       font-size: clamp(44px, 8vw, 96px);
@@ -174,11 +153,7 @@
       text-transform: uppercase;
       font-weight: 600;
     }
-
-    .hero-copy {
-      max-width: 760px;
-    }
-
+    .hero-copy { max-width: 760px; }
     .hero-copy p {
       max-width: 660px;
       margin: 24px 0 0;
@@ -186,33 +161,25 @@
       line-height: 1.8;
       color: var(--muted);
     }
-
     .hero-actions {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
       margin-top: 34px;
     }
-
-    .system-grid,
-    .tier-grid,
-    .preview-grid {
+    .system-grid, .tier-grid, .preview-grid, .feature-grid {
       display: grid;
       gap: 18px;
     }
-
     .system-grid {
       grid-template-columns: minmax(0, 1.06fr) minmax(340px, 0.94fr);
       margin-top: 54px;
       align-items: start;
     }
-
-    .tier-grid,
-    .preview-grid {
+    .tier-grid, .preview-grid, .feature-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       margin-top: 28px;
     }
-
     .card {
       position: relative;
       border-radius: var(--radius);
@@ -222,7 +189,6 @@
       overflow: hidden;
       backdrop-filter: blur(8px);
     }
-
     .card::before {
       content: "";
       position: absolute;
@@ -230,16 +196,12 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent 40%);
       pointer-events: none;
     }
-
     .card:hover {
       transform: translateY(-2px);
       border-color: rgba(255,255,255,0.14);
     }
-
-    .system-card { padding: 0; }
-
-    .system-head,
-    .feed-head {
+    .system-card, .live-terminal-card { padding: 0; }
+    .system-head, .feed-head, .live-terminal-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -251,9 +213,7 @@
       text-transform: uppercase;
       letter-spacing: 0.18em;
     }
-
     .system-body { padding: 24px; }
-
     .signal-title {
       display: flex;
       align-items: end;
@@ -261,7 +221,6 @@
       gap: 12px;
       flex-wrap: wrap;
     }
-
     .signal-title h2,
     .section-head h2,
     .cta-box h2 {
@@ -272,7 +231,6 @@
       letter-spacing: 0.08em;
       font-weight: 500;
     }
-
     .signal-status {
       display: inline-flex;
       align-items: center;
@@ -287,14 +245,36 @@
       text-transform: uppercase;
       letter-spacing: 0.18em;
     }
-
+    .live-status, .live-terminal-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .live-status { margin-top: 14px; }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 14px rgba(101,240,161,0.5);
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: 0.45; }
+      100% { transform: scale(1); opacity: 1; }
+    }
     .signal-meta {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 12px;
       margin-top: 22px;
     }
-
     .meta-box {
       min-height: 86px;
       padding: 14px;
@@ -302,7 +282,6 @@
       border-radius: 16px;
       background: rgba(255,255,255,0.02);
     }
-
     .meta-box span {
       display: block;
       color: var(--muted-2);
@@ -310,7 +289,6 @@
       text-transform: uppercase;
       letter-spacing: 0.18em;
     }
-
     .meta-box strong {
       display: block;
       margin-top: 10px;
@@ -318,9 +296,7 @@
       letter-spacing: 0.02em;
       font-weight: 500;
     }
-
-    .signal-steps,
-    .feed-body {
+    .signal-steps, .feed-body {
       display: grid;
       gap: 10px;
       margin-top: 24px;
@@ -328,69 +304,50 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 14px;
     }
-
-    .signal-step,
-    .feed-row {
+    .signal-step, .feed-row {
       display: flex;
       justify-content: space-between;
       gap: 12px;
       padding-bottom: 10px;
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-
-    .signal-step:hover,
-    .feed-row:hover {
+    .signal-step:hover, .feed-row:hover, .terminal-row:hover {
       color: var(--text);
       border-color: rgba(109,165,255,0.18);
     }
-
-    .section {
-      padding: 56px 0;
-    }
-
+    .section { padding: 56px 0; }
     .section-head {
       text-align: center;
       margin-bottom: 30px;
     }
-
     .eyebrow {
       color: var(--muted-2);
       text-transform: uppercase;
       letter-spacing: 0.30em;
       font-size: 12px;
     }
-
-    .section-head p,
-    .preview-card p,
-    .tier-description,
-    .cta-box p {
+    .section-head p, .preview-card p, .tier-description, .cta-box p, .feature-card p {
       max-width: 760px;
       margin: 16px auto 0;
       color: var(--muted);
       line-height: 1.8;
     }
-
-    .preview-card,
-    .tier-card { padding: 24px; }
-
-    .preview-card h3,
-    .tier-title {
+    .preview-card, .tier-card, .feature-card { padding: 24px; }
+    .preview-card h3, .tier-title, .feature-card h3 {
       margin: 18px 0 0;
       font-size: 24px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       font-weight: 500;
     }
-
-    .bullet-list,
-    .tier-list {
+    .feature-card h3 { margin-top: 0; }
+    .bullet-list, .tier-list {
       display: grid;
       gap: 10px;
       margin-top: 18px;
       color: #d2d8e2;
       font-size: 14px;
     }
-
     .tier-list div {
       min-height: 50px;
       border-radius: 16px;
@@ -400,9 +357,7 @@
       align-items: center;
       padding: 0 14px;
     }
-
-    .preview-top,
-    .tier-meta {
+    .preview-top, .tier-meta {
       display: flex;
       justify-content: space-between;
       gap: 12px;
@@ -411,42 +366,32 @@
       text-transform: uppercase;
       letter-spacing: 0.16em;
     }
-
-    .tier-card.free {
-      opacity: 0.96;
-    }
-
+    .tier-card.free { opacity: 0.96; }
     .tier-card.core {
       background: linear-gradient(180deg, rgba(255,255,255,0.038), rgba(255,255,255,0.018));
     }
-
     .tier-card.pro {
       box-shadow: 0 0 48px rgba(109,165,255,0.09), var(--shadow);
       border-color: rgba(109,165,255,0.18);
     }
-
     .tier-card.pro:hover {
       box-shadow: 0 0 66px rgba(109,165,255,0.14), var(--shadow);
       border-color: rgba(109,165,255,0.28);
     }
-
     .tier-card.free:hover .logo-wrap {
       border-color: rgba(255,255,255,0.12);
       background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.06), rgba(0,0,0,0.94) 68%);
     }
-
     .tier-card.pro:hover .logo-wrap {
       border-color: rgba(109,165,255,0.22);
       box-shadow: 0 0 44px rgba(109,165,255,0.15);
       background: radial-gradient(circle at 50% 40%, rgba(109,165,255,0.10), rgba(0,0,0,0.94) 68%);
     }
-
     .tier-card.core:hover .logo-wrap {
       border-color: rgba(255,255,255,0.14);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
       background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.05), rgba(0,0,0,0.96) 68%);
     }
-
     .logo-wrap {
       display: inline-flex;
       align-items: center;
@@ -459,7 +404,6 @@
       position: relative;
       overflow: visible;
     }
-
     .logo-wrap::before {
       content: "";
       position: absolute;
@@ -468,7 +412,6 @@
       border: 1px solid rgba(255,255,255,0.05);
       pointer-events: none;
     }
-
     .logo-wrap.small {
       width: 28px;
       height: 28px;
@@ -476,14 +419,11 @@
       background: none;
       border: none;
     }
-
     .logo-wrap.small::before { display: none; }
-
     .logo-wrap:has(.pro-logo) {
       border-color: rgba(109,165,255,0.14);
       box-shadow: 0 0 22px rgba(109,165,255,0.08);
     }
-
     .logo {
       position: relative;
       width: 78px;
@@ -494,7 +434,6 @@
       background: #f5f7fb;
       isolation: isolate;
     }
-
     .logo::after {
       content: "";
       position: absolute;
@@ -504,40 +443,27 @@
       opacity: 0;
       pointer-events: none;
     }
-
-    .logo-wrap:hover .logo::after,
-    .tier-card:hover .logo::after {
+    .logo-wrap:hover .logo::after, .tier-card:hover .logo::after {
       opacity: 1;
       transform: translateX(120%);
       transition: transform 560ms ease, opacity 220ms ease;
     }
-
     .logo-wrap.small .logo {
       width: 16px;
       height: 16px;
       border-radius: 3px;
       border-color: rgba(255,255,255,0.14);
     }
-
-    .logo .top,
-    .logo .bottom,
-    .logo .slash-main,
-    .logo .slash-gap,
-    .logo .slash-micro,
-    .logo .cut-shadow {
+    .logo .top, .logo .bottom, .logo .slash-main, .logo .slash-gap, .logo .slash-micro, .logo .cut-shadow {
       position: absolute;
     }
-
-    .logo .top,
-    .logo .bottom {
+    .logo .top, .logo .bottom {
       left: 0;
       right: 0;
       height: 56%;
     }
-
     .logo .top { top: 0; }
     .logo .bottom { bottom: 0; }
-
     .logo .slash-main {
       top: 47%;
       left: -14%;
@@ -547,7 +473,6 @@
       border-radius: 1px;
       z-index: 2;
     }
-
     .logo .slash-gap {
       top: 47.4%;
       left: 42%;
@@ -557,7 +482,6 @@
       z-index: 4;
       clip-path: polygon(0 0, 100% 0, 65% 100%, 0 100%);
     }
-
     .logo .slash-micro {
       top: 47.2%;
       left: 48.8%;
@@ -567,7 +491,6 @@
       border-radius: 1px;
       z-index: 3;
     }
-
     .logo .cut-shadow {
       width: 16%;
       height: 2.5%;
@@ -578,19 +501,15 @@
       z-index: 1;
       filter: blur(0.45px);
     }
-
     .free-logo .top { background: #ffffff; }
     .free-logo .bottom { background: #e9edf3; }
-    .free-logo .slash-main,
-    .free-logo .slash-micro { background: #050607; }
+    .free-logo .slash-main, .free-logo .slash-micro { background: #050607; }
     .free-logo .slash-gap { background: #ffffff; }
     .free-logo .cut-shadow { background: #050607; }
-
     .pro-logo {
       box-shadow: 0 0 22px rgba(109,165,255,0.20), 0 0 56px rgba(109,165,255,0.10);
       border-color: rgba(109,165,255,0.30);
     }
-
     .pro-logo::before {
       content: "";
       position: absolute;
@@ -602,22 +521,18 @@
       pointer-events: none;
       z-index: 5;
     }
-
     .pro-logo .top { background: linear-gradient(180deg, #f7fbff, #b0c2dd); }
     .pro-logo .bottom { background: linear-gradient(180deg, #8ca2c3, #283245); }
-    .pro-logo .slash-main,
-    .pro-logo .slash-micro {
+    .pro-logo .slash-main, .pro-logo .slash-micro {
       background: linear-gradient(90deg, #79b3ff, #2f6bff);
       box-shadow: 0 0 14px rgba(109,165,255,0.28);
     }
     .pro-logo .slash-gap { background: #dfeaff; }
     .pro-logo .cut-shadow { background: #0a1220; }
-
     .core-logo {
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
       border-color: rgba(255,255,255,0.18);
     }
-
     .core-logo::before {
       content: "";
       position: absolute;
@@ -627,20 +542,16 @@
       pointer-events: none;
       z-index: 5;
     }
-
     .core-logo .top { background: linear-gradient(180deg, #f2f2f2, #9a9a9a); }
     .core-logo .bottom { background: linear-gradient(180deg, #737373, #181818); }
-    .core-logo .slash-main,
-    .core-logo .slash-micro { background: #000000; }
+    .core-logo .slash-main, .core-logo .slash-micro { background: #000000; }
     .core-logo .slash-gap { background: #d7d7d7; }
     .core-logo .cut-shadow { background: #000000; }
-
     .tier-inline {
       display: flex;
       justify-content: center;
       margin-bottom: 20px;
     }
-
     .divider {
       height: 1px;
       width: min(70vw, 960px);
@@ -648,19 +559,101 @@
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
       opacity: 0.34;
     }
-
-    .cta-wrap {
-      padding: 66px 0 90px;
+    .live-terminal-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 0;
     }
-
+    .terminal-main, .terminal-feed-wrap { padding: 22px; }
+    .terminal-main {
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+    .terminal-label {
+      color: var(--muted-2);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+    .terminal-hero {
+      margin-top: 18px;
+      padding: 20px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+      min-height: 118px;
+    }
+    .terminal-asset {
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+    }
+    .terminal-stage {
+      margin-top: 12px;
+      color: var(--blue-2);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+    .terminal-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .terminal-stat {
+      min-height: 84px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+    }
+    .terminal-stat span {
+      display: block;
+      color: var(--muted-2);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+    .terminal-stat strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 22px;
+      font-weight: 600;
+    }
+    .terminal-feed {
+      margin-top: 18px;
+      display: grid;
+      gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .terminal-row {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 14px;
+      color: #d8dee7;
+    }
+    .terminal-row span:first-child { color: var(--muted-2); }
+    .terminal-footer {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 18px 22px 22px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .cta-wrap { padding: 66px 0 90px; }
     .cta-box {
       padding: 42px 24px;
       text-align: center;
       box-shadow: 0 0 44px rgba(255,255,255,0.03), var(--shadow);
     }
-
     .cta-box p { max-width: 680px; }
-
     .cta-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -668,44 +661,45 @@
       gap: 12px;
       margin-top: 28px;
     }
-
     footer {
       padding: 28px 0 42px;
       color: var(--muted-2);
       font-size: 13px;
       border-top: 1px solid rgba(255,255,255,0.05);
     }
-
     footer .container {
       display: flex;
       justify-content: space-between;
       gap: 16px;
       flex-wrap: wrap;
     }
-
     @media (max-width: 1080px) {
       .system-grid { grid-template-columns: 1fr; }
     }
-
     @media (max-width: 980px) {
-      .tier-grid,
-      .preview-grid { grid-template-columns: 1fr; }
+      .tier-grid, .preview-grid, .feature-grid { grid-template-columns: 1fr; }
       .signal-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .live-terminal-grid { grid-template-columns: 1fr; }
+      .terminal-main {
+        border-right: 0;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
       .nav { display: none; }
       .hero { padding-top: 84px; }
     }
-
     @media (max-width: 640px) {
       .topbar-inner { min-height: 68px; }
       .actions .btn:first-child { display: none; }
       h1 { letter-spacing: 0.02em; }
-      .hero-copy p,
-      .section-head p,
-      .cta-box p { font-size: 16px; }
+      .hero-copy p, .section-head p, .cta-box p { font-size: 16px; }
       .logo-wrap { width: 116px; height: 116px; }
       .logo { width: 68px; height: 68px; }
-      .signal-meta { grid-template-columns: 1fr; }
-      .system-head, .feed-head { flex-direction: column; align-items: flex-start; }
+      .signal-meta, .terminal-stats { grid-template-columns: 1fr; }
+      .system-head, .feed-head, .live-terminal-head { flex-direction: column; align-items: flex-start; }
+      .terminal-row {
+        grid-template-columns: 72px 1fr;
+        font-size: 13px;
+      }
     }
   </style>
 </head>
@@ -715,27 +709,20 @@
       <div class="brand">
         <span class="logo-wrap small">
           <span class="logo free-logo">
-            <span class="top"></span>
-            <span class="bottom"></span>
-            <span class="slash-main"></span>
-            <span class="slash-gap"></span>
-            <span class="slash-micro"></span>
-            <span class="cut-shadow"></span>
+            <span class="top"></span><span class="bottom"></span><span class="slash-main"></span><span class="slash-gap"></span><span class="slash-micro"></span><span class="cut-shadow"></span>
           </span>
         </span>
         <span>STRCTR</span>
       </div>
-
       <nav class="nav">
         <a href="#system">System</a>
         <a href="#levels">Levels</a>
-        <a href="#previews">Previews</a>
+        <a href="#feed">Feed</a>
         <a href="#cta">Access</a>
       </nav>
-
       <div class="actions">
         <a class="btn" href="#levels">View Levels</a>
-        <a class="btn primary" href="https://t.me/strctr_system" target="_blank" rel="noreferrer">Join Free</a>
+        <a class="btn primary" href="https://t.me/strctr_system" target="_blank" rel="noreferrer">Access Free Layer</a>
       </div>
     </div>
   </header>
@@ -754,21 +741,20 @@
         <div class="tier-inline" style="justify-content:flex-start; margin-top:42px; margin-bottom:0;">
           <div class="logo-wrap">
             <div class="logo core-logo">
-              <div class="top"></div>
-              <div class="bottom"></div>
-              <div class="slash-main"></div>
-              <div class="slash-gap"></div>
-              <div class="slash-micro"></div>
-              <div class="cut-shadow"></div>
+              <div class="top"></div><div class="bottom"></div><div class="slash-main"></div><div class="slash-gap"></div><div class="slash-micro"></div><div class="cut-shadow"></div>
             </div>
           </div>
         </div>
 
         <h1>Structure decides.<br>You execute.</h1>
         <div style="margin-top:14px;color:var(--muted-2);font-size:12px;letter-spacing:0.22em;text-transform:uppercase">STRCTR SYSTEM</div>
+        <div class="live-status">
+          <span class="live-dot"></span>
+          <span>SYSTEM ACTIVE</span>
+        </div>
         <p>No prediction. No opinions. No noise.<br>Only structure, liquidity, timing — and execution.</p>
         <div class="hero-actions">
-          <a class="btn primary" href="https://t.me/strctr_system" target="_blank" rel="noreferrer">Join Free</a>
+          <a class="btn primary" href="https://t.me/strctr_system" target="_blank" rel="noreferrer">Access Free Layer</a>
           <a class="btn" href="#system">View Live System</a>
         </div>
       </div>
@@ -786,22 +772,10 @@
             </div>
 
             <div class="signal-meta">
-              <div class="meta-box">
-                <span>Confidence</span>
-                <strong>82%</strong>
-              </div>
-              <div class="meta-box">
-                <span>Timing</span>
-                <strong>Optimal</strong>
-              </div>
-              <div class="meta-box">
-                <span>Size</span>
-                <strong>6%</strong>
-              </div>
-              <div class="meta-box">
-                <span>Invalidation</span>
-                <strong>71.6</strong>
-              </div>
+              <div class="meta-box"><span>Confidence</span><strong>82%</strong></div>
+              <div class="meta-box"><span>Timing</span><strong>Optimal</strong></div>
+              <div class="meta-box"><span>Size</span><strong>6%</strong></div>
+              <div class="meta-box"><span>Invalidation</span><strong>71.6</strong></div>
             </div>
 
             <div class="signal-steps">
@@ -832,6 +806,31 @@
 
     <div class="divider"></div>
 
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Framework</div>
+          <h2>No signals. No predictions.</h2>
+          <p>Only structure. Only liquidity. Only execution.</p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="card feature-card">
+            <h3>Structure</h3>
+            <p>The market shows where it breaks. You do not need opinions when the map is already there.</p>
+          </article>
+          <article class="card feature-card">
+            <h3>Timing</h3>
+            <p>Execution matters more than idea quality. Timing decides whether a setup becomes a trade.</p>
+          </article>
+          <article class="card feature-card">
+            <h3>Management</h3>
+            <p>The real edge starts after entry: add, reduce, hold, exit. That is where the system operates.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section id="levels" class="section">
       <div class="container">
         <div class="section-head">
@@ -843,19 +842,11 @@
 
         <div class="tier-grid">
           <article class="card tier-card free">
-            <div class="tier-meta">
-              <span>Minimal</span>
-              <span>Free</span>
-            </div>
+            <div class="tier-meta"><span>Minimal</span><span>Free</span></div>
             <div class="tier-inline">
               <div class="logo-wrap">
                 <div class="logo free-logo">
-                  <div class="top"></div>
-                  <div class="bottom"></div>
-                  <div class="slash-main"></div>
-                  <div class="slash-gap"></div>
-                  <div class="slash-micro"></div>
-                  <div class="cut-shadow"></div>
+                  <div class="top"></div><div class="bottom"></div><div class="slash-main"></div><div class="slash-gap"></div><div class="slash-micro"></div><div class="cut-shadow"></div>
                 </div>
               </div>
             </div>
@@ -868,24 +859,16 @@
               <div>Sweeps &amp; reactions</div>
             </div>
             <div style="margin-top:24px">
-              <a class="btn" style="width:100%" href="https://t.me/strctr_system" target="_blank" rel="noreferrer">Join Free</a>
+              <a class="btn" style="width:100%" href="https://t.me/strctr_system" target="_blank" rel="noreferrer">Access Free Layer</a>
             </div>
           </article>
 
           <article class="card tier-card pro">
-            <div class="tier-meta">
-              <span>Pro</span>
-              <span>$49/mo</span>
-            </div>
+            <div class="tier-meta"><span>Pro</span><span>$49/mo</span></div>
             <div class="tier-inline">
               <div class="logo-wrap">
                 <div class="logo pro-logo">
-                  <div class="top"></div>
-                  <div class="bottom"></div>
-                  <div class="slash-main"></div>
-                  <div class="slash-gap"></div>
-                  <div class="slash-micro"></div>
-                  <div class="cut-shadow"></div>
+                  <div class="top"></div><div class="bottom"></div><div class="slash-main"></div><div class="slash-gap"></div><div class="slash-micro"></div><div class="cut-shadow"></div>
                 </div>
               </div>
             </div>
@@ -898,24 +881,16 @@
               <div>Trade ideas &amp; triggers</div>
             </div>
             <div style="margin-top:24px">
-              <a class="btn primary" style="width:100%" href="#cta">Upgrade to Pro</a>
+              <a class="btn primary" style="width:100%" href="#cta">Unlock PRO</a>
             </div>
           </article>
 
           <article class="card tier-card core">
-            <div class="tier-meta">
-              <span>Core</span>
-              <span>$149/mo</span>
-            </div>
+            <div class="tier-meta"><span>Core</span><span>$149/mo</span></div>
             <div class="tier-inline">
               <div class="logo-wrap">
                 <div class="logo core-logo">
-                  <div class="top"></div>
-                  <div class="bottom"></div>
-                  <div class="slash-main"></div>
-                  <div class="slash-gap"></div>
-                  <div class="slash-micro"></div>
-                  <div class="cut-shadow"></div>
+                  <div class="top"></div><div class="bottom"></div><div class="slash-main"></div><div class="slash-gap"></div><div class="slash-micro"></div><div class="cut-shadow"></div>
                 </div>
               </div>
             </div>
@@ -928,7 +903,7 @@
               <div>Decision flow</div>
             </div>
             <div style="margin-top:24px">
-              <a class="btn" style="width:100%" href="#cta">Access Core</a>
+              <a class="btn" style="width:100%" href="#cta">Enter CORE</a>
             </div>
           </article>
         </div>
@@ -945,10 +920,7 @@
 
         <div class="preview-grid">
           <article class="card preview-card">
-            <div class="preview-top">
-              <span>STRCTR FREE</span>
-              <span>16:52 UTC</span>
-            </div>
+            <div class="preview-top"><span>STRCTR FREE</span><span>16:52 UTC</span></div>
             <h3>Market context</h3>
             <p>Liquidity below → upside bias.</p>
             <div class="bullet-list">
@@ -959,10 +931,7 @@
           </article>
 
           <article class="card preview-card">
-            <div class="preview-top">
-              <span>STRCTR PRO</span>
-              <span>07:45 UTC</span>
-            </div>
+            <div class="preview-top"><span>STRCTR PRO</span><span>07:45 UTC</span></div>
             <h3>Setup</h3>
             <p>BTC → Sweep → Long setup</p>
             <div class="bullet-list">
@@ -973,10 +942,7 @@
           </article>
 
           <article class="card preview-card">
-            <div class="preview-top">
-              <span>STRCTR CORE</span>
-              <span>10:36 UTC</span>
-            </div>
+            <div class="preview-top"><span>STRCTR CORE</span><span>10:36 UTC</span></div>
             <h3>Execution</h3>
             <p>ENTER_PARTIAL → ADD on acceptance.</p>
             <div class="bullet-list">
@@ -989,6 +955,56 @@
       </div>
     </section>
 
+    <section id="feed" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Feed</div>
+          <h2>Live system feed</h2>
+          <p>Telegram-first now. Native execution layer next.</p>
+        </div>
+
+        <article class="card live-terminal-card">
+          <div class="live-terminal-head">
+            <span>STRCTR SYSTEM — LIVE</span>
+            <span class="live-terminal-status"><span class="live-dot"></span>STREAM ACTIVE</span>
+          </div>
+
+          <div class="live-terminal-grid">
+            <div class="terminal-main">
+              <div class="terminal-label">Latest execution</div>
+              <div class="terminal-hero" id="terminal-hero">
+                <div class="terminal-asset">BTC — SHORT</div>
+                <div class="terminal-stage">confirmation</div>
+              </div>
+
+              <div class="terminal-stats">
+                <div class="terminal-stat"><span>Confidence</span><strong id="stat-confidence">82%</strong></div>
+                <div class="terminal-stat"><span>Timing</span><strong id="stat-timing">Optimal</strong></div>
+                <div class="terminal-stat"><span>Size</span><strong id="stat-size">6%</strong></div>
+                <div class="terminal-stat"><span>Invalidation</span><strong id="stat-invalid">71.6</strong></div>
+              </div>
+            </div>
+
+            <div class="terminal-feed-wrap">
+              <div class="terminal-label">Event stream</div>
+              <div class="terminal-feed" id="terminal-feed">
+                <div class="terminal-row"><span>[12:03]</span><span>BTC SHORT — confirmation</span></div>
+                <div class="terminal-row"><span>[12:01]</span><span>liquidity above swept</span></div>
+                <div class="terminal-row"><span>[11:58]</span><span>weak spot response</span></div>
+                <div class="terminal-row"><span>[11:54]</span><span>reclaim failed</span></div>
+                <div class="terminal-row"><span>[11:50]</span><span>setup forming</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="terminal-footer">
+            <a class="btn" href="https://t.me/strctr_system" target="_blank" rel="noreferrer">Open Telegram Feed</a>
+            <a class="btn primary" href="#cta">Access STRCTR</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <section id="cta" class="cta-wrap">
       <div class="container">
         <div class="card cta-box">
@@ -996,9 +1012,9 @@
           <h2>Access STRCTR</h2>
           <p>Start with Free. Upgrade when you’re ready.<br>No friction. No onboarding. Just the system.</p>
           <div class="cta-buttons">
-            <a class="btn" href="https://t.me/strctr_system" target="_blank" rel="noreferrer">Join Free</a>
-            <a class="btn primary" href="mailto:you@example.com?subject=STRCTR%20PRO">Upgrade to Pro</a>
-            <a class="btn" href="mailto:you@example.com?subject=STRCTR%20CORE">Access Core</a>
+            <a class="btn" href="https://t.me/strctr_system" target="_blank" rel="noreferrer">Access Free Layer</a>
+            <a class="btn primary" href="mailto:you@example.com?subject=STRCTR%20PRO">Unlock PRO</a>
+            <a class="btn" href="mailto:you@example.com?subject=STRCTR%20CORE">Enter CORE</a>
           </div>
         </div>
       </div>
@@ -1011,5 +1027,74 @@
       <div>Structure → Decision → Execution</div>
     </div>
   </footer>
+
+  <script>
+    (function () {
+      const feedEl = document.getElementById("terminal-feed");
+      const heroAsset = document.getElementById("terminal-hero");
+      const confidenceEl = document.getElementById("stat-confidence");
+      const timingEl = document.getElementById("stat-timing");
+      const sizeEl = document.getElementById("stat-size");
+      const invalidEl = document.getElementById("stat-invalid");
+
+      if (!feedEl) return;
+
+      const events = [
+        { asset: "BTC — SHORT", stage: "confirmation", confidence: "82%", timing: "Optimal", size: "6%", invalid: "71.6", row: "BTC SHORT — confirmation" },
+        { asset: "BTC — LONG", stage: "trigger watch", confidence: "74%", timing: "Developing", size: "4%", invalid: "66.2", row: "liquidity below forming" },
+        { asset: "ETH — LONG", stage: "acceptance", confidence: "68%", timing: "Early", size: "3%", invalid: "3,280", row: "ETH reclaim holding" },
+        { asset: "SOL — SHORT", stage: "breakdown", confidence: "79%", timing: "Optimal", size: "5%", invalid: "188.4", row: "SOL trap confirmed" }
+      ];
+
+      const details = [
+        "liquidity above swept",
+        "weak spot response",
+        "reclaim failed",
+        "setup forming",
+        "timing window opening",
+        "positioning imbalance rising",
+        "acceptance not confirmed",
+        "reduce into reaction zone"
+      ];
+
+      function getTimeString() {
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, "0");
+        const mm = String(now.getMinutes()).padStart(2, "0");
+        return `[${hh}:${mm}]`;
+      }
+
+      function pushRow(text) {
+        const row = document.createElement("div");
+        row.className = "terminal-row";
+        row.innerHTML = `<span>${getTimeString()}</span><span>${text}</span>`;
+        feedEl.prepend(row);
+        while (feedEl.children.length > 6) {
+          feedEl.removeChild(feedEl.lastElementChild);
+        }
+      }
+
+      let i = 0;
+      setInterval(() => {
+        const evt = events[i % events.length];
+        const detail = details[i % details.length];
+
+        heroAsset.innerHTML = `
+          <div class="terminal-asset">${evt.asset}</div>
+          <div class="terminal-stage">${evt.stage}</div>
+        `;
+
+        confidenceEl.textContent = evt.confidence;
+        timingEl.textContent = evt.timing;
+        sizeEl.textContent = evt.size;
+        invalidEl.textContent = evt.invalid;
+
+        pushRow(evt.row);
+        pushRow(detail);
+
+        i++;
+      }, 5000);
+    })();
+  </script>
 </body>
 </html>
