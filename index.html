@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>STRCTR</title>
+  <meta name="description" content="STRCTR — structure, liquidity, execution. Minimal for context, Pro for setups, Core for execution." />
+  <style>
+    :root {
+      --bg: #000000;
+      --bg-2: #050608;
+      --panel: rgba(255,255,255,0.025);
+      --panel-2: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.10);
+      --border-soft: rgba(255,255,255,0.06);
+      --text: #f5f7fb;
+      --muted: #97a1b0;
+      --muted-2: #68707d;
+      --blue: #6da5ff;
+      --blue-2: #c7d9ff;
+      --blue-soft: rgba(109,165,255,0.12);
+      --shadow: 0 22px 64px rgba(0,0,0,0.52);
+      --radius: 24px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% -10%, rgba(109,165,255,0.08), transparent 22%),
+        linear-gradient(180deg, #020304 0%, #000000 34%, #030405 100%);
+      letter-spacing: 0.01em;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 42px 42px;
+      opacity: 0.22;
+      z-index: 0;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(16px);
+      background: rgba(0,0,0,0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 74px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      letter-spacing: 0.30em;
+      text-transform: uppercase;
+      color: #f3f6fb;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav a,
+    .actions a,
+    .btn,
+    .card,
+    .feed-row,
+    .signal-step,
+    .logo,
+    .logo-wrap,
+    .tier-card {
+      transition: 180ms ease;
+    }
+
+    .nav a:hover { color: var(--text); }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      color: var(--text);
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.16);
+    }
+
+    .btn.primary {
+      border-color: rgba(109,165,255,0.22);
+      background: linear-gradient(180deg, rgba(109,165,255,0.14), rgba(109,165,255,0.06));
+      box-shadow: 0 0 28px rgba(109,165,255,0.10), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    .btn.primary:hover {
+      background: linear-gradient(180deg, rgba(109,165,255,0.18), rgba(109,165,255,0.08));
+      box-shadow: 0 0 38px rgba(109,165,255,0.14), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .hero {
+      padding: 96px 0 72px;
+    }
+
+    .ticker {
+      display: flex;
+      gap: 22px;
+      flex-wrap: wrap;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: var(--muted-2);
+      font-size: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .ticker strong { color: var(--text); font-weight: 600; }
+
+    h1 {
+      margin: 46px 0 0;
+      font-size: clamp(44px, 8vw, 96px);
+      line-height: 0.9;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .hero-copy {
+      max-width: 760px;
+    }
+
+    .hero-copy p {
+      max-width: 660px;
+      margin: 24px 0 0;
+      font-size: 18px;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 34px;
+    }
+
+    .system-grid,
+    .tier-grid,
+    .preview-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .system-grid {
+      grid-template-columns: minmax(0, 1.06fr) minmax(340px, 0.94fr);
+      margin-top: 54px;
+      align-items: start;
+    }
+
+    .tier-grid,
+    .preview-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 28px;
+    }
+
+    .card {
+      position: relative;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent 40%);
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    .system-card { padding: 0; }
+
+    .system-head,
+    .feed-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted-2);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .system-body { padding: 24px; }
+
+    .signal-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .signal-title h2,
+    .section-head h2,
+    .cta-box h2 {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 48px);
+      line-height: 1.04;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+    }
+
+    .signal-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(109,165,255,0.22);
+      background: rgba(109,165,255,0.10);
+      color: var(--blue-2);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .signal-meta {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .meta-box {
+      min-height: 86px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .meta-box span {
+      display: block;
+      color: var(--muted-2);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .meta-box strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 20px;
+      letter-spacing: 0.02em;
+      font-weight: 500;
+    }
+
+    .signal-steps,
+    .feed-body {
+      display: grid;
+      gap: 10px;
+      margin-top: 24px;
+      color: #d8dee7;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 14px;
+    }
+
+    .signal-step,
+    .feed-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .signal-step:hover,
+    .feed-row:hover {
+      color: var(--text);
+      border-color: rgba(109,165,255,0.18);
+    }
+
+    .section {
+      padding: 56px 0;
+    }
+
+    .section-head {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .eyebrow {
+      color: var(--muted-2);
+      text-transform: uppercase;
+      letter-spacing: 0.30em;
+      font-size: 12px;
+    }
+
+    .section-head p,
+    .preview-card p,
+    .tier-description,
+    .cta-box p {
+      max-width: 760px;
+      margin: 16px auto 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .preview-card,
+    .tier-card { padding: 24px; }
+
+    .preview-card h3,
+    .tier-title {
+      margin: 18px 0 0;
+      font-size: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+    }
+
+    .bullet-list,
+    .tier-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+      color: #d2d8e2;
+      font-size: 14px;
+    }
+
+    .tier-list div {
+      min-height: 50px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+    }
+
+    .preview-top,
+    .tier-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted-2);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .tier-card.free {
+      opacity: 0.96;
+    }
+
+    .tier-card.core {
+      background: linear-gradient(180deg, rgba(255,255,255,0.038), rgba(255,255,255,0.018));
+    }
+
+    .tier-card.pro {
+      box-shadow: 0 0 48px rgba(109,165,255,0.09), var(--shadow);
+      border-color: rgba(109,165,255,0.18);
+    }
+
+    .tier-card.pro:hover {
+      box-shadow: 0 0 66px rgba(109,165,255,0.14), var(--shadow);
+      border-color: rgba(109,165,255,0.28);
+    }
+
+    .tier-card.free:hover .logo-wrap {
+      border-color: rgba(255,255,255,0.12);
+      background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.06), rgba(0,0,0,0.94) 68%);
+    }
+
+    .tier-card.pro:hover .logo-wrap {
+      border-color: rgba(109,165,255,0.22);
+      box-shadow: 0 0 44px rgba(109,165,255,0.15);
+      background: radial-gradient(circle at 50% 40%, rgba(109,165,255,0.10), rgba(0,0,0,0.94) 68%);
+    }
+
+    .tier-card.core:hover .logo-wrap {
+      border-color: rgba(255,255,255,0.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+      background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.05), rgba(0,0,0,0.96) 68%);
+    }
+
+    .logo-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 132px;
+      height: 132px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.05), rgba(0,0,0,0.92) 68%);
+      position: relative;
+      overflow: visible;
+    }
+
+    .logo-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.05);
+      pointer-events: none;
+    }
+
+    .logo-wrap.small {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: none;
+      border: none;
+    }
+
+    .logo-wrap.small::before { display: none; }
+
+    .logo-wrap:has(.pro-logo) {
+      border-color: rgba(109,165,255,0.14);
+      box-shadow: 0 0 22px rgba(109,165,255,0.08);
+    }
+
+    .logo {
+      position: relative;
+      width: 78px;
+      height: 78px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: #f5f7fb;
+      isolation: isolate;
+    }
+
+    .logo::after {
+      content: "";
+      position: absolute;
+      inset: -18%;
+      background: linear-gradient(120deg, transparent 38%, rgba(255,255,255,0.14) 48%, transparent 58%);
+      transform: translateX(-120%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .logo-wrap:hover .logo::after,
+    .tier-card:hover .logo::after {
+      opacity: 1;
+      transform: translateX(120%);
+      transition: transform 560ms ease, opacity 220ms ease;
+    }
+
+    .logo-wrap.small .logo {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    .logo .top,
+    .logo .bottom,
+    .logo .slash-main,
+    .logo .slash-gap,
+    .logo .slash-micro,
+    .logo .cut-shadow {
+      position: absolute;
+    }
+
+    .logo .top,
+    .logo .bottom {
+      left: 0;
+      right: 0;
+      height: 56%;
+    }
+
+    .logo .top { top: 0; }
+    .logo .bottom { bottom: 0; }
+
+    .logo .slash-main {
+      top: 47%;
+      left: -14%;
+      width: 92%;
+      height: 6.8%;
+      transform: rotate(-35deg);
+      border-radius: 1px;
+      z-index: 2;
+    }
+
+    .logo .slash-gap {
+      top: 47.4%;
+      left: 42%;
+      width: 11%;
+      height: 7.4%;
+      transform: rotate(-35deg);
+      z-index: 4;
+      clip-path: polygon(0 0, 100% 0, 65% 100%, 0 100%);
+    }
+
+    .logo .slash-micro {
+      top: 47.2%;
+      left: 48.8%;
+      width: 42%;
+      height: 6.8%;
+      transform: rotate(-35deg);
+      border-radius: 1px;
+      z-index: 3;
+    }
+
+    .logo .cut-shadow {
+      width: 16%;
+      height: 2.5%;
+      top: 51.2%;
+      left: 45.7%;
+      transform: rotate(-35deg);
+      opacity: 0.18;
+      z-index: 1;
+      filter: blur(0.45px);
+    }
+
+    .free-logo .top { background: #ffffff; }
+    .free-logo .bottom { background: #e9edf3; }
+    .free-logo .slash-main,
+    .free-logo .slash-micro { background: #050607; }
+    .free-logo .slash-gap { background: #ffffff; }
+    .free-logo .cut-shadow { background: #050607; }
+
+    .pro-logo {
+      box-shadow: 0 0 22px rgba(109,165,255,0.20), 0 0 56px rgba(109,165,255,0.10);
+      border-color: rgba(109,165,255,0.30);
+    }
+
+    .pro-logo::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      border: 1px solid rgba(109,165,255,0.30);
+      box-shadow: 0 0 24px rgba(109,165,255,0.18);
+      opacity: 0.85;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .pro-logo .top { background: linear-gradient(180deg, #f7fbff, #b0c2dd); }
+    .pro-logo .bottom { background: linear-gradient(180deg, #8ca2c3, #283245); }
+    .pro-logo .slash-main,
+    .pro-logo .slash-micro {
+      background: linear-gradient(90deg, #79b3ff, #2f6bff);
+      box-shadow: 0 0 14px rgba(109,165,255,0.28);
+    }
+    .pro-logo .slash-gap { background: #dfeaff; }
+    .pro-logo .cut-shadow { background: #0a1220; }
+
+    .core-logo {
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.18);
+    }
+
+    .core-logo::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      border: 1px solid rgba(255,255,255,0.06);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .core-logo .top { background: linear-gradient(180deg, #f2f2f2, #9a9a9a); }
+    .core-logo .bottom { background: linear-gradient(180deg, #737373, #181818); }
+    .core-logo .slash-main,
+    .core-logo .slash-micro { background: #000000; }
+    .core-logo .slash-gap { background: #d7d7d7; }
+    .core-logo .cut-shadow { background: #000000; }
+
+    .tier-inline {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .divider {
+      height: 1px;
+      width: min(70vw, 960px);
+      margin: 0 auto;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+      opacity: 0.34;
+    }
+
+    .cta-wrap {
+      padding: 66px 0 90px;
+    }
+
+    .cta-box {
+      padding: 42px 24px;
+      text-align: center;
+      box-shadow: 0 0 44px rgba(255,255,255,0.03), var(--shadow);
+    }
+
+    .cta-box p { max-width: 680px; }
+
+    .cta-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    footer {
+      padding: 28px 0 42px;
+      color: var(--muted-2);
+      font-size: 13px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    footer .container {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 1080px) {
+      .system-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 980px) {
+      .tier-grid,
+      .preview-grid { grid-template-columns: 1fr; }
+      .signal-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .nav { display: none; }
+      .hero { padding-top: 84px; }
+    }
+
+    @media (max-width: 640px) {
+      .topbar-inner { min-height: 68px; }
+      .actions .btn:first-child { display: none; }
+      h1 { letter-spacing: 0.02em; }
+      .hero-copy p,
+      .section-head p,
+      .cta-box p { font-size: 16px; }
+      .logo-wrap { width: 116px; height: 116px; }
+      .logo { width: 68px; height: 68px; }
+      .signal-meta { grid-template-columns: 1fr; }
+      .system-head, .feed-head { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <span class="logo-wrap small">
+          <span class="logo free-logo">
+            <span class="top"></span>
+            <span class="bottom"></span>
+            <span class="slash-main"></span>
+            <span class="slash-gap"></span>
+            <span class="slash-micro"></span>
+            <span class="cut-shadow"></span>
+          </span>
+        </span>
+        <span>STRCTR</span>
+      </div>
+
+      <nav class="nav">
+        <a href="#system">System</a>
+        <a href="#levels">Levels</a>
+        <a href="#previews">Previews</a>
+        <a href="#cta">Access</a>
+      </nav>
+
+      <div class="actions">
+        <a class="btn" href="#levels">View Levels</a>
+        <a class="btn primary" href="https://t.me/yourchannel" target="_blank" rel="noreferrer">Join Free</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="ticker">
+        <strong>BTC 68,240</strong>
+        <span>ETH 3,420</span>
+        <span>OI ↑</span>
+        <span>Funding +0.012%</span>
+        <span>12:03:22</span>
+      </div>
+
+      <div class="hero-copy">
+        <div class="tier-inline" style="justify-content:flex-start; margin-top:42px; margin-bottom:0;">
+          <div class="logo-wrap">
+            <div class="logo core-logo">
+              <div class="top"></div>
+              <div class="bottom"></div>
+              <div class="slash-main"></div>
+              <div class="slash-gap"></div>
+              <div class="slash-micro"></div>
+              <div class="cut-shadow"></div>
+            </div>
+          </div>
+        </div>
+
+        <h1>Structure decides.<br>You execute.</h1>
+        <div style="margin-top:14px;color:var(--muted-2);font-size:12px;letter-spacing:0.22em;text-transform:uppercase">STRCTR SYSTEM</div>
+        <p>No prediction. No opinions. No noise.<br>Only structure, liquidity, timing — and execution.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="https://t.me/yourchannel" target="_blank" rel="noreferrer">Join Free</a>
+          <a class="btn" href="#system">View Live System</a>
+        </div>
+      </div>
+
+      <div id="system" class="system-grid">
+        <article class="card system-card">
+          <div class="system-head">
+            <span>Live execution — BTC_PERP</span>
+            <span>System online</span>
+          </div>
+          <div class="system-body">
+            <div class="signal-title">
+              <h2>BTC — SHORT</h2>
+              <span class="signal-status">Confirmation</span>
+            </div>
+
+            <div class="signal-meta">
+              <div class="meta-box">
+                <span>Confidence</span>
+                <strong>82%</strong>
+              </div>
+              <div class="meta-box">
+                <span>Timing</span>
+                <strong>Optimal</strong>
+              </div>
+              <div class="meta-box">
+                <span>Size</span>
+                <strong>6%</strong>
+              </div>
+              <div class="meta-box">
+                <span>Invalidation</span>
+                <strong>71.6</strong>
+              </div>
+            </div>
+
+            <div class="signal-steps">
+              <div class="signal-step"><span>ENTER</span><span>67,800</span></div>
+              <div class="signal-step"><span>ADD</span><span>68,200</span></div>
+              <div class="signal-step"><span>HOLD</span><span>structure intact</span></div>
+              <div class="signal-step"><span>REDUCE</span><span>69,100</span></div>
+              <div class="signal-step"><span>EXIT</span><span>69,400</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card feed-card">
+          <div class="feed-head">
+            <span>Live feed — Telegram</span>
+            <span>Core flow</span>
+          </div>
+          <div class="feed-body">
+            <div class="feed-row">[12:03] BTC SHORT — confirmation</div>
+            <div class="feed-row">[12:01] liquidity above swept</div>
+            <div class="feed-row">[11:58] weak spot response</div>
+            <div class="feed-row">[11:54] reclaim failed</div>
+            <div class="feed-row">[11:50] setup forming</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="levels" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Levels</div>
+          <h2>Observe. Decide. Execute.</h2>
+          <p style="margin-top:10px;color:var(--muted-2);font-size:13px;letter-spacing:0.18em;text-transform:uppercase">Three layers. One system.</p>
+          <p>Minimal for context. Pro for setups. Core for execution.</p>
+        </div>
+
+        <div class="tier-grid">
+          <article class="card tier-card free">
+            <div class="tier-meta">
+              <span>Minimal</span>
+              <span>Free</span>
+            </div>
+            <div class="tier-inline">
+              <div class="logo-wrap">
+                <div class="logo free-logo">
+                  <div class="top"></div>
+                  <div class="bottom"></div>
+                  <div class="slash-main"></div>
+                  <div class="slash-gap"></div>
+                  <div class="slash-micro"></div>
+                  <div class="cut-shadow"></div>
+                </div>
+              </div>
+            </div>
+            <div class="tier-title">MINIMAL</div>
+            <div style="margin-top:10px;color:var(--muted-2);font-size:11px;text-transform:uppercase;letter-spacing:0.18em;">Observer layer</div>
+            <div class="tier-description">See the market clearly. No execution.</div>
+            <div class="tier-list">
+              <div>Market context</div>
+              <div>Key levels</div>
+              <div>Sweeps &amp; reactions</div>
+            </div>
+            <div style="margin-top:24px">
+              <a class="btn" style="width:100%" href="https://t.me/yourchannel" target="_blank" rel="noreferrer">Join Free</a>
+            </div>
+          </article>
+
+          <article class="card tier-card pro">
+            <div class="tier-meta">
+              <span>Pro</span>
+              <span>$49/mo</span>
+            </div>
+            <div class="tier-inline">
+              <div class="logo-wrap">
+                <div class="logo pro-logo">
+                  <div class="top"></div>
+                  <div class="bottom"></div>
+                  <div class="slash-main"></div>
+                  <div class="slash-gap"></div>
+                  <div class="slash-micro"></div>
+                  <div class="cut-shadow"></div>
+                </div>
+              </div>
+            </div>
+            <div class="tier-title">PRO</div>
+            <div style="margin-top:10px;color:var(--blue-2);font-size:11px;text-transform:uppercase;letter-spacing:0.18em;">Decision layer</div>
+            <div class="tier-description">Know what to do. Execute manually.</div>
+            <div class="tier-list">
+              <div>Full signals</div>
+              <div>Scenario breakdowns</div>
+              <div>Trade ideas &amp; triggers</div>
+            </div>
+            <div style="margin-top:24px">
+              <a class="btn primary" style="width:100%" href="#cta">Upgrade to Pro</a>
+            </div>
+          </article>
+
+          <article class="card tier-card core">
+            <div class="tier-meta">
+              <span>Core</span>
+              <span>$149/mo</span>
+            </div>
+            <div class="tier-inline">
+              <div class="logo-wrap">
+                <div class="logo core-logo">
+                  <div class="top"></div>
+                  <div class="bottom"></div>
+                  <div class="slash-main"></div>
+                  <div class="slash-gap"></div>
+                  <div class="slash-micro"></div>
+                  <div class="cut-shadow"></div>
+                </div>
+              </div>
+            </div>
+            <div class="tier-title">CORE</div>
+            <div style="margin-top:10px;color:var(--muted-2);font-size:11px;text-transform:uppercase;letter-spacing:0.18em;">Execution layer</div>
+            <div class="tier-description">The system manages the position.</div>
+            <div class="tier-list">
+              <div>Execution system</div>
+              <div>Position management</div>
+              <div>Decision flow</div>
+            </div>
+            <div style="margin-top:24px">
+              <a class="btn" style="width:100%" href="#cta">Access Core</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="previews" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Previews</div>
+          <h2>System output. Not marketing.</h2>
+          <p>Short. Operational. No storytelling.</p>
+        </div>
+
+        <div class="preview-grid">
+          <article class="card preview-card">
+            <div class="preview-top">
+              <span>STRCTR FREE</span>
+              <span>16:52 UTC</span>
+            </div>
+            <h3>Market context</h3>
+            <p>Liquidity below → upside bias.</p>
+            <div class="bullet-list">
+              <div>• Large short build-up under 66,000</div>
+              <div>• Sweep likely below</div>
+              <div>• Watching long trigger</div>
+            </div>
+          </article>
+
+          <article class="card preview-card">
+            <div class="preview-top">
+              <span>STRCTR PRO</span>
+              <span>07:45 UTC</span>
+            </div>
+            <h3>Setup</h3>
+            <p>BTC → Sweep → Long setup</p>
+            <div class="bullet-list">
+              <div>• Entry: 66,200</div>
+              <div>• Invalidation: 64,900</div>
+              <div>• Scenario: shorts into lows</div>
+            </div>
+          </article>
+
+          <article class="card preview-card">
+            <div class="preview-top">
+              <span>STRCTR CORE</span>
+              <span>10:36 UTC</span>
+            </div>
+            <h3>Execution</h3>
+            <p>ENTER_PARTIAL → ADD on acceptance.</p>
+            <div class="bullet-list">
+              <div>• Reduce on failure</div>
+              <div>• Exit on invalidation</div>
+              <div>• Decision layer active</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="cta" class="cta-wrap">
+      <div class="container">
+        <div class="card cta-box">
+          <div class="eyebrow">Access</div>
+          <h2>Access STRCTR</h2>
+          <p>Start with Free. Upgrade when you’re ready.<br>No friction. No onboarding. Just the system.</p>
+          <div class="cta-buttons">
+            <a class="btn" href="https://t.me/yourchannel" target="_blank" rel="noreferrer">Join Free</a>
+            <a class="btn primary" href="mailto:you@example.com?subject=STRCTR%20PRO">Upgrade to Pro</a>
+            <a class="btn" href="mailto:you@example.com?subject=STRCTR%20CORE">Access Core</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div>STRCTR</div>
+      <div>Structure → Decision → Execution</div>
+    </div>
+  </footer>
+</body>
+</html>
