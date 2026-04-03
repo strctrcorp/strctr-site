@@ -338,27 +338,45 @@
             font-size: 18px;
             line-height: 1;
             cursor: pointer;
+            opacity: 0.68;
+            transition: opacity 0.2s ease, border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
         }
 
         .paywall-close:hover {
+            opacity: 1;
             border-color: rgba(59, 130, 246, 0.35);
             color: #e5e7eb;
         }
 
         .paywall-copy {
-            margin: 0 0 18px;
+            margin: 0 0 20px;
             padding-right: 28px;
             font-size: 17px;
             font-weight: 600;
             letter-spacing: -0.02em;
-            line-height: 1.35;
-            color: #e8eaed;
+            line-height: 1.45;
+            color: rgba(203, 210, 222, 0.88);
         }
 
         .paywall-actions {
             display: grid;
-            gap: 10px;
+            gap: 16px;
             margin-bottom: 14px;
+        }
+
+        .paywall-cta-block {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .paywall-layer-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(229, 231, 235, 0.36);
+            padding-left: 1px;
         }
 
         .paywall-actions .btn {
@@ -370,6 +388,34 @@
             height: auto;
             min-height: 48px;
             padding: 12px 16px;
+            transition: transform 0.18s ease, border-color 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease,
+                background 0.18s ease;
+        }
+
+        .paywall-actions .paywall-btn-pro {
+            background: linear-gradient(180deg, #3468c4 0%, #1f4fa3 100%);
+            border-color: rgba(59, 130, 246, 0.72);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.14);
+            filter: brightness(0.97);
+        }
+
+        .paywall-actions .paywall-btn-pro:hover {
+            background: linear-gradient(180deg, #3870cc 0%, #2256ac 100%);
+            filter: brightness(1.01);
+            box-shadow: 0 0 16px rgba(59, 130, 246, 0.2);
+        }
+
+        .paywall-actions .paywall-btn-core {
+            background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
+            border-color: rgba(120, 170, 255, 0.88);
+            box-shadow: 0 0 22px rgba(59, 130, 246, 0.3), 0 0 0 1px rgba(59, 130, 246, 0.22) inset;
+            transform: scale(1.03);
+        }
+
+        .paywall-actions .paywall-btn-core:hover {
+            filter: brightness(1.04);
+            box-shadow: 0 0 28px rgba(59, 130, 246, 0.36), 0 0 0 1px rgba(59, 130, 246, 0.28) inset;
+            transform: scale(1.035);
         }
 
         .paywall-plan-title {
@@ -2961,19 +3007,25 @@
         <dialog id="paywallModal" class="paywall-dialog" aria-labelledby="paywallTitle">
             <div class="paywall-inner">
                 <button type="button" class="paywall-close" data-paywall-close aria-label="Close">×</button>
-                <p id="paywallTitle" class="paywall-copy">Seeing the market is not enough. Execution is the edge.</p>
+                <p id="paywallTitle" class="paywall-copy">You are viewing the surface layer.<br />Unlock deeper market
+                    logic or full execution behavior.</p>
                 <div class="paywall-actions">
-                    <button type="button" class="btn btn-primary" data-checkout-tier="pro">
-                        <span class="paywall-plan-title">Unlock Decision Layer (PRO)</span>
-                        <span class="paywall-plan-price">$39/month · billed via Stripe</span>
-                    </button>
-                    <button type="button" class="btn btn-primary" data-checkout-tier="core">
-                        <span class="paywall-plan-title">Unlock Execution System (CORE)</span>
-                        <span class="paywall-plan-price">$119/month · billed via Stripe</span>
-                    </button>
+                    <div class="paywall-cta-block">
+                        <span class="paywall-layer-label">Decision Layer</span>
+                        <button type="button" class="btn btn-primary paywall-btn-pro" data-checkout-tier="pro">
+                            <span class="paywall-plan-title">Unlock Decision Layer (PRO)</span>
+                            <span class="paywall-plan-price">$39/month · billed via Stripe</span>
+                        </button>
+                    </div>
+                    <div class="paywall-cta-block">
+                        <span class="paywall-layer-label">Execution System</span>
+                        <button type="button" class="btn btn-primary paywall-btn-core" data-checkout-tier="core">
+                            <span class="paywall-plan-title">Unlock Execution System (CORE)</span>
+                            <span class="paywall-plan-price">$119/month · billed via Stripe</span>
+                        </button>
+                    </div>
                 </div>
-                <p class="paywall-note">Secure checkout. Subscription status syncs after payment. Free preview stays
-                    local until you subscribe.</p>
+                <p class="paywall-note">Secure checkout. Subscription status syncs after payment.</p>
             </div>
         </dialog>
 
