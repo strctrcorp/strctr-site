@@ -1394,6 +1394,10 @@
             max-width: 720px;
         }
 
+        .cta-intro-mobile {
+            display: none;
+        }
+
         .cta-box {
             border: 1px solid rgba(255, 255, 255, .1);
             border-radius: 22px;
@@ -1412,6 +1416,10 @@
             inset: 0;
             background: radial-gradient(circle at 88% 14%, rgba(47, 107, 255, .14), transparent 44%);
             pointer-events: none;
+        }
+
+        .cta-actions {
+            margin-top: 16px;
         }
 
         .cta .btn-primary {
@@ -1813,10 +1821,6 @@
                 grid-template-columns: 1fr
             }
 
-            .hero {
-                padding-top: 46px
-            }
-
             .section {
                 padding-top: 18px
             }
@@ -1840,12 +1844,468 @@
                 transform: translateX(22%);
             }
 
-            h1 {
-                font-size: clamp(44px, 14vw, 74px)
-            }
-
             .state {
                 font-size: 34px
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav {
+                height: 58px;
+                gap: 10px;
+            }
+
+            .header .brand {
+                gap: 7px;
+                font-size: 13px;
+                letter-spacing: 0.14em;
+            }
+
+            .brand-mark {
+                width: 30px;
+                height: 30px;
+                border-radius: 7px;
+            }
+
+            .logo-mark-svg {
+                width: 17px;
+                height: 17px;
+            }
+
+            .header .nav>.btn {
+                height: 40px;
+                padding: 0 11px;
+                font-size: 11px;
+                font-weight: 600;
+                letter-spacing: 0.06em;
+                flex: 0 0 auto;
+            }
+
+            .hero {
+                padding: 22px 0 10px;
+            }
+
+            .hero-grid {
+                gap: 8px;
+            }
+
+            .hero-copy {
+                gap: 3px;
+                padding-top: 0;
+            }
+
+            .hero-logo {
+                width: 62px;
+                height: 62px;
+                margin: 0;
+                border-radius: 6px;
+            }
+
+            .hero-logo svg {
+                width: 32px;
+                height: 32px;
+            }
+
+            h1 {
+                font-size: clamp(40px, 11.5vw, 62px);
+                line-height: 0.84;
+                letter-spacing: -0.065em;
+                margin: 2px 0 0;
+            }
+
+            .hero-sub {
+                font-size: clamp(13px, 3.4vw, 16px);
+                line-height: 1.2;
+                letter-spacing: 0.05em;
+            }
+
+            .hero .btn-row {
+                margin-top: 2px;
+                justify-self: stretch;
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+                gap: 11px;
+            }
+
+            .hero .btn {
+                width: 100%;
+                height: 44px;
+                padding: 0 13px;
+                font-size: 12px;
+                font-weight: 600;
+                box-sizing: border-box;
+            }
+
+            .cta .btn-row {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+            }
+
+            .hero-stack {
+                gap: 8px;
+            }
+
+            .hero-stack::before {
+                inset: -6px -6px -4px -6px;
+                opacity: 0.22;
+            }
+
+            .hero-stack .panel {
+                padding: 13px 14px 11px 13px;
+                border-radius: 22px 22px 20px 22px;
+            }
+
+            .hero-stack .panel-top {
+                margin-bottom: 10px;
+            }
+
+            .hero-stack .live {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            .hero-stack .terminal {
+                padding: 14px 15px 13px 15px;
+                border-radius: 18px 18px 16px 18px;
+            }
+
+            .hero-stack .terminal-head {
+                margin-bottom: 10px;
+            }
+
+            .hero-stack .term-grid {
+                gap: 10px;
+                margin-bottom: 10px;
+            }
+
+            .section {
+                padding-top: 12px;
+            }
+
+            .section+.section {
+                margin-top: 8px;
+            }
+
+            .section-head {
+                margin-bottom: 12px;
+                gap: 12px;
+            }
+
+            .section-sigil {
+                margin: 0 0 6px;
+            }
+
+            .section-head h2 {
+                margin: 0 0 6px;
+            }
+
+            .section-head p {
+                line-height: 1.55;
+            }
+
+            .system-grid,
+            .trust-grid,
+            .action-grid,
+            .outputs,
+            .tiers,
+            .how-grid {
+                gap: 12px;
+            }
+
+            .card {
+                padding: 15px 14px;
+            }
+
+            .outputs .card {
+                padding: 15px 14px;
+            }
+
+            .card-head {
+                margin-bottom: 10px;
+            }
+
+            .card pre {
+                padding: 12px 13px;
+            }
+
+            .system-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .system-grid>.card {
+                min-width: 0;
+                padding: 14px 13px 13px 14px;
+            }
+
+            .system-grid .card-head {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 8px 10px;
+                margin-bottom: 8px;
+            }
+
+            .system-grid .card-head>div:first-child {
+                flex: 1 1 auto;
+                min-width: 0;
+            }
+
+            .system-grid .card-title {
+                font-size: 17px;
+                line-height: 1.1;
+            }
+
+            .system-grid .card-sub {
+                margin-top: 3px;
+                line-height: 1.2;
+            }
+
+            .system-grid .card-head .pill {
+                flex: 0 0 auto;
+                align-self: flex-start;
+                margin-top: 2px;
+                padding: 6px 10px;
+                font-size: 10px;
+                letter-spacing: 0.11em;
+                line-height: 1.2;
+            }
+
+            .system-grid .card pre {
+                padding: 10px 11px;
+                font-size: 12px;
+                line-height: 1.52;
+                border-radius: 12px;
+            }
+
+            .tier {
+                padding: 17px 18px 16px 17px;
+            }
+
+            .tier .name {
+                margin-bottom: 8px;
+            }
+
+            .tier .layer-title {
+                margin: 0 0 8px;
+            }
+
+            .tier p {
+                margin: 0 0 10px;
+            }
+
+            .trust-title {
+                margin: 0 0 7px;
+            }
+
+            .trust-copy {
+                line-height: 1.62;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .action-grid>.card {
+                padding: 18px 17px 17px 18px;
+                min-width: 0;
+            }
+
+            .action-grid .trade-head {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px 12px;
+                margin-bottom: 14px;
+            }
+
+            .action-grid .trade-asset {
+                flex: 1 1 auto;
+                min-width: 0;
+                font-size: 26px;
+                line-height: 1.05;
+            }
+
+            .action-grid .trade-head .pill {
+                flex: 0 0 auto;
+                max-width: 100%;
+                padding: 7px 11px;
+                font-size: 10px;
+                letter-spacing: 0.11em;
+                line-height: 1.25;
+                white-space: normal;
+                text-align: center;
+            }
+
+            .action-grid .trade-list {
+                gap: 10px;
+            }
+
+            .action-grid .trade-row {
+                grid-template-columns: minmax(72px, 92px) minmax(0, 1fr);
+                gap: 12px 14px;
+                align-items: start;
+                padding-top: 10px;
+            }
+
+            .action-grid .trade-row .k {
+                line-height: 1.35;
+            }
+
+            .action-grid .trade-row .v {
+                font-size: 14px;
+                line-height: 1.62;
+            }
+
+            .out-k {
+                margin-bottom: 8px;
+            }
+
+            .out-v {
+                line-height: 1.72;
+            }
+
+            .how-wrap {
+                margin-top: 0;
+            }
+
+            .how-card {
+                padding: 12px 12px;
+            }
+
+            .how-head {
+                margin: 0 0 8px;
+            }
+
+            .how-grid {
+                gap: 8px;
+            }
+
+            .how-step {
+                padding: 9px 10px;
+            }
+
+            .how-step .k {
+                margin: 0 0 6px;
+            }
+
+            .eyebrow {
+                padding: 6px 10px;
+            }
+
+            .cta {
+                margin: 10px 0 14px;
+                padding: 14px 12px 14px;
+            }
+
+            .cta .eyebrow {
+                display: none;
+            }
+
+            .cta .cta-intro-desktop {
+                display: none;
+            }
+
+            .cta .cta-intro-mobile {
+                display: block;
+                line-height: 1.45;
+                font-size: 14px;
+            }
+
+            .cta h3 {
+                margin: 0 0 4px;
+            }
+
+            .cta-grid {
+                gap: 8px;
+                align-items: stretch;
+            }
+
+            .cta-box {
+                width: 100%;
+                padding: 12px 12px 13px;
+                border-radius: 18px;
+            }
+
+            .cta-box .tiny,
+            .cta-box .copy {
+                display: none;
+            }
+
+            .cta-box .cta-status {
+                margin: 0 0 6px;
+            }
+
+            .cta .btn-row {
+                gap: 10px;
+            }
+
+            .cta .btn-primary,
+            .cta .btn-ghost {
+                box-sizing: border-box;
+            }
+
+            .cta .btn-primary {
+                width: 100%;
+                height: 46px;
+                padding: 0 14px;
+                font-size: 14px;
+                font-weight: 600;
+                letter-spacing: 0.07em;
+                box-shadow:
+                    0 3px 24px rgba(47, 107, 255, .34),
+                    0 0 0 1px rgba(47, 107, 255, .42) inset;
+            }
+
+            .cta .btn-ghost {
+                width: 100%;
+                height: 42px;
+                padding: 0 12px;
+                font-size: 12px;
+                font-weight: 600;
+                letter-spacing: 0.05em;
+                opacity: .9;
+                border-color: rgba(255, 255, 255, .12);
+                background: rgba(255, 255, 255, .02);
+            }
+
+            .cta .cta-actions {
+                margin-top: 8px;
+            }
+
+            .tiny {
+                margin-bottom: 7px;
+            }
+
+            #access .footer {
+                padding: 8px 0 16px;
+                margin-top: 0;
+            }
+
+            #access .footer-line {
+                padding-top: 10px;
+                gap: 8px;
+            }
+
+            #access .footer-line>div:last-child {
+                display: none;
+            }
+
+            .footer {
+                padding: 0 0 22px;
+            }
+
+            .footer-line {
+                padding-top: 12px;
             }
         }
     </style>
@@ -2292,13 +2752,14 @@
             <div class="container">
                 <div class="cta reveal">
                     <div class="cta-grid">
-                        <div>
+                        <div class="cta-intro-col">
                             <div class="eyebrow"><span class="dot"></span> Telegram-first launch model</div>
                             <h3>Access the system.</h3>
-                            <p>
+                            <p class="cta-intro-desktop">
                                 Real-time decision flow.<br>
                                 No signals. No noise.
                             </p>
+                            <p class="cta-intro-mobile">Real-time decision flow. No noise.</p>
                         </div>
 
                         <div class="cta-box">
@@ -2308,7 +2769,7 @@
                                 Real-time decision flow.<br>
                                 No signals. No noise.
                             </div>
-                            <div class="btn-row" style="margin-top:16px;">
+                            <div class="btn-row cta-actions">
                                 <button class="btn btn-primary" type="button" data-cmd-open>Enter System</button>
                                 <a class="btn btn-ghost" href="https://t.me/" target="_blank"
                                     rel="noopener noreferrer">View Live Feed</a>
