@@ -1786,6 +1786,32 @@
             flex-wrap: wrap;
         }
 
+        .footer-legal {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, .04);
+            font-size: 12px;
+            letter-spacing: .06em;
+            color: var(--muted);
+        }
+
+        .footer-legal a {
+            color: var(--muted);
+            text-decoration: none;
+            transition: color .2s ease, text-shadow .2s ease;
+        }
+
+        .footer-legal a:hover {
+            color: var(--accent);
+            text-shadow: 0 0 18px rgba(59, 130, 246, .25);
+        }
+
+        .footer-legal-sep {
+            margin: 0 10px;
+            opacity: .45;
+            user-select: none;
+        }
+
         .reveal {
             opacity: 0;
             transform: translateY(8px);
@@ -2496,8 +2522,8 @@
                                 <span class="access-badge" id="accessTierBadge" aria-live="polite">FREE</span>
                             </div>
                             <div class="panel-top-right">
-                                <button type="button" class="btn-unlock" id="btnUnlockAccess"
-                                    aria-haspopup="dialog" aria-controls="paywallModal">Unlock</button>
+                                <button type="button" class="btn-unlock" id="btnUnlockAccess" aria-haspopup="dialog"
+                                    aria-controls="paywallModal">Unlock</button>
                                 <div class="live pulse"><span class="dot live-dot"></span> Core stream online</div>
                             </div>
                         </div>
@@ -2902,6 +2928,11 @@
                         <div>STRCTR — Not signals. Decision system.</div>
                         <div>Black / White / Blue • Telegram-first • Dashboard-ready</div>
                     </div>
+                    <div class="footer-legal">
+                        <a href="/terms.html">Terms</a><span class="footer-legal-sep" aria-hidden="true">·</span><a
+                            href="/privacy.html">Privacy</a><span class="footer-legal-sep" aria-hidden="true">·</span><a
+                            href="/refund.html">Refund</a>
+                    </div>
                 </footer>
             </div>
         </section>
@@ -2941,7 +2972,8 @@
                         <span class="paywall-plan-price">$119/month · billed via Stripe</span>
                     </button>
                 </div>
-                <p class="paywall-note">Secure checkout. Subscription status syncs after payment. Free preview stays local until you subscribe.</p>
+                <p class="paywall-note">Secure checkout. Subscription status syncs after payment. Free preview stays
+                    local until you subscribe.</p>
             </div>
         </dialog>
 
