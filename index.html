@@ -1,1126 +1,2483 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>STRCTR — Decision system for liquidity and execution</title>
-  <meta name="description" content="STRCTR — a cold, structured decision system for liquidity, trap, structure break, and execution." />
-  <style>
-    :root{
-      --bg:#000000;
-      --bg-2:#050505;
-      --panel:#0a0a0a;
-      --panel-2:#101010;
-      --line:#171717;
-      --line-2:#222222;
-      --text:#EDEDED;
-      --muted:#8A8A8A;
-      --accent:#2F6BFF;
-      --accent-soft:rgba(47,107,255,.12);
-      --accent-line:rgba(47,107,255,.28);
-      --shadow:0 0 0 1px rgba(255,255,255,.035), 0 26px 80px rgba(0,0,0,.62);
-      --blue-shadow:0 0 0 1px rgba(47,107,255,.24), 0 0 30px rgba(47,107,255,.12);
-      --radius:26px;
-      --radius-sm:16px;
-      --max:1240px;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STRCTR — Decision system for liquidity and execution</title>
+    <meta name="description"
+        content="STRCTR — a cold, structured decision system for liquidity, trap, structure break, and execution." />
+    <style>
+        :root {
+            --bg: #000000;
+            --bg-2: #050505;
+            --panel: #0a0a0a;
+            --panel-2: #101010;
+            --line: #171717;
+            --line-2: #222222;
+            --text: #EDEDED;
+            --muted: #8A8A8A;
+            --accent: #2F6BFF;
+            --accent-soft: rgba(47, 107, 255, .12);
+            --accent-line: rgba(47, 107, 255, .28);
+            --shadow: 0 0 0 1px rgba(255, 255, 255, .035), 0 26px 80px rgba(0, 0, 0, .62);
+            --blue-shadow: 0 0 0 1px rgba(47, 107, 255, .24), 0 0 30px rgba(47, 107, 255, .12);
+            --radius: 26px;
+            --radius-sm: 16px;
+            --max: 1240px;
+            --section-pad: 34px;
+            --grid-gap: 18px;
+            --module-border: rgba(255, 255, 255, .08);
+            --module-border-soft: rgba(255, 255, 255, .06);
+            --module-bg: linear-gradient(180deg, rgba(255, 255, 255, .022), rgba(255, 255, 255, .012));
+            --module-shadow: 0 0 0 1px rgba(255, 255, 255, .024), 0 16px 34px rgba(0, 0, 0, .36), 0 28px 70px rgba(0, 0, 0, .26);
+            --module-inset: 0 1px 0 rgba(255, 255, 255, .03) inset;
+            --cut-line: rgba(255, 255, 255, .05);
+            --cut-line-soft: rgba(255, 255, 255, .035);
+            --cut-size-lg: 20px;
+            --break-divider-main: rgba(47, 107, 255, .16);
+            --break-divider-soft: rgba(47, 107, 255, .1);
+        }
 
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      color:var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at 84% 6%, rgba(47,107,255,.11), transparent 20%),
-        radial-gradient(circle at 10% 0%, rgba(47,107,255,.05), transparent 22%),
-        linear-gradient(180deg, #020202 0%, #000000 34%, #010101 100%);
-      -webkit-font-smoothing:antialiased;
-      text-rendering:optimizeLegibility;
-      overflow-x:hidden;
-    }
+        * {
+            box-sizing: border-box
+        }
 
-    body::before{
-      content:"";
-      position:fixed; inset:0;
-      pointer-events:none;
-      opacity:.2;
-      background-image:
-        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
-      background-size:52px 52px;
-      mask-image:linear-gradient(180deg, rgba(0,0,0,.26), transparent 78%);
-    }
+        html {
+            scroll-behavior: smooth
+        }
 
-    body::after{
-      content:"";
-      position:fixed; inset:0;
-      pointer-events:none;
-      opacity:.04;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
-      mix-blend-mode:soft-light;
-    }
+        body {
+            margin: 0;
+            color: var(--text);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at 84% 6%, rgba(47, 107, 255, .11), transparent 20%),
+                radial-gradient(circle at 10% 0%, rgba(47, 107, 255, .05), transparent 22%),
+                linear-gradient(180deg, #020202 0%, #000000 34%, #010101 100%);
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            overflow-x: hidden;
+        }
 
-    a{color:inherit;text-decoration:none}
-    .container{width:min(var(--max), calc(100% - 40px)); margin:0 auto}
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .2;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .018) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .018) 1px, transparent 1px);
+            background-size: 52px 52px;
+            mask-image: linear-gradient(180deg, rgba(0, 0, 0, .26), transparent 78%);
+        }
 
-    .eyebrow{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid var(--line-2);
-      background:rgba(255,255,255,.02);
-      color:var(--muted);
-      font-size:12px;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      white-space:nowrap;
-    }
-    .dot{
-      width:7px; height:7px; border-radius:999px;
-      background:var(--accent);
-      box-shadow:0 0 18px rgba(47,107,255,.95);
-      flex:none;
-    }
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .04;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+            mix-blend-mode: soft-light;
+        }
 
-    .header{
-      position:sticky;
-      top:0;
-      z-index:60;
-      background:rgba(0,0,0,.72);
-      backdrop-filter:blur(16px);
-      border-bottom:1px solid rgba(255,255,255,.05);
-    }
-    .nav{
-      height:76px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:18px;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      font-size:14px;
-      font-weight:700;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-    }
-    .brand-mark{
-      width:34px;height:34px;border-radius:11px;
-      display:grid;place-items:center;
-      font-size:11px;
-      background:linear-gradient(180deg, rgba(47,107,255,.18), rgba(47,107,255,.05));
-      border:1px solid rgba(47,107,255,.34);
-      box-shadow:var(--blue-shadow);
-    }
-    .nav-links{
-      display:flex;
-      align-items:center;
-      gap:28px;
-    }
-    .nav-links a{
-      color:var(--muted);
-      font-size:13px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      transition:.18s ease;
-    }
-    .nav-links a:hover{color:var(--text)}
+        a {
+            color: inherit;
+            text-decoration: none
+        }
 
-    .btn-row{display:flex; gap:12px; flex-wrap:wrap}
-    .btn{
-      height:46px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:0 18px;
-      border-radius:14px;
-      border:1px solid var(--line-2);
-      background:#0a0a0a;
-      color:var(--text);
-      font-size:13px;
-      font-weight:600;
-      letter-spacing:.05em;
-      text-transform:uppercase;
-      transition:transform .18s ease, border-color .18s ease, filter .18s ease, box-shadow .18s ease;
-    }
-    .btn:hover{transform:translateY(-1px); border-color:#2f2f2f}
-    .btn-primary{
-      background:var(--accent);
-      color:#fff;
-      border-color:rgba(47,107,255,.62);
-      box-shadow:0 12px 32px rgba(47,107,255,.24);
-    }
-    .btn-primary:hover{filter:brightness(1.05)}
-    .btn-ghost{background:rgba(255,255,255,.02)}
+        .container {
+            width: min(var(--max), calc(100% - 40px));
+            margin: 0 auto
+        }
 
-    .hero{
-      padding:84px 0 38px;
-    }
-    .hero-grid{
-      display:grid;
-      grid-template-columns:1.02fr .98fr;
-      gap:30px;
-      align-items:stretch;
-    }
-    .hero-copy{padding-top:16px}
-    h1{
-      margin:18px 0 16px;
-      font-size:clamp(50px, 7vw, 98px);
-      line-height:.92;
-      letter-spacing:-.07em;
-      font-weight:700;
-    }
-    h1 span{text-shadow:0 0 30px rgba(47,107,255,.18)}
-    .hero-sub{
-      max-width:690px;
-      margin:0 0 26px;
-      color:#bdbdbd;
-      font-size:clamp(16px, 2vw, 19px);
-      line-height:1.72;
-    }
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--line-2);
+            background: rgba(255, 255, 255, .02);
+            color: var(--muted);
+            font-size: 12px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
 
-    .micro-bar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin:0 0 28px;
-    }
-    .micro-pill{
-      padding:10px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.06);
-      background:rgba(255,255,255,.02);
-      color:#dadada;
-      font-size:12px;
-      letter-spacing:.1em;
-      text-transform:uppercase;
-    }
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: var(--accent);
+            box-shadow: 0 0 18px rgba(47, 107, 255, .95);
+            flex: none;
+        }
 
-    .metrics{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:14px;
-      margin-top:28px;
-    }
-    .metric{
-      border:1px solid var(--line);
-      border-radius:20px;
-      padding:16px;
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      box-shadow:var(--shadow);
-    }
-    .metric .k{
-      font-size:11px;
-      color:var(--muted);
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      margin-bottom:10px;
-    }
-    .metric .v{
-      font-size:28px;
-      line-height:1;
-      letter-spacing:-.05em;
-    }
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 60;
+            background: rgba(0, 0, 0, .72);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, .05);
+        }
 
-    .hero-stack{
-      display:grid;
-      gap:16px;
-      min-height:100%;
-    }
+        .nav {
+            height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
 
-    .panel{
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:30px;
-      padding:18px;
-      background:
-        linear-gradient(180deg, rgba(47,107,255,.06), transparent 24%),
-        linear-gradient(180deg, rgba(255,255,255,.024), rgba(255,255,255,.01));
-      box-shadow:var(--shadow), 0 0 0 1px rgba(47,107,255,.08) inset;
-      position:relative;
-      overflow:hidden;
-    }
-    .panel::before{
-      content:"";
-      position:absolute;
-      right:-80px; top:-60px;
-      width:220px; height:220px; border-radius:999px;
-      background:radial-gradient(circle, rgba(47,107,255,.14), transparent 70%);
-      pointer-events:none;
-    }
-    .panel-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:14px;
-      position:relative;
-      z-index:1;
-      margin-bottom:16px;
-    }
-    .panel-label{
-      font-size:12px;
-      color:var(--muted);
-      letter-spacing:.14em;
-      text-transform:uppercase;
-    }
-    .live{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid rgba(47,107,255,.26);
-      background:rgba(47,107,255,.08);
-      font-size:12px;
-      letter-spacing:.1em;
-      text-transform:uppercase;
-    }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+        }
 
-    .terminal{
-      border:1px solid rgba(255,255,255,.07);
-      border-radius:24px;
-      background:rgba(0,0,0,.48);
-      padding:20px;
-      position:relative;
-      z-index:1;
-    }
-    .terminal-head{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:flex-start;
-      margin-bottom:16px;
-    }
-    .asset{
-      font-size:13px;
-      color:var(--muted);
-      letter-spacing:.13em;
-      text-transform:uppercase;
-    }
-    .state{
-      margin-top:6px;
-      font-size:40px;
-      line-height:1;
-      letter-spacing:-.06em;
-    }
-    .pill{
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.02);
-      font-size:11px;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      white-space:nowrap;
-    }
-    .pill.blue{
-      border-color:rgba(47,107,255,.3);
-      background:rgba(47,107,255,.1);
-      box-shadow:var(--blue-shadow);
-    }
+        .brand-mark {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            background: #060606;
+            border: 1px solid rgba(255, 255, 255, .24);
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, .015), 0 6px 14px rgba(0, 0, 0, .3);
+        }
 
-    .term-grid{
-      display:grid;
-      grid-template-columns:repeat(2, minmax(0,1fr));
-      gap:12px;
-      margin-bottom:12px;
-    }
-    .term-stat{
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:var(--panel);
-      padding:14px;
-    }
-    .term-stat .k{
-      font-size:11px;
-      color:var(--muted);
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      margin-bottom:8px;
-    }
-    .term-stat .v{
-      font-size:22px;
-      line-height:1.1;
-      letter-spacing:-.04em;
-    }
-    .plan{
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:var(--panel);
-      padding:14px;
-    }
-    .plan .k{
-      font-size:11px;
-      color:var(--muted);
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      margin-bottom:10px;
-    }
-    .plan .v{
-      font-size:14px;
-      line-height:1.8;
-      color:#dbdbdb;
-    }
+        .logo-mark-svg {
+            width: 19px;
+            height: 19px;
+            color: #8f8f8f;
+        }
 
-    .mini-stream{
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:24px;
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      padding:16px;
-      box-shadow:var(--shadow);
-    }
-    .stream-head{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:center;
-      margin-bottom:12px;
-    }
-    .stream-title{
-      font-size:12px;
-      color:var(--muted);
-      letter-spacing:.14em;
-      text-transform:uppercase;
-    }
-    .stream-list{display:grid; gap:10px}
-    .stream-item{
-      border:1px solid rgba(255,255,255,.05);
-      border-radius:16px;
-      background:rgba(255,255,255,.015);
-      padding:12px;
-    }
-    .stream-item .tag{
-      font-size:10px;
-      color:var(--muted);
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      margin-bottom:8px;
-    }
-    .stream-item .line{
-      font-size:14px;
-      line-height:1.7;
-      color:#e3e3e3;
-    }
+        .logo-mark-svg .break {
+            stroke: #f1f1f1;
+        }
 
-    .section{padding:24px 0 0}
-    .section-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:end;
-      gap:20px;
-      margin-bottom:20px;
-    }
-    .section-head h2{
-      margin:0 0 10px;
-      font-size:clamp(28px, 3vw, 44px);
-      line-height:1;
-      letter-spacing:-.05em;
-    }
-    .section-head p{
-      margin:0;
-      max-width:760px;
-      color:#b8b8b8;
-      line-height:1.72;
-    }
+        .logo-mark-svg.is-active .break {
+            stroke: #3e76ff;
+        }
 
-    .system-grid,
-    .tiers,
-    .outputs{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:18px;
-    }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
 
-    .card{
-      border:1px solid var(--line);
-      border-radius:24px;
-      padding:18px;
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      position:relative;
-    }
-    .card.featured{
-      border-color:rgba(47,107,255,.3);
-      box-shadow:var(--shadow), var(--blue-shadow);
-    }
-    .card-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-      margin-bottom:14px;
-    }
-    .card-title{
-      margin:0;
-      font-size:18px;
-      letter-spacing:-.03em;
-    }
-    .card-sub{
-      margin-top:5px;
-      font-size:11px;
-      color:var(--muted);
-      letter-spacing:.12em;
-      text-transform:uppercase;
-    }
-    pre{
-      margin:0;
-      white-space:pre-wrap;
-      color:#cfdaff;
-      background:#05070d;
-      border:1px solid rgba(47,107,255,.18);
-      border-radius:16px;
-      padding:14px;
-      font:500 13px/1.68 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    }
+        .nav-links a {
+            color: var(--muted);
+            font-size: 13px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            transition: .18s ease;
+        }
 
-    .tier{
-      border:1px solid var(--line);
-      border-radius:24px;
-      padding:22px;
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      box-shadow:var(--shadow);
-    }
-    .tier.featured{
-      border-color:rgba(47,107,255,.28);
-      box-shadow:var(--shadow), var(--blue-shadow);
-    }
-    .tier .name{
-      font-size:12px;
-      color:var(--muted);
-      letter-spacing:.13em;
-      text-transform:uppercase;
-      margin-bottom:10px;
-    }
-    .tier .price{
-      font-size:46px;
-      letter-spacing:-.06em;
-      line-height:1;
-      margin-bottom:14px;
-    }
-    .tier .price small{
-      font-size:15px;
-      color:var(--muted);
-      letter-spacing:0;
-    }
-    .tier p{
-      color:#bfbfbf;
-      line-height:1.68;
-      min-height:76px;
-      margin:0 0 16px;
-    }
-    .tier ul{
-      list-style:none; padding:0; margin:0; display:grid; gap:10px;
-    }
-    .tier li{
-      padding-top:10px;
-      border-top:1px solid rgba(255,255,255,.05);
-      font-size:14px;
-      line-height:1.56;
-    }
-    .tier li span{color:var(--muted)}
+        .nav-links a:hover {
+            color: var(--text)
+        }
 
-    .framework{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:18px;
-    }
-    .stack{
-      display:grid;
-      gap:12px;
-      margin-top:12px;
-    }
-    .stack-row{
-      display:flex;
-      gap:12px;
-      align-items:flex-start;
-      padding:14px;
-      border:1px solid rgba(255,255,255,.05);
-      border-radius:16px;
-      background:rgba(255,255,255,.015);
-    }
-    .stack-num{
-      width:34px; height:34px; border-radius:12px;
-      display:grid; place-items:center;
-      border:1px solid rgba(47,107,255,.26);
-      background:rgba(47,107,255,.08);
-      color:#dce7ff;
-      flex:none;
-      font-size:12px;
-      letter-spacing:.08em;
-    }
-    .stack strong{
-      display:block;
-      font-size:14px;
-      letter-spacing:.05em;
-      text-transform:uppercase;
-      margin-bottom:4px;
-    }
-    .stack p{
-      margin:0;
-      color:#b7b7b7;
-      line-height:1.62;
-    }
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap
+        }
 
-    .outputs .card{padding:20px}
-    .out-k{
-      font-size:11px;
-      color:var(--muted);
-      letter-spacing:.13em;
-      text-transform:uppercase;
-      margin-bottom:10px;
-    }
-    .out-v{
-      font-size:15px;
-      color:#dfdfdf;
-      line-height:1.8;
-    }
+        .btn {
+            height: 46px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 18px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            transition: transform .18s ease, border-color .18s ease, filter .18s ease, box-shadow .18s ease;
+        }
 
-    .cta{
-      margin:34px 0 58px;
-      border:1px solid rgba(47,107,255,.25);
-      border-radius:28px;
-      padding:26px;
-      background:
-        radial-gradient(circle at right top, rgba(47,107,255,.14), transparent 26%),
-        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      box-shadow:var(--shadow), var(--blue-shadow);
-    }
-    .cta-grid{
-      display:grid;
-      grid-template-columns:1.06fr .94fr;
-      gap:18px;
-      align-items:center;
-    }
-    .cta h3{
-      margin:0 0 12px;
-      font-size:clamp(30px, 4vw, 50px);
-      line-height:.98;
-      letter-spacing:-.05em;
-    }
-    .cta p{
-      margin:0;
-      color:#bebebe;
-      line-height:1.72;
-      max-width:720px;
-    }
-    .cta-box{
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:22px;
-      padding:18px;
-      background:rgba(0,0,0,.38);
-    }
-    .tiny{
-      color:var(--muted);
-      font-size:11px;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      margin-bottom:10px;
-    }
-    .copy{
-      font-size:14px;
-      line-height:1.8;
-      color:#e3e3e3;
-    }
+        .btn:hover {
+            transform: none;
+            border-color: rgba(255, 255, 255, 0.28);
+            background: rgba(255, 255, 255, 0.02);
+        }
 
-    .footer{
-      padding:0 0 34px;
-      color:var(--muted);
-      font-size:13px;
-    }
-    .footer-line{
-      border-top:1px solid rgba(255,255,255,.05);
-      padding-top:18px;
-      display:flex;
-      justify-content:space-between;
-      gap:16px;
-      flex-wrap:wrap;
-    }
+        .btn-primary {
+            background: #2F6BFF;
+            color: #fff;
+            border-color: #2F6BFF;
+            box-shadow: none;
+        }
 
-    .reveal{
-      opacity:0;
-      transform:translateY(18px);
-      animation:reveal .8s ease forwards;
-    }
-    .reveal.d2{animation-delay:.08s}
-    .reveal.d3{animation-delay:.16s}
-    .reveal.d4{animation-delay:.24s}
-    .reveal.d5{animation-delay:.32s}
+        .btn-primary:hover {
+            filter: brightness(1.05)
+        }
 
-    @keyframes reveal{
-      to{opacity:1; transform:translateY(0)}
-    }
+        .btn-ghost {
+            background: transparent;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
 
-    @media (max-width: 1080px){
-      .hero-grid, .framework, .cta-grid{grid-template-columns:1fr}
-      .system-grid, .tiers, .outputs{grid-template-columns:1fr}
-    }
+        .cta-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
-    @media (max-width: 760px){
-      .container{width:min(var(--max), calc(100% - 24px))}
-      .nav-links{display:none}
-      .metrics, .term-grid{grid-template-columns:1fr}
-      .hero{padding-top:46px}
-      .section{padding-top:18px}
-      h1{font-size:clamp(44px, 14vw, 74px)}
-      .state{font-size:34px}
-    }
-  </style>
+        .glossary-term {
+            border: 0;
+            padding: 0;
+            margin: 0;
+            background: none;
+            color: inherit;
+            font: inherit;
+            line-height: inherit;
+            letter-spacing: inherit;
+            text-transform: inherit;
+            border-bottom: 1px dashed rgba(47, 107, 255, .3);
+            cursor: help;
+        }
+
+        .glossary-term:hover {
+            border-bottom-color: rgba(47, 107, 255, .55);
+        }
+
+        .glossary-pop {
+            width: min(360px, calc(100vw - 28px));
+            margin: 0;
+            padding: 12px 13px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, .12);
+            background: linear-gradient(180deg, rgba(10, 10, 10, .98), rgba(5, 5, 5, .98));
+            color: #dfdfdf;
+            box-shadow: 0 14px 38px rgba(0, 0, 0, .52), 0 0 0 1px rgba(47, 107, 255, .12) inset;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .glossary-pop strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #f0f0f0;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            font-size: 10px;
+        }
+
+        .cmd-dialog {
+            width: min(620px, calc(100vw - 28px));
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 16px;
+            background: linear-gradient(180deg, rgba(8, 8, 8, .98), rgba(4, 4, 4, .98));
+            color: #e6e6e6;
+            box-shadow: 0 24px 56px rgba(0, 0, 0, .56), 0 0 0 1px rgba(47, 107, 255, .12) inset;
+        }
+
+        .cmd-dialog::backdrop {
+            background: rgba(0, 0, 0, .56);
+            backdrop-filter: blur(2px);
+        }
+
+        .cmd-inner {
+            padding: 14px;
+        }
+
+        .cmd-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .cmd-label {
+            font-size: 10px;
+            color: #9a9a9a;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+
+        .cmd-close {
+            border: 1px solid rgba(255, 255, 255, .12);
+            background: rgba(255, 255, 255, .02);
+            color: #d8d8d8;
+            border-radius: 10px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .cmd-input {
+            width: 100%;
+            height: 42px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, .12);
+            background: rgba(255, 255, 255, .02);
+            color: #ececec;
+            padding: 0 12px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .cmd-input::placeholder {
+            color: #7e7e7e;
+        }
+
+        .cmd-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .cmd-item {
+            width: 100%;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, .1);
+            background: rgba(255, 255, 255, .015);
+            color: #dddddd;
+            border-radius: 12px;
+            padding: 10px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+
+        .cmd-item:hover {
+            border-color: rgba(47, 107, 255, .34);
+            background: rgba(47, 107, 255, .08);
+        }
+
+        .hero {
+            padding: 84px 0 38px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-watermark {
+            position: absolute;
+            inset: 0;
+            width: min(var(--max), calc(100% - 40px));
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-right: 28px;
+            opacity: .022;
+            pointer-events: none;
+            z-index: 0;
+            mask-image: linear-gradient(90deg, transparent 6%, rgba(0, 0, 0, .9) 26%, rgba(0, 0, 0, .95) 78%, transparent 98%);
+        }
+
+        .hero-watermark svg {
+            width: min(50vw, 580px);
+            height: min(50vw, 580px);
+            color: #d6d6d6;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.02fr .98fr;
+            gap: 30px;
+            align-items: stretch;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-grid::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 8px;
+            bottom: 8px;
+            width: 1px;
+            background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, .06) 20%, rgba(47, 107, 255, .11) 52%, rgba(255, 255, 255, .06) 82%, transparent 100%);
+            opacity: .45;
+            pointer-events: none;
+            transform: translateX(-15px);
+        }
+
+        .hero-copy {
+            padding-top: 12px;
+            text-align: center;
+            display: grid;
+            justify-items: center;
+            align-content: start;
+            gap: 8px;
+        }
+
+        .hero-logo {
+            width: 82px;
+            height: 82px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            background: #000000;
+            margin: 0 0 2px;
+        }
+
+        .hero-logo svg {
+            width: 44px;
+            height: 44px;
+            color: #d9d9d9;
+        }
+
+        .hero-logo svg .break {
+            stroke: rgba(47, 107, 255, 0.78);
+        }
+
+        h1 {
+            margin: 8px 0 2px;
+            font-size: clamp(54px, 7.4vw, 104px);
+            line-height: .88;
+            letter-spacing: -.07em;
+            font-weight: 760;
+            color: #f3f3f3;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, .08), 0 14px 38px rgba(0, 0, 0, .34);
+        }
+
+        h1 span {
+            color: #f9f9ff;
+            background: linear-gradient(180deg, #ffffff 0%, #e9eeff 62%, #d9e3ff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 26px rgba(47, 107, 255, .16);
+        }
+
+        .hero-sub {
+            max-width: 560px;
+            margin: 0;
+            color: #bdbdbd;
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.35;
+            letter-spacing: .06em;
+            text-transform: none;
+        }
+
+        .hero-line {
+            margin: 0 0 8px;
+            color: var(--muted);
+            font-size: 12px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            line-height: 1.3;
+        }
+
+        .hero-sigil {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0 0 16px;
+            color: #9a9a9a;
+            font-size: 10px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+
+        .hero-sigil svg {
+            width: 14px;
+            height: 14px;
+            color: #cfcfcf;
+        }
+
+        .hero-sigil svg .break {
+            stroke: #d4d4d4;
+        }
+
+        .hero-sigil svg.is-active .break {
+            stroke: var(--accent)
+        }
+
+        .micro-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 0 0 28px;
+        }
+
+        .micro-pill {
+            padding: 10px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .06);
+            background:
+                linear-gradient(135deg, transparent 0 5px, var(--cut-line-soft) 5px 6px, transparent 6px) top right / 10px 10px no-repeat,
+                rgba(255, 255, 255, .02);
+            color: #dadada;
+            font-size: 12px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 28px;
+        }
+
+        .metric {
+            border: 1px solid var(--module-border-soft);
+            border-radius: 20px;
+            padding: 17px 18px;
+            background: var(--module-bg);
+            box-shadow: var(--module-shadow), var(--module-inset);
+            position: relative;
+            overflow: hidden;
+            transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+        }
+
+        .metric .k {
+            font-size: 10px;
+            color: #9a9a9a;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            margin-bottom: 11px;
+            line-height: 1.25;
+        }
+
+        .metric .v {
+            font-size: 27px;
+            line-height: 1.08;
+            letter-spacing: -.03em;
+            font-weight: 520;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .hero-stack {
+            display: grid;
+            gap: 16px;
+            min-height: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-stack::before {
+            content: "";
+            position: absolute;
+            inset: -26px -24px -22px -24px;
+            background:
+                radial-gradient(88% 72% at 64% 38%, rgba(47, 107, 255, .12), transparent 70%),
+                radial-gradient(70% 56% at 36% 60%, rgba(255, 255, 255, .04), transparent 76%);
+            opacity: .42;
+            pointer-events: none;
+            z-index: -1;
+            filter: saturate(95%);
+        }
+
+        .panel {
+            border: 1px solid var(--module-border);
+            border-radius: 30px 30px 28px 30px;
+            padding: 18px 19px 17px 18px;
+            background:
+                linear-gradient(135deg, transparent 0 10px, var(--cut-line) 10px 11px, transparent 11px) top right / var(--cut-size-lg) var(--cut-size-lg) no-repeat,
+                linear-gradient(180deg, rgba(47, 107, 255, .055), transparent 26%),
+                var(--module-bg);
+            box-shadow: var(--module-shadow), var(--module-inset), 0 0 0 1px rgba(47, 107, 255, .08) inset;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: "";
+            position: absolute;
+            right: -80px;
+            top: -60px;
+            width: 220px;
+            height: 220px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(47, 107, 255, .14), transparent 70%);
+            pointer-events: none;
+        }
+
+        .panel-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 16px;
+        }
+
+        .panel-label {
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+
+        .live {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(47, 107, 255, .26);
+            background: rgba(47, 107, 255, .08);
+            font-size: 12px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            box-shadow: 0 0 0 1px rgba(47, 107, 255, .14) inset, 0 0 12px rgba(47, 107, 255, .12);
+        }
+
+        .terminal {
+            border: 1px solid var(--module-border);
+            border-radius: 24px 24px 22px 24px;
+            background:
+                linear-gradient(135deg, transparent 0 10px, var(--cut-line) 10px 11px, transparent 11px) top right / var(--cut-size-lg) var(--cut-size-lg) no-repeat,
+                rgba(0, 0, 0, .48);
+            padding: 22px 21px 21px 22px;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            box-shadow: var(--module-shadow), var(--module-inset);
+        }
+
+        .terminal-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .asset {
+            font-size: 12px;
+            color: #9a9a9a;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            line-height: 1.3;
+        }
+
+        .state {
+            margin-top: 6px;
+            font-size: 40px;
+            line-height: 1.02;
+            letter-spacing: -.045em;
+            font-weight: 560;
+        }
+
+        .pill {
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .08);
+            background: rgba(255, 255, 255, .02);
+            font-size: 11px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .pill.blue {
+            border-color: rgba(47, 107, 255, .3);
+            background: rgba(47, 107, 255, .12);
+            box-shadow: 0 0 0 1px rgba(47, 107, 255, .16) inset, 0 0 10px rgba(47, 107, 255, .11);
+        }
+
+        .term-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 13px;
+            margin-bottom: 14px;
+        }
+
+        .term-stat {
+            border: 1px solid var(--module-border-soft);
+            border-radius: 16px;
+            background: linear-gradient(180deg, rgba(13, 13, 13, .95), rgba(10, 10, 10, .94));
+            padding: 14px 15px;
+            display: grid;
+            gap: 8px;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, .016), 0 10px 22px rgba(0, 0, 0, .32);
+            transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+        }
+
+        .term-stat .k {
+            font-size: 10px;
+            color: #989898;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            margin: 0;
+            line-height: 1.25;
+        }
+
+        .term-stat .v {
+            font-size: 22px;
+            line-height: 1.16;
+            letter-spacing: -.025em;
+            font-weight: 540;
+            font-variant-numeric: tabular-nums;
+            word-spacing: .04em;
+        }
+
+        .plan {
+            border: 1px solid var(--module-border-soft);
+            border-radius: 16px;
+            background: linear-gradient(180deg, rgba(13, 13, 13, .94), rgba(10, 10, 10, .94));
+            padding: 15px 16px;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, .016), 0 10px 22px rgba(0, 0, 0, .3);
+            transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+        }
+
+        .plan .k {
+            font-size: 10px;
+            color: #9a9a9a;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            margin-bottom: 11px;
+        }
+
+        .plan .v {
+            font-size: 14px;
+            line-height: 1.9;
+            color: #dfdfdf;
+            word-spacing: .03em;
+        }
+
+        .mini-stream {
+            border: 1px solid var(--module-border);
+            border-radius: 24px 24px 22px 24px;
+            background:
+                linear-gradient(135deg, transparent 0 10px, var(--cut-line) 10px 11px, transparent 11px) top right / var(--cut-size-lg) var(--cut-size-lg) no-repeat,
+                var(--module-bg);
+            padding: 18px;
+            box-shadow: var(--module-shadow), var(--module-inset);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stream-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .stream-title {
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+
+        .stream-list {
+            display: grid;
+            gap: 12px
+        }
+
+        .stream-item {
+            border: 1px solid var(--module-border-soft);
+            border-radius: 16px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, .018), rgba(255, 255, 255, .012));
+            padding: 13px 14px;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, .014), 0 8px 18px rgba(0, 0, 0, .24);
+            transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+        }
+
+        .stream-item .tag {
+            font-size: 10px;
+            color: #9a9a9a;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+            margin-bottom: 9px;
+        }
+
+        .stream-item .line {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #e5e5e5;
+            word-spacing: .04em;
+        }
+
+        .section {
+            position: relative;
+            padding: var(--section-pad) 0 0;
+        }
+
+        .section>.container {
+            position: relative;
+        }
+
+        .section>.container::before {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: -2px;
+            width: 150px;
+            height: 150px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='4.2' y='4.2' width='15.6' height='15.6' rx='0.8' fill='none' stroke='rgba(222,222,222,.4)' stroke-width='1.2'/%3E%3Cpath d='M6.8 17.2 11.4 12.6' fill='none' stroke='rgba(206,206,206,.72)' stroke-width='1.75' stroke-linecap='square'/%3E%3Cpath d='M12.8 11.2 17.4 6.6' fill='none' stroke='rgba(206,206,206,.72)' stroke-width='1.75' stroke-linecap='square'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: .018;
+            pointer-events: none;
+            transform: translateX(34%);
+        }
+
+        .section+.section {
+            margin-top: 14px;
+        }
+
+        .section+.section::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: -8px;
+            height: 1px;
+            background:
+                linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, .095) 20%, var(--break-divider-main) 50%, rgba(255, 255, 255, .095) 80%, transparent 100%),
+                linear-gradient(135deg, transparent 40%, rgba(47, 107, 255, .24) 48%, rgba(47, 107, 255, .24) 52%, transparent 60%) center / 24px 6px no-repeat,
+                linear-gradient(315deg, transparent 40%, var(--break-divider-soft) 48%, var(--break-divider-soft) 52%, transparent 60%) center / 42px 6px no-repeat;
+            pointer-events: none;
+        }
+
+        .section+.section::after {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, transparent 38%, rgba(47, 107, 255, .26) 48%, rgba(47, 107, 255, .26) 52%, transparent 62%);
+            opacity: .32;
+            pointer-events: none;
+        }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section-sigil {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 12px;
+            color: #919191;
+            font-size: 10px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+
+        .section-sigil svg {
+            width: 13px;
+            height: 13px;
+            color: #c7c7c7;
+            flex: none;
+        }
+
+        .section-sigil svg .break {
+            stroke: #a9a9a9;
+        }
+
+        .section-sigil svg.is-active .break {
+            stroke: var(--accent)
+        }
+
+        .section-head h2 {
+            margin: 0 0 10px;
+            font-size: clamp(28px, 3vw, 44px);
+            line-height: 1;
+            letter-spacing: -.05em;
+        }
+
+        .section-head p {
+            margin: 0;
+            max-width: 760px;
+            color: #b8b8b8;
+            line-height: 1.72;
+        }
+
+        .system-grid,
+        .trust-grid,
+        .action-grid,
+        .outputs {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: var(--grid-gap);
+        }
+
+        .tiers {
+            display: grid;
+            grid-template-columns: .95fr 1fr 1.15fr;
+            gap: var(--grid-gap);
+            align-items: stretch;
+        }
+
+        .card {
+            border: 1px solid var(--module-border);
+            border-radius: 24px 24px 22px 24px;
+            padding: 19px;
+            background:
+                linear-gradient(135deg, transparent 0 10px, var(--cut-line) 10px 11px, transparent 11px) top right / var(--cut-size-lg) var(--cut-size-lg) no-repeat,
+                var(--module-bg);
+            box-shadow: var(--module-shadow), var(--module-inset);
+            overflow: hidden;
+            position: relative;
+            transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+        }
+
+        .card::after {
+            content: "";
+            position: absolute;
+            right: 14px;
+            top: 14px;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, transparent 38%, rgba(255, 255, 255, .24) 48%, rgba(255, 255, 255, .24) 52%, transparent 62%);
+            opacity: .5;
+            pointer-events: none;
+        }
+
+        .card.featured {
+            border-color: rgba(47, 107, 255, .3);
+            box-shadow: var(--module-shadow), var(--module-inset), 0 0 0 1px rgba(47, 107, 255, .18) inset, 0 0 14px rgba(47, 107, 255, .08);
+        }
+
+        .card.featured::after {
+            background: linear-gradient(135deg, transparent 38%, rgba(47, 107, 255, .5) 48%, rgba(47, 107, 255, .5) 52%, transparent 62%);
+            opacity: .65;
+        }
+
+        .card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            margin: 0;
+            font-size: 18px;
+            letter-spacing: -.025em;
+            line-height: 1.15;
+        }
+
+        .card-sub {
+            margin-top: 5px;
+            font-size: 10px;
+            color: #9a9a9a;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            line-height: 1.3;
+        }
+
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            color: #d5dfff;
+            background: #05070d;
+            border: 1px solid rgba(47, 107, 255, .18);
+            border-radius: 16px;
+            padding: 16px;
+            font: 500 13px/1.82 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: .01em;
+        }
+
+        .tier {
+            border: 1px solid var(--module-border);
+            border-radius: 24px 24px 22px 24px;
+            padding: 22px 23px 21px 22px;
+            background:
+                linear-gradient(135deg, transparent 0 10px, var(--cut-line) 10px 11px, transparent 11px) top right / var(--cut-size-lg) var(--cut-size-lg) no-repeat,
+                var(--module-bg);
+            box-shadow: var(--module-shadow), var(--module-inset);
+            position: relative;
+            overflow: hidden;
+            transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease, filter .2s ease;
+        }
+
+        .metric:hover,
+        .term-stat:hover,
+        .plan:hover,
+        .stream-item:hover,
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(47, 107, 255, .34);
+            box-shadow: 0 0 0 1px rgba(47, 107, 255, .16) inset, 0 18px 34px rgba(0, 0, 0, .34), 0 0 16px rgba(47, 107, 255, .12);
+        }
+
+        .tier .name {
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: .13em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .tier .layer-title {
+            margin: 0 0 10px;
+            font-size: 28px;
+            letter-spacing: -.035em;
+            line-height: 1.05;
+        }
+
+        .tier p {
+            color: #bfbfbf;
+            line-height: 1.68;
+            min-height: 0;
+            margin: 0 0 12px;
+        }
+
+        .tier .layer-points {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 8px;
+        }
+
+        .tier .layer-points li {
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, .05);
+            font-size: 12px;
+            line-height: 1.5;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+
+        .tier-free {
+            border-color: rgba(255, 255, 255, .05);
+            background: #000000;
+            box-shadow: none;
+        }
+
+        .tier-free .layer-title,
+        .tier-free p {
+            color: #aeb3bc;
+        }
+
+        .tier-pro {
+            border-color: rgba(47, 107, 255, .24);
+            box-shadow: var(--module-shadow), var(--module-inset), 0 0 0 1px rgba(47, 107, 255, .1) inset;
+        }
+
+        .tier-pro .layer-title {
+            color: #dfe8ff;
+        }
+
+        .tier-core {
+            border-color: rgba(47, 107, 255, .5);
+            box-shadow: var(--module-shadow), var(--module-inset), 0 0 0 1px rgba(47, 107, 255, .22) inset, 0 0 20px rgba(47, 107, 255, .12);
+        }
+
+        .tier-core .layer-title {
+            color: #edf2ff;
+            font-size: 32px;
+        }
+
+        .tier-core p {
+            color: #d2dbef;
+        }
+
+        .core-live-label {
+            display: inline-flex;
+            align-items: center;
+            margin: 0 0 8px;
+            padding: 4px 8px;
+            border: 1px solid rgba(47, 107, 255, .36);
+            border-radius: 6px;
+            background: rgba(47, 107, 255, .1);
+            color: #dce7ff;
+            font-size: 10px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .tier-free:hover {
+            filter: brightness(1.05);
+        }
+
+        .tier-pro:hover {
+            box-shadow: var(--module-shadow), var(--module-inset), 0 0 0 1px rgba(47, 107, 255, .16) inset, 0 0 12px rgba(47, 107, 255, .14);
+        }
+
+        .tier-core:hover {
+            transform: scale(1.02);
+            box-shadow: var(--module-shadow), var(--module-inset), 0 0 0 1px rgba(47, 107, 255, .24) inset, 0 0 18px rgba(47, 107, 255, .2);
+        }
+
+        .framework {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--grid-gap);
+        }
+
+        .stack {
+            display: grid;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .stack-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 14px;
+            border: 1px solid rgba(255, 255, 255, .05);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, .015);
+        }
+
+        .stack-num {
+            width: 34px;
+            height: 34px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(47, 107, 255, .26);
+            background: rgba(47, 107, 255, .08);
+            color: #dce7ff;
+            flex: none;
+            font-size: 12px;
+            letter-spacing: .08em;
+        }
+
+        .stack strong {
+            display: block;
+            font-size: 14px;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .stack p {
+            margin: 0;
+            color: #b7b7b7;
+            line-height: 1.62;
+        }
+
+        .outputs .card {
+            padding: 21px
+        }
+
+        .out-k {
+            font-size: 10px;
+            color: #9a9a9a;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            margin-bottom: 11px;
+            line-height: 1.25;
+        }
+
+        .out-v {
+            font-size: 15px;
+            color: #e1e1e1;
+            line-height: 1.9;
+            word-spacing: .04em;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .trust-card .card-sub {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .trust-title {
+            margin: 0 0 10px;
+            font-size: 20px;
+            letter-spacing: -.025em;
+            line-height: 1.12;
+        }
+
+        .trust-copy {
+            margin: 0;
+            color: #c9c9c9;
+            line-height: 1.78;
+            font-size: 14px;
+            max-width: 42ch;
+        }
+
+        .trade-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .trade-asset {
+            margin: 0;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: -.04em;
+            font-weight: 620;
+        }
+
+        .trade-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .trade-row {
+            display: grid;
+            grid-template-columns: 98px 1fr;
+            align-items: baseline;
+            gap: 12px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, .045);
+        }
+
+        .trade-row .k {
+            font-size: 10px;
+            color: #9b9b9b;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            line-height: 1.3;
+        }
+
+        .trade-row .v {
+            font-size: 14px;
+            color: #e2e2e2;
+            line-height: 1.6;
+            letter-spacing: .005em;
+        }
+
+        .trade-row .v.result {
+            color: #dbe5ff;
+            font-weight: 560;
+        }
+
+        .how-wrap {
+            margin-top: 6px;
+        }
+
+        .how-card {
+            border: 1px solid var(--module-border);
+            border-radius: 20px;
+            padding: 16px;
+            background: rgba(255, 255, 255, .01);
+            box-shadow: var(--module-shadow), var(--module-inset);
+        }
+
+        .how-head {
+            margin: 0 0 12px;
+            font-size: 12px;
+            letter-spacing: .12em;
+            text-transform: none;
+            color: #cfcfcf;
+        }
+
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .how-step {
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 12px;
+            padding: 11px 12px;
+            background: rgba(255, 255, 255, .01);
+        }
+
+        .how-step .k {
+            margin: 0 0 8px;
+            font-size: 10px;
+            color: #a1a1a1;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .how-step .v {
+            margin: 0;
+            font-size: 13px;
+            color: #e3e3e3;
+            line-height: 1.55;
+        }
+
+        .panel::after,
+        .terminal::before,
+        .mini-stream::before,
+        .tier::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            background:
+                linear-gradient(90deg, rgba(47, 107, 255, .24), transparent 72%) top 12px left 12px / 18px 1px no-repeat,
+                linear-gradient(180deg, rgba(47, 107, 255, .24), transparent 72%) top 12px left 12px / 1px 18px no-repeat,
+                linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, .2) 49%, rgba(255, 255, 255, .2) 51%, transparent 60%) top 10px right 10px / 10px 10px no-repeat;
+            opacity: .42;
+        }
+
+        .pill,
+        .section-sigil {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pill::after,
+        .section-sigil::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, transparent 0 4px, var(--cut-line-soft) 4px 5px, transparent 5px);
+            opacity: .65;
+            pointer-events: none;
+        }
+
+        .metric::before,
+        .card::before,
+        .tier::after {
+            content: "";
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            top: 0;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, .16), rgba(47, 107, 255, .16), rgba(255, 255, 255, .04));
+            opacity: .45;
+            pointer-events: none;
+        }
+
+        .cta {
+            margin: 34px 0 58px;
+            border: 1px solid rgba(47, 107, 255, .34);
+            border-radius: 28px;
+            padding: 26px;
+            background:
+                radial-gradient(circle at 78% 22%, rgba(47, 107, 255, .18), transparent 34%),
+                radial-gradient(circle at 18% 78%, rgba(255, 255, 255, .04), transparent 42%),
+                linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .012));
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, .03), 0 26px 72px rgba(0, 0, 0, .48), 0 0 18px rgba(47, 107, 255, .1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-grid {
+            display: grid;
+            grid-template-columns: 1.06fr .94fr;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .cta h3 {
+            margin: 0 0 12px;
+            font-size: clamp(30px, 4vw, 50px);
+            line-height: .98;
+            letter-spacing: -.05em;
+        }
+
+        .cta p {
+            margin: 0;
+            color: #bebebe;
+            line-height: 1.72;
+            max-width: 720px;
+        }
+
+        .cta-box {
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: 22px;
+            padding: 18px;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .012)),
+                rgba(0, 0, 0, .5);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04), 0 16px 36px rgba(0, 0, 0, .34);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 88% 14%, rgba(47, 107, 255, .14), transparent 44%);
+            pointer-events: none;
+        }
+
+        .cta .btn-primary {
+            border-color: rgba(47, 107, 255, .72);
+            box-shadow: none;
+        }
+
+        .cta .btn-primary:hover {
+            filter: brightness(1.04);
+        }
+
+        .cta .btn-primary {
+            height: 52px;
+            padding: 0 24px;
+            font-size: 14px;
+            letter-spacing: .08em;
+        }
+
+        .cta .btn-ghost {
+            height: 48px;
+            padding: 0 18px;
+        }
+
+        .cta-status {
+            margin: 0 0 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(47, 107, 255, .24);
+            background: rgba(47, 107, 255, .08);
+            color: #c8d8ff;
+            font-size: 10px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .cta-status .dot {
+            width: 6px;
+            height: 6px;
+        }
+
+        .live-dot {
+            animation: liveDotPulse 1.5s ease-in-out infinite;
+        }
+
+        .panel-updating {
+            position: relative;
+        }
+
+        .panel-update-line {
+            position: absolute;
+            left: 12px;
+            right: 12px;
+            top: 8px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(47, 107, 255, .3) 50%, transparent 100%);
+            opacity: .2;
+            pointer-events: none;
+            animation: panelUpdateLine 2.8s ease-in-out infinite;
+        }
+
+        .pulse {
+            position: relative;
+            isolation: isolate;
+        }
+
+        .pulse::after {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            pointer-events: none;
+            opacity: 0;
+            box-shadow: 0 0 0 0 rgba(47, 107, 255, .18);
+            animation: pulseRing 2.6s ease-in-out infinite;
+        }
+
+        .tiny {
+            color: var(--muted);
+            font-size: 11px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .copy {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #e3e3e3;
+        }
+
+        .footer {
+            padding: 0 0 34px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .footer-line {
+            border-top: 1px solid rgba(255, 255, 255, .05);
+            padding-top: 18px;
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: all 0.6s ease;
+        }
+
+        .visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes pulseRing {
+            0% {
+                opacity: 0;
+                box-shadow: 0 0 0 0 rgba(47, 107, 255, .14);
+            }
+
+            35% {
+                opacity: .55;
+                box-shadow: 0 0 0 6px rgba(47, 107, 255, .08);
+            }
+
+            100% {
+                opacity: 0;
+                box-shadow: 0 0 0 12px rgba(47, 107, 255, 0);
+            }
+        }
+
+        @keyframes liveDotPulse {
+
+            0%,
+            100% {
+                opacity: .45;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes panelUpdateLine {
+
+            0%,
+            100% {
+                opacity: .14;
+                transform: scaleX(.88);
+            }
+
+            50% {
+                opacity: .3;
+                transform: scaleX(1);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+
+            .reveal {
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+            }
+        }
+
+        .glossary-term:focus-visible,
+        .cmd-close:focus-visible,
+        .cmd-input:focus-visible,
+        .cmd-item:focus-visible,
+        [data-cmd-open]:focus-visible {
+            outline: 1px solid rgba(47, 107, 255, .72);
+            outline-offset: 2px;
+        }
+
+        /* Terminal-style hardening: cold, sharp, system-like */
+        :root {
+            --text: #EDEDED;
+            --muted: #8A8F98;
+        }
+
+        body {
+            background: #000000 !important;
+            color: #EDEDED !important;
+        }
+
+        body::before,
+        body::after {
+            display: none !important;
+        }
+
+        h1 span {
+            background: none !important;
+            -webkit-text-fill-color: #EDEDED !important;
+            color: #EDEDED !important;
+            text-shadow: none !important;
+        }
+
+        .hero-watermark,
+        .hero-stack::before,
+        .section>.container::before,
+        .section+.section::before,
+        .section+.section::after,
+        .panel::before,
+        .panel::after,
+        .terminal::before,
+        .mini-stream::before,
+        .tier::before,
+        .tier::after,
+        .metric::before,
+        .card::before,
+        .card::after,
+        .pill::after,
+        .section-sigil::after,
+        .cta-box::before {
+            display: none !important;
+        }
+
+        .metric,
+        .panel,
+        .terminal,
+        .mini-stream,
+        .card,
+        .tier,
+        .term-stat,
+        .plan,
+        .stream-item,
+        .cta,
+        .cta-box,
+        .how-card,
+        .how-step,
+        .cmd-dialog,
+        .cmd-item,
+        .cmd-input,
+        .cmd-close,
+        .glossary-pop,
+        .micro-pill,
+        .eyebrow,
+        .pill,
+        .live,
+        .stack-row,
+        .btn {
+            background: #000000 !important;
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            border-radius: 8px !important;
+            box-shadow: none !important;
+        }
+
+        .btn-primary,
+        .pill.blue {
+            background: rgba(47, 107, 255, 0.14) !important;
+            border-color: rgba(47, 107, 255, 0.36) !important;
+            box-shadow: none !important;
+        }
+
+        .btn {
+            border-radius: 6px !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            background: transparent !important;
+        }
+
+        .btn-primary {
+            background: #2F6BFF !important;
+            color: #ffffff !important;
+            border-color: #2F6BFF !important;
+        }
+
+        .btn-ghost {
+            background: transparent !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        .cta .btn-primary:hover {
+            box-shadow: 0 0 0 1px rgba(47, 107, 255, 0.22) inset, 0 0 16px rgba(47, 107, 255, 0.2) !important;
+            filter: brightness(1.06) !important;
+        }
+
+        .metric:hover,
+        .term-stat:hover,
+        .plan:hover,
+        .stream-item:hover,
+        .card:hover {
+            box-shadow: none !important;
+            border-color: rgba(47, 107, 255, 0.28) !important;
+        }
+
+        .tier-free:hover {
+            filter: brightness(1.05) !important;
+        }
+
+        .tier-core {
+            transform: scale(1.12) translateY(-8px) !important;
+            transform-origin: center;
+            border-color: rgba(47, 107, 255, 0.4) !important;
+            box-shadow: 0 0 40px rgba(47, 107, 255, 0.15) !important;
+            z-index: 2;
+        }
+
+        .tier-pro:hover {
+            box-shadow: 0 0 0 1px rgba(47, 107, 255, 0.14) inset, 0 0 12px rgba(47, 107, 255, 0.14) !important;
+            border-color: rgba(47, 107, 255, 0.34) !important;
+        }
+
+        .tier-core:hover {
+            transform: scale(1.14) translateY(-8px) !important;
+            box-shadow: 0 0 0 1px rgba(47, 107, 255, 0.2) inset, 0 0 18px rgba(47, 107, 255, 0.2) !important;
+            border-color: rgba(47, 107, 255, 0.5) !important;
+        }
+
+        .hero-sub,
+        .panel-label,
+        .asset,
+        .stream-title,
+        .stream-item .tag,
+        .card-sub,
+        .out-k,
+        .tiny,
+        .footer,
+        .k,
+        .tier .name,
+        .tier .price small,
+        .section-sigil,
+        .how-step .k,
+        .cmd-label,
+        .cmd-input::placeholder {
+            color: #8A8F98 !important;
+        }
+
+        .copy,
+        .out-v,
+        .stream-item .line,
+        .trust-copy,
+        .tier p,
+        .stack p,
+        .how-step .v {
+            color: #EDEDED !important;
+        }
+
+        pre {
+            background: #000000 !important;
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            color: #EDEDED !important;
+            box-shadow: none !important;
+            border-radius: 8px !important;
+        }
+
+        @media (max-width: 1080px) {
+
+            .hero-grid,
+            .framework,
+            .cta-grid {
+                grid-template-columns: 1fr
+            }
+
+            .hero-grid::before {
+                display: none;
+            }
+
+            .hero-stack::before {
+                inset: -14px -10px -10px -10px;
+                opacity: .3;
+            }
+
+            .system-grid,
+            .tiers,
+            .outputs,
+            .how-grid {
+                grid-template-columns: 1fr
+            }
+
+            .tier-core {
+                transform: scale(1.06) translateY(-4px) !important;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .container {
+                width: min(var(--max), calc(100% - 24px))
+            }
+
+            .nav-links {
+                display: none
+            }
+
+            .metrics,
+            .term-grid {
+                grid-template-columns: 1fr
+            }
+
+            .hero {
+                padding-top: 46px
+            }
+
+            .section {
+                padding-top: 18px
+            }
+
+            .hero-watermark {
+                width: min(var(--max), calc(100% - 24px));
+                justify-content: center;
+                padding-right: 0;
+                opacity: .017;
+            }
+
+            .hero-watermark svg {
+                width: min(72vw, 360px);
+                height: min(72vw, 360px);
+            }
+
+            .section>.container::before {
+                width: 110px;
+                height: 110px;
+                opacity: .014;
+                transform: translateX(22%);
+            }
+
+            h1 {
+                font-size: clamp(44px, 14vw, 74px)
+            }
+
+            .state {
+                font-size: 34px
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <header class="header">
-    <div class="container nav">
-      <div class="brand">
-        <div class="brand-mark">SB</div>
-        <div>STRCTR</div>
-      </div>
+    <svg width="0" height="0" style="position:absolute;opacity:0;pointer-events:none" aria-hidden="true"
+        focusable="false">
+        <defs>
+            <symbol id="strctr-mark" viewBox="0 0 24 24">
+                <rect class="frame" x="4.2" y="4.2" width="15.6" height="15.6" rx="0.8" fill="none"
+                    stroke="currentColor" stroke-width="1.25" />
+                <path class="break" d="M6.8 17.2 11.4 12.6" fill="none" stroke="currentColor" stroke-width="1.95"
+                    stroke-linecap="square" />
+                <path class="break" d="M12.8 11.2 17.4 6.6" fill="none" stroke="currentColor" stroke-width="1.95"
+                    stroke-linecap="square" />
+            </symbol>
+        </defs>
+    </svg>
 
-      <nav class="nav-links">
-        <a href="#system">System</a>
-        <a href="#tiers">Layers</a>
-        <a href="#framework">Framework</a>
-        <a href="#outputs">Output</a>
-        <a href="#access">Access</a>
-      </nav>
-
-      <a class="btn btn-ghost" href="#access">Join Free</a>
-    </div>
-  </header>
-
-  <main>
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy reveal">
-          <div class="eyebrow"><span class="dot"></span> Decision system for liquidity trading</div>
-          <h1>Structure decides.<br><span>You execute.</span></h1>
-          <p class="hero-sub">
-            STRCTR is a cold, structured operating system for liquidity, trap, structure break, and execution.
-            Telegram first. Dashboard ready. Built to feel like one system across channel, bot, and future SaaS.
-          </p>
-
-          <div class="micro-bar">
-            <div class="micro-pill">Minimal</div>
-            <div class="micro-pill">Cold</div>
-            <div class="micro-pill">Structured</div>
-            <div class="micro-pill">No noise</div>
-          </div>
-
-          <div class="btn-row">
-            <a class="btn btn-primary" href="#access">Access Free Layer</a>
-            <a class="btn btn-ghost" href="#system">View System</a>
-          </div>
-
-          <div class="metrics">
-            <div class="metric">
-              <div class="k">Framework</div>
-              <div class="v">ZLF v4</div>
+    <header class="header">
+        <div class="container nav">
+            <div class="brand">
+                <div class="brand-mark" aria-hidden="true">
+                    <svg class="logo-mark-svg" viewBox="0 0 24 24" role="img" aria-label="STRCTR mark">
+                        <use href="#strctr-mark"></use>
+                    </svg>
+                </div>
+                <div>STRCTR</div>
             </div>
-            <div class="metric">
-              <div class="k">Model</div>
-              <div class="v">Scenario → Execution</div>
+
+            <nav class="nav-links">
+                <a href="#system">System</a>
+                <a href="#tiers">Layers</a>
+                <a href="#framework">Framework</a>
+                <a href="#outputs">Output</a>
+                <a href="#action">Action</a>
+                <a href="#access">Access</a>
+            </nav>
+
+            <a class="btn btn-ghost" href="#system">Open System</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-watermark" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                    <use href="#strctr-mark"></use>
+                </svg>
             </div>
-            <div class="metric">
-              <div class="k">Launch</div>
-              <div class="v">Telegram First</div>
+            <div class="container hero-grid">
+                <div class="hero-copy reveal">
+                    <div class="hero-logo" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <use href="#strctr-mark"></use>
+                        </svg>
+                    </div>
+                    <h1>STRCTR</h1>
+                    <p class="hero-sub">Market structure and execution system</p>
+                    <p class="hero-sub">Not signals. Decision system.</p>
+
+                    <div class="btn-row">
+                        <button class="btn btn-primary" type="button" data-cmd-open>Open System</button>
+                        <a class="btn btn-ghost" href="https://t.me/" target="_blank" rel="noopener noreferrer">View
+                            Live Feed</a>
+                    </div>
+                </div>
+
+                <div class="hero-stack reveal d2">
+                    <div class="panel panel-updating">
+                        <div class="panel-update-line" aria-hidden="true"></div>
+                        <div class="panel-top">
+                            <div class="panel-label">System Panel — Live</div>
+                            <div class="live pulse"><span class="dot live-dot"></span> Core stream online</div>
+                        </div>
+
+                        <div class="terminal">
+                            <div class="terminal-head">
+                                <div>
+                                    <div class="asset">BTC —
+                                        <button class="glossary-term" type="button"
+                                            popovertarget="glossary-structure-break">Structure Break</button>
+                                    </div>
+                                    <div class="state">SHORT</div>
+                                </div>
+                                <div class="pill blue">Confirmation</div>
+                            </div>
+
+                            <div class="term-grid">
+                                <div class="term-stat">
+                                    <div class="k">Scenario</div>
+                                    <div class="v">Up
+                                        <button class="glossary-term" type="button"
+                                            popovertarget="glossary-trap">Trap</button>
+                                        → Down
+                                    </div>
+                                </div>
+                                <div class="term-stat">
+                                    <div class="k">Action</div>
+                                    <div class="v">Enter Partial</div>
+                                </div>
+                                <div class="term-stat">
+                                    <div class="k">Confidence</div>
+                                    <div class="v" id="liveConfidence">82%</div>
+                                </div>
+                                <div class="term-stat">
+                                    <div class="k">Timing</div>
+                                    <div class="v">Optimal</div>
+                                </div>
+                            </div>
+
+                            <div class="plan">
+                                <div class="k">Plan</div>
+                                <div class="v">
+                                    Add → acceptance<br>
+                                    Reduce → failure<br>
+                                    Exit → invalidation
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-          </div>
+        </section>
+
+        <section class="section how-wrap" id="framework" aria-labelledby="howWorksTitle">
+            <div class="container">
+                <div class="how-card">
+                    <h2 id="howWorksTitle" class="how-head">How the system makes decisions.</h2>
+                    <div class="how-grid">
+                        <article class="how-step">
+                            <h3 class="k">Input</h3>
+                            <p class="v">Liquidity, OI, CVD</p>
+                        </article>
+                        <article class="how-step">
+                            <h3 class="k">Interpretation</h3>
+                            <p class="v">Scenario, structure, probability</p>
+                        </article>
+                        <article class="how-step">
+                            <h3 class="k">Output</h3>
+                            <p class="v">Action, levels, execution behavior</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="trust">
+            <div class="container">
+                <div class="section-head reveal">
+                    <div>
+                        <div class="section-sigil">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="#strctr-mark"></use>
+                            </svg>
+                            <span>System Proof</span>
+                        </div>
+                        <h2>What drives the decision.</h2>
+                        <p>
+                            Liquidity. Positioning. Execution.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="trust-grid">
+                    <article class="card trust-card reveal d2">
+                        <h3 class="trust-title">LIQUIDITY</h3>
+                        <p class="trust-copy">Sweeps define movement.</p>
+                    </article>
+
+                    <article class="card trust-card reveal d3">
+                        <h3 class="trust-title">POSITIONING</h3>
+                        <p class="trust-copy">Crowding reveals traps.</p>
+                    </article>
+
+                    <article class="card trust-card reveal d4">
+                        <h3 class="trust-title">EXECUTION</h3>
+                        <p class="trust-copy">State logic controls behavior.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="system">
+            <div class="container">
+                <div class="section-head reveal">
+                    <div>
+                        <div class="section-sigil">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="#strctr-mark"></use>
+                            </svg>
+                            <span>Product Surface</span>
+                        </div>
+                        <h2>One engine. Three product surfaces.</h2>
+                        <p>
+                            Scenario, execution, stream.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="system-grid">
+                    <div class="card reveal d2">
+                        <div class="card-head">
+                            <div>
+                                <h3 class="card-title">Scenario</h3>
+                                <div class="card-sub">Market direction + probabilities</div>
+                            </div>
+                            <div class="pill">Main</div>
+                        </div>
+                        <pre>Scenario
+→ market direction
+→ probabilities</pre>
+                    </div>
+
+                    <div class="card featured reveal d3">
+                        <div class="card-head">
+                            <div>
+                                <h3 class="card-title">Execution</h3>
+                                <div class="card-sub">Position behavior</div>
+                            </div>
+                            <div class="pill blue">Core</div>
+                        </div>
+                        <pre>Execution
+→ enter / add / reduce / exit
+→ position behavior</pre>
+                    </div>
+
+                    <div class="card reveal d4">
+                        <div class="card-head">
+                            <div>
+                                <h3 class="card-title">Stream</h3>
+                                <div class="card-sub">Real-time output<br>Telegram feed</div>
+                            </div>
+                            <div class="pill">Live</div>
+                        </div>
+                        <pre>Stream
+→ real-time output
+→ telegram feed</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="tiers">
+            <div class="container">
+                <div class="section-head reveal">
+                    <div>
+                        <div class="section-sigil">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="#strctr-mark"></use>
+                            </svg>
+                            <span>Access Levels</span>
+                        </div>
+                        <h2>Access levels.</h2>
+                        <p>
+                            Free, Pro, Core.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="tiers">
+                    <article class="tier tier-free reveal d2">
+                        <div class="name">FREE</div>
+                        <h3 class="layer-title">Observer</h3>
+                        <ul class="layer-points">
+                            <li>Market context</li>
+                            <li>Direction</li>
+                            <li>Invalidation</li>
+                        </ul>
+                    </article>
+
+                    <article class="tier tier-pro reveal d3">
+                        <div class="name">PRO</div>
+                        <h3 class="layer-title">Decision Layer</h3>
+                        <ul class="layer-points">
+                            <li>Scenario + timing</li>
+                            <li>Structure logic</li>
+                        </ul>
+                    </article>
+
+                    <article class="tier tier-core reveal d4">
+                        <div class="name">CORE</div>
+                        <div class="core-live-label">LIVE SYSTEM</div>
+                        <h3 class="layer-title">Execution System</h3>
+                        <p>
+                            ENTER → ADD → REDUCE → EXIT
+                        </p>
+                        <ul class="layer-points">
+                            <li>Live execution behavior</li>
+                            <li>Add / reduce / exit</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="outputs">
+            <div class="container">
+                <div class="section-head reveal">
+                    <div>
+                        <div class="section-sigil">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="#strctr-mark"></use>
+                            </svg>
+                            <span>Output Schema</span>
+                        </div>
+                        <h2>Output, structured.</h2>
+                    </div>
+                </div>
+
+                <div class="outputs">
+                    <div class="card reveal d2">
+                        <div class="out-k">Action</div>
+                        <div class="out-v">
+                            ENTER<br>
+                            ADD<br>
+                            HOLD<br>
+                            REDUCE<br>
+                            EXIT
+                        </div>
+                    </div>
+
+                    <div class="card reveal d3">
+                        <div class="out-k">Context</div>
+                        <div class="out-v">
+                            Scenario<br>
+                            Stage<br>
+                            Timing<br>
+                            Confidence
+                        </div>
+                    </div>
+
+                    <div class="card reveal d4">
+                        <div class="out-k">Plan</div>
+                        <div class="out-v">
+                            Levels<br>
+                            Invalidation<br>
+                            Add / Reduce logic
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="action">
+            <div class="container">
+                <div class="section-head reveal">
+                    <div>
+                        <div class="section-sigil">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="#strctr-mark"></use>
+                            </svg>
+                            <span>System in Action</span>
+                        </div>
+                        <h2>System in action.</h2>
+                        <p>
+                            Asset. Scenario. Stage. Action. Result.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="action-grid">
+                    <article class="card reveal d2">
+                        <div class="trade-head">
+                            <h3 class="trade-asset">BTC</h3>
+                            <div class="pill blue">Closed</div>
+                        </div>
+                        <div class="trade-list">
+                            <div class="trade-row">
+                                <div class="k">Scenario</div>
+                                <div class="v">Up Trap → Down</div>
+                            </div>
+                            <div class="trade-row">
+                                <div class="k">Stage</div>
+                                <div class="v">Confirmation</div>
+                            </div>
+                            <div class="trade-row">
+                                <div class="k">Action</div>
+                                <div class="v">ENTER → ADD → HOLD</div>
+                            </div>
+                            <div class="trade-row">
+                                <div class="k">Result</div>
+                                <div class="v result">T1 filled<br>Residual reduced</div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card reveal d3">
+                        <div class="trade-head">
+                            <h3 class="trade-asset">ETH</h3>
+                            <div class="pill">Managed</div>
+                        </div>
+                        <div class="trade-list">
+                            <div class="trade-row">
+                                <div class="k">Scenario</div>
+                                <div class="v">Range Failure → Continuation Up</div>
+                            </div>
+                            <div class="trade-row">
+                                <div class="k">Stage</div>
+                                <div class="v">Trigger</div>
+                            </div>
+                            <div class="trade-row">
+                                <div class="k">Action</div>
+                                <div class="v">ENTER → HOLD → REDUCE</div>
+                            </div>
+                            <div class="trade-row">
+                                <div class="k">Result</div>
+                                <div class="v result">Protection triggered<br>Invalidation untouched</div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card reveal d4">
+                        <div class="trade-head">
+                            <h3 class="trade-asset">SOL</h3>
+                            <div class="pill">Re-entry</div>
+                        </div>
+                        <div class="trade-list">
+                            <div class="trade-row">
+                                <div class="k">Scenario</div>
+                                <div class="v">Liquidity Sweep Below → Reclaim</div>
+                            </div>
+                            <div class="trade-row">
+                                <div class="k">Stage</div>
+                                <div class="v">Setup → Confirmation</div>
+                            </div>
+                            <div class="trade-row">
+                                <div class="k">Action</div>
+                                <div class="v">ENTER → EXIT → RE-ENTER</div>
+                            </div>
+                            <div class="trade-row">
+                                <div class="k">Result</div>
+                                <div class="v result">Failure closed fast<br>Re-entry accepted</div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="access">
+            <div class="container">
+                <div class="cta reveal">
+                    <div class="cta-grid">
+                        <div>
+                            <div class="eyebrow"><span class="dot"></span> Telegram-first launch model</div>
+                            <h3>Access the system.</h3>
+                            <p>
+                                Real-time decision flow.<br>
+                                No signals. No noise.
+                            </p>
+                        </div>
+
+                        <div class="cta-box">
+                            <div class="tiny">System Access</div>
+                            <div class="cta-status pulse"><span class="dot"></span> Live System • Active Feed</div>
+                            <div class="copy">
+                                Real-time decision flow.<br>
+                                No signals. No noise.
+                            </div>
+                            <div class="btn-row" style="margin-top:16px;">
+                                <button class="btn btn-primary" type="button" data-cmd-open>Enter System</button>
+                                <a class="btn btn-ghost" href="https://t.me/" target="_blank"
+                                    rel="noopener noreferrer">View Live Feed</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="footer">
+                    <div class="footer-line">
+                        <div>STRCTR — Not signals. Decision system.</div>
+                        <div>Black / White / Blue • Telegram-first • Dashboard-ready</div>
+                    </div>
+                </footer>
+            </div>
+        </section>
+
+        <div id="glossary-liquidity" class="glossary-pop" popover>
+            <strong>Liquidity</strong>
+            where forced inventory can be absorbed or swept.
+        </div>
+        <div id="glossary-trap" class="glossary-pop" popover>
+            <strong>Trap</strong>
+            crowd positioning plus failed continuation behavior.
+        </div>
+        <div id="glossary-structure-break" class="glossary-pop" popover>
+            <strong>Structure Break</strong>
+            failed continuation followed by level loss or reclaim shift.
+        </div>
+        <div id="glossary-oi" class="glossary-pop" popover>
+            <strong>OI</strong>
+            open interest used to track position buildup and crowd exposure.
+        </div>
+        <div id="glossary-cvd" class="glossary-pop" popover>
+            <strong>CVD</strong>
+            buy/sell pressure imbalance across aggressive flow.
         </div>
 
-        <div class="hero-stack reveal d2">
-          <div class="panel">
-            <div class="panel-top">
-              <div class="panel-label">System Panel — Live</div>
-              <div class="live"><span class="dot"></span> Core stream online</div>
+        <dialog id="commandPalette" class="cmd-dialog" aria-label="System Command Palette">
+            <div class="cmd-inner">
+                <div class="cmd-top">
+                    <div class="cmd-label">System Command Palette</div>
+                    <button class="cmd-close" type="button" data-cmd-close aria-label="Close command palette">x</button>
+                </div>
+                <input id="cmdInput" class="cmd-input" type="text" placeholder="Type command or filter actions..."
+                    autocomplete="off" />
+                <div class="cmd-list" id="cmdList">
+                    <button class="cmd-item" type="button" data-target="#system">Go: System</button>
+                    <button class="cmd-item" type="button" data-target="#tiers">Go: Layers</button>
+                    <button class="cmd-item" type="button" data-target="#framework">Go: Framework</button>
+                    <button class="cmd-item" type="button" data-target="#access">Go: Access</button>
+                    <button class="cmd-item" type="button" data-link="https://t.me/">View Signals</button>
+                    <button class="cmd-item" type="button" data-link="https://t.me/">Open Telegram</button>
+                </div>
             </div>
+        </dialog>
+    </main>
+    <script>
+        (function () {
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            <div class="terminal">
-              <div class="terminal-head">
-                <div>
-                  <div class="asset">BTC — Structure Break</div>
-                  <div class="state">SHORT</div>
-                </div>
-                <div class="pill blue">Confirmation</div>
-              </div>
+            const items = document.querySelectorAll('.reveal');
+            if (items.length) {
+                if (reducedMotion) {
+                    items.forEach((el) => el.classList.add('visible'));
+                } else {
+                    const observer = new IntersectionObserver((entries, obs) => {
+                        entries.forEach((entry) => {
+                            if (!entry.isIntersecting) return;
+                            entry.target.classList.add('visible');
+                            obs.unobserve(entry.target);
+                        });
+                    }, {
+                        threshold: 0.12,
+                        rootMargin: '0px 0px -8% 0px'
+                    });
 
-              <div class="term-grid">
-                <div class="term-stat">
-                  <div class="k">Scenario</div>
-                  <div class="v">Up Trap → Down</div>
-                </div>
-                <div class="term-stat">
-                  <div class="k">Action</div>
-                  <div class="v">Enter Partial</div>
-                </div>
-                <div class="term-stat">
-                  <div class="k">Confidence</div>
-                  <div class="v">82%</div>
-                </div>
-                <div class="term-stat">
-                  <div class="k">Timing</div>
-                  <div class="v">Optimal</div>
-                </div>
-                <div class="term-stat">
-                  <div class="k">Liquidity Above</div>
-                  <div class="v">Swept</div>
-                </div>
-                <div class="term-stat">
-                  <div class="k">Next Targets</div>
-                  <div class="v">68.5 / 66.0</div>
-                </div>
-              </div>
+                    items.forEach((el) => observer.observe(el));
+                }
+            }
 
-              <div class="plan">
-                <div class="k">Plan</div>
-                <div class="v">
-                  Add → on downside acceptance<br>
-                  Reduce → on failed continuation<br>
-                  Exit → on invalidation above 71.4
-                </div>
-              </div>
-            </div>
-          </div>
+            const dialog = document.getElementById('commandPalette');
+            const input = document.getElementById('cmdInput');
+            const cmdItems = Array.from(document.querySelectorAll('.cmd-item'));
+            const openButtons = document.querySelectorAll('[data-cmd-open]');
+            const closeBtn = dialog?.querySelector('[data-cmd-close]');
 
-          <div class="mini-stream">
-            <div class="stream-head">
-              <div class="stream-title">Execution Stream</div>
-              <div class="pill">Telegram</div>
-            </div>
-            <div class="stream-list">
-              <div class="stream-item">
-                <div class="tag">Entry</div>
-                <div class="line">BTC — SHORT<br>Scenario: Up Trap → Down<br>Stage: Confirmation</div>
-              </div>
-              <div class="stream-item">
-                <div class="tag">Update</div>
-                <div class="line">ACTION: ADD<br>Expansion confirmed<br>OI rising with move</div>
-              </div>
-              <div class="stream-item">
-                <div class="tag">Protection</div>
-                <div class="line">REDUCE on failed continuation<br>EXIT on invalidation only</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+            if (!dialog) return;
 
-    <section class="section" id="system">
-      <div class="container">
-        <div class="section-head reveal">
-          <div>
-            <h2>One engine. Three product surfaces.</h2>
-            <p>
-              STRCTR should sell itself by showing the engine, not by overexplaining it.
-              Scenario reads the market. Execution turns that into behavior. Stream makes the system feel alive.
-            </p>
-          </div>
-        </div>
+            const openPalette = () => {
+                if (dialog.open) return;
+                dialog.showModal();
+                if (input) {
+                    input.value = '';
+                    cmdItems.forEach((item) => item.hidden = false);
+                    requestAnimationFrame(() => input.focus());
+                }
+            };
 
-        <div class="system-grid">
-          <div class="card reveal d2">
-            <div class="card-head">
-              <div>
-                <h3 class="card-title">Scenario</h3>
-                <div class="card-sub">Market path</div>
-              </div>
-              <div class="pill">Main</div>
-            </div>
-            <pre>BTC MARKET MAP
+            const closePalette = () => {
+                if (dialog.open) dialog.close();
+            };
 
-MAIN (62%)
-→ sweep 72.4
-→ rejection
-→ move to 69.8
+            const isTypingContext = (target) => {
+                if (!target) return false;
+                const tag = target.tagName;
+                return target.isContentEditable || tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+            };
 
-ALT (24%)
-→ direct squeeze
-→ continuation
+            openButtons.forEach((btn) => {
+                btn.addEventListener('click', openPalette);
+            });
 
-FAILURE (14%)
-→ acceptance above 73.3</pre>
-          </div>
+            closeBtn?.addEventListener('click', closePalette);
 
-          <div class="card featured reveal d3">
-            <div class="card-head">
-              <div>
-                <h3 class="card-title">Execution</h3>
-                <div class="card-sub">Position behavior</div>
-              </div>
-              <div class="pill blue">Core</div>
-            </div>
-            <pre>BTC — POSITION UPDATE
+            dialog.addEventListener('click', (event) => {
+                const rect = dialog.getBoundingClientRect();
+                const inside = event.clientX >= rect.left && event.clientX <= rect.right &&
+                    event.clientY >= rect.top && event.clientY <= rect.bottom;
+                if (!inside) closePalette();
+            });
 
-ACTION: ADD
-SIDE: LONG
-ADDED: +7%
-TOTAL: 12%
+            window.addEventListener('keydown', (event) => {
+                if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+                    event.preventDefault();
+                    openPalette();
+                    return;
+                }
 
-REASON:
-Expansion confirmed
-OI rising with price</pre>
-          </div>
+                if (event.key === '/' && !isTypingContext(event.target) && !dialog.open) {
+                    event.preventDefault();
+                    openPalette();
+                }
+            });
 
-          <div class="card reveal d4">
-            <div class="card-head">
-              <div>
-                <h3 class="card-title">Stream</h3>
-                <div class="card-sub">Telegram output</div>
-              </div>
-              <div class="pill">Live</div>
-            </div>
-            <pre>BTC — SHORT
+            input?.addEventListener('input', () => {
+                const query = input.value.trim().toLowerCase();
+                cmdItems.forEach((item) => {
+                    item.hidden = query && !item.textContent.toLowerCase().includes(query);
+                });
+            });
 
-Scenario: Up Trap → Down
-Stage: Confirmation
-Confidence: 82%
+            cmdItems.forEach((item) => {
+                item.addEventListener('click', () => {
+                    const targetSelector = item.getAttribute('data-target');
+                    const link = item.getAttribute('data-link');
 
-→ liquidity above swept
-→ OI expansion on push
-→ weak spot response</pre>
-          </div>
-        </div>
-      </div>
-    </section>
+                    if (targetSelector) {
+                        const target = document.querySelector(targetSelector);
+                        target?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+                    } else if (link) {
+                        window.open(link, '_blank', 'noopener,noreferrer');
+                    }
 
-    <section class="section" id="tiers">
-      <div class="container">
-        <div class="section-head reveal">
-          <div>
-            <h2>Access modes of one system.</h2>
-            <p>
-              Free gives the surface. Pro gives structured decision support. Core gives live execution behavior.
-              The engine stays the same. Only depth changes.
-            </p>
-          </div>
-        </div>
+                    closePalette();
+                });
+            });
 
-        <div class="tiers">
-          <article class="tier reveal d2">
-            <div class="name">Free — Observer Layer</div>
-            <div class="price">$0 <small>/ forever</small></div>
-            <p>
-              Learn the framework, watch the market, and understand the approach without full execution logic.
-            </p>
-            <ul>
-              <li>1–2 daily signals <span>with simplified scenario</span></li>
-              <li>Targets + invalidation <span>without full breakdown</span></li>
-              <li>Minimal market context <span>compression / expansion / direction</span></li>
-            </ul>
-          </article>
-
-          <article class="tier featured reveal d3">
-            <div class="name">Pro — Decision Layer</div>
-            <div class="price">$49 <small>/ month</small></div>
-            <p>
-              Full scenario logic for traders who want to understand why the trade exists, not just follow a call.
-            </p>
-            <ul>
-              <li>Scenario + stage + confidence <span>SETUP / TRIGGER / CONFIRMATION</span></li>
-              <li>Liquidity + OI + CVD breakdown <span>with structured logic</span></li>
-              <li>Timing layer <span>early / optimal / late</span></li>
-              <li>Daily market context <span>where price is easier to go</span></li>
-            </ul>
-          </article>
-
-          <article class="tier reveal d4">
-            <div class="name">Core — Execution Layer</div>
-            <div class="price">$149 <small>/ month</small></div>
-            <p>
-              Institutional mode. Full execution behavior with live position updates, lifecycle management, and real-time flow.
-            </p>
-            <ul>
-              <li>ENTER / ADD / HOLD / REDUCE / EXIT <span>as live behavior</span></li>
-              <li>Position updates <span>not just entry alerts</span></li>
-              <li>Swing mode + re-entry logic <span>runner + major partials</span></li>
-              <li>Full lifecycle guidance <span>from setup to invalidation</span></li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="framework">
-      <div class="container">
-        <div class="section-head reveal">
-          <div>
-            <h2>ZLF v4 inside the interface.</h2>
-            <p>
-              STRCTR is not signal noise. It is one lifecycle: context, pressure, crowding, trap or failure,
-              structure break, execution, position state, capital behavior, and re-entry logic.
-            </p>
-          </div>
-        </div>
-
-        <div class="framework">
-          <div class="card reveal d2">
-            <div class="card-sub">Framework Logic</div>
-            <h3 class="card-title" style="margin:8px 0 0;">Liquidity → Trap / Failure → Structure Break → Execution</h3>
-            <div class="stack">
-              <div class="stack-row">
-                <div class="stack-num">01</div>
-                <div>
-                  <strong>Context</strong>
-                  <p>Where price sits relative to higher-timeframe liquidity.</p>
-                </div>
-              </div>
-              <div class="stack-row">
-                <div class="stack-num">02</div>
-                <div>
-                  <strong>Selection</strong>
-                  <p>Only A-quality opportunities deserve execution.</p>
-                </div>
-              </div>
-              <div class="stack-row">
-                <div class="stack-num">03</div>
-                <div>
-                  <strong>Pressure + Crowding</strong>
-                  <p>Who is overloaded and whether the market is actually ready to move.</p>
-                </div>
-              </div>
-              <div class="stack-row">
-                <div class="stack-num">04</div>
-                <div>
-                  <strong>Trap / Failure / Continuation</strong>
-                  <p>No trap, no failed move, no forced continuation — no trade.</p>
-                </div>
-              </div>
-              <div class="stack-row">
-                <div class="stack-num">05</div>
-                <div>
-                  <strong>Execution</strong>
-                  <p>Entry type, position state, capital behavior, exit, and re-entry.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card reveal d3">
-            <div class="card-sub">Design Lock</div>
-            <h3 class="card-title" style="margin:8px 0 0;">Minimal. Cold. Structured. No noise.</h3>
-            <div class="stack">
-              <div class="stack-row">
-                <div class="stack-num">⚡</div>
-                <div>
-                  <strong>Action</strong>
-                  <p>Blue is activation only. It should never become decoration.</p>
-                </div>
-              </div>
-              <div class="stack-row">
-                <div class="stack-num">🧠</div>
-                <div>
-                  <strong>Context</strong>
-                  <p>Every output must show what phase of the scenario is active.</p>
-                </div>
-              </div>
-              <div class="stack-row">
-                <div class="stack-num">💧</div>
-                <div>
-                  <strong>Liquidity</strong>
-                  <p>Quality comes from trapped money, not from directional guessing.</p>
-                </div>
-              </div>
-              <div class="stack-row">
-                <div class="stack-num">🎯</div>
-                <div>
-                  <strong>Plan</strong>
-                  <p>Every block ends with what happens next: add, reduce, hold, or exit.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="outputs">
-      <div class="container">
-        <div class="section-head reveal">
-          <div>
-            <h2>Output system, locked.</h2>
-            <p>
-              The same structure should appear in every surface: website, Telegram, dashboard, and bot output.
-              Action, context, liquidity, and plan should always remain visible.
-            </p>
-          </div>
-        </div>
-
-        <div class="outputs">
-          <div class="card reveal d2">
-            <div class="out-k">⚡ Action</div>
-            <div class="out-v">
-              ENTER_PARTIAL<br>
-              ADD_SMALL<br>
-              HOLD<br>
-              REDUCE_DEFENSIVE<br>
-              EXIT_FAILURE
-            </div>
-          </div>
-
-          <div class="card reveal d3">
-            <div class="out-k">🧠 Context</div>
-            <div class="out-v">
-              Scenario: Up Trap → Down<br>
-              Stage: Confirmation<br>
-              Timing: Optimal<br>
-              Confidence: 82%
-            </div>
-          </div>
-
-          <div class="card reveal d4">
-            <div class="out-k">💧 Liquidity + 🎯 Plan</div>
-            <div class="out-v">
-              Above: swept<br>
-              Below: 68.5 / 66.0<br><br>
-              Add on acceptance<br>
-              Reduce on failed continuation<br>
-              Exit on invalidation
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="access">
-      <div class="container">
-        <div class="cta reveal">
-          <div class="cta-grid">
-            <div>
-              <div class="eyebrow"><span class="dot"></span> Telegram-first launch model</div>
-              <h3>Start with the feed.<br>Scale into the system.</h3>
-              <p>
-                Telegram is the first surface. SaaS comes after traction. The engine stays the same:
-                framework first, interface second. STRCTR should read like one system across channel,
-                bot, and dashboard.
-              </p>
-            </div>
-
-            <div class="cta-box">
-              <div class="tiny">Primary CTA</div>
-              <div class="copy">
-                Access Free Layer<br>
-                Join the observer feed and watch how the system reads liquidity in real time.<br><br>
-                Upgrade later into Pro or Core for full breakdown and execution behavior.
-              </div>
-              <div class="btn-row" style="margin-top:16px;">
-                <a class="btn btn-primary" href="https://t.me/" target="_blank" rel="noopener noreferrer">Join Free</a>
-                <a class="btn btn-ghost" href="https://t.me/" target="_blank" rel="noopener noreferrer">Open Telegram</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <footer class="footer">
-          <div class="footer-line">
-            <div>STRCTR — Not signals. Decision system.</div>
-            <div>Black / White / Blue • Telegram-first • Dashboard-ready</div>
-          </div>
-        </footer>
-      </div>
-    </section>
-  </main>
+            const confidenceEl = document.getElementById('liveConfidence');
+            if (confidenceEl && !reducedMotion) {
+                const confidenceLoop = ['82%', '81%', '83%'];
+                let confidenceIdx = 0;
+                setInterval(() => {
+                    confidenceIdx = (confidenceIdx + 1) % confidenceLoop.length;
+                    confidenceEl.textContent = confidenceLoop[confidenceIdx];
+                }, 1500);
+            }
+        })();
+    </script>
 </body>
+
 </html>
