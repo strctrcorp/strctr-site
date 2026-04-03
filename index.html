@@ -3197,12 +3197,17 @@
                         return;
                     }
                     const j = await r.json();
-                    if (j.authenticated && (j.tier === 'pro' || j.tier === 'core')) {
-                        if (j.active !== false) tier = j.tier;
-                    } else if (!j.authenticated) {
-                        tier = getStoredTier();
+                    if (j.authenticated === true) {
+                        if (
+                            (j.tier === 'pro' || j.tier === 'core') &&
+                            j.active === true
+                        ) {
+                            tier = j.tier;
+                        } else {
+                            tier = 'free';
+                        }
                     } else {
-                        tier = 'free';
+                        tier = getStoredTier();
                     }
                 } catch {
                     tier = getStoredTier();
