@@ -438,6 +438,41 @@
             line-height: 1.45;
         }
 
+        .checkout-feedback-modal.checkout-cancel-modal {
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 24px 56px rgba(0, 0, 0, 0.52), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+        }
+
+        .checkout-feedback-inner {
+            padding-bottom: 22px;
+        }
+
+        .checkout-feedback-title {
+            margin-bottom: 12px;
+        }
+
+        .checkout-feedback-body {
+            margin: 0 0 20px;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.55;
+            letter-spacing: -0.01em;
+            color: rgba(203, 210, 222, 0.88);
+        }
+
+        .checkout-cancel-modal .checkout-feedback-body {
+            color: rgba(180, 188, 198, 0.82);
+        }
+
+        .checkout-feedback-actions {
+            gap: 0;
+            margin-bottom: 0;
+        }
+
+        .checkout-feedback-actions .btn {
+            min-height: 46px;
+        }
+
         .cmd-inner {
             padding: 14px;
         }
@@ -1952,7 +1987,8 @@
         [data-cmd-open]:focus-visible,
         .btn-unlock:focus-visible,
         .paywall-close:focus-visible,
-        .paywall-actions .btn:focus-visible {
+        .paywall-actions .btn:focus-visible,
+        .checkout-feedback-modal .btn:focus-visible {
             outline: 1px solid rgba(59, 130, 246, .72);
             outline-offset: 2px;
         }
@@ -3029,6 +3065,29 @@
             </div>
         </dialog>
 
+        <dialog id="checkoutSuccessModal" class="paywall-dialog checkout-feedback-modal" aria-labelledby="checkoutSuccessTitle">
+            <div class="paywall-inner checkout-feedback-inner">
+                <button type="button" class="paywall-close" data-checkout-feedback-close aria-label="Close">×</button>
+                <p id="checkoutSuccessTitle" class="paywall-copy checkout-feedback-title">Access unlocked</p>
+                <p class="checkout-feedback-body">Your subscription is active. Full STRCTR system is now available.</p>
+                <div class="paywall-actions checkout-feedback-actions">
+                    <button type="button" class="btn btn-primary paywall-btn-core" id="checkoutSuccessContinue">Continue</button>
+                </div>
+            </div>
+        </dialog>
+
+        <dialog id="checkoutCanceledModal" class="paywall-dialog checkout-feedback-modal checkout-cancel-modal"
+            aria-labelledby="checkoutCanceledTitle">
+            <div class="paywall-inner checkout-feedback-inner">
+                <button type="button" class="paywall-close" data-checkout-feedback-close aria-label="Close">×</button>
+                <p id="checkoutCanceledTitle" class="paywall-copy checkout-feedback-title">Checkout canceled</p>
+                <p class="checkout-feedback-body">You can continue in FREE layer or unlock deeper access anytime.</p>
+                <div class="paywall-actions checkout-feedback-actions">
+                    <button type="button" class="btn btn-ghost" id="checkoutCanceledBack">Back</button>
+                </div>
+            </div>
+        </dialog>
+
         <dialog id="commandPalette" class="cmd-dialog" aria-label="System Command Palette">
             <div class="cmd-inner">
                 <div class="cmd-top">
@@ -3075,11 +3134,22 @@
             }
 
             const PAYWALL_KEY = 'strctr_access_tier';
+            const ACCESS_KEY = 'strctr_access';
             const TIER_RANK = { free: 0, pro: 1, core: 2 };
 
             function getStoredTier() {
+                const a = localStorage.getItem(ACCESS_KEY);
+                if (a === 'pro' || a === 'core') return a;
                 const t = localStorage.getItem(PAYWALL_KEY);
                 return t === 'pro' || t === 'core' ? t : 'free';
+            }
+
+            function updateUnlockVisibility(tier) {
+                const unlock = document.getElementById('btnUnlockAccess');
+                if (!unlock) return;
+                const paid = tier === 'pro' || tier === 'core';
+                unlock.hidden = paid;
+                unlock.setAttribute('aria-hidden', paid ? 'true' : 'false');
             }
 
             let confidenceTimer = null;
@@ -3087,6 +3157,11 @@
             function applyAccessTier(tier) {
                 if (tier !== 'pro' && tier !== 'core') tier = 'free';
                 localStorage.setItem(PAYWALL_KEY, tier);
+                if (tier === 'pro' || tier === 'core') {
+                    localStorage.setItem(ACCESS_KEY, tier);
+                } else {
+                    localStorage.removeItem(ACCESS_KEY);
+                }
                 const r = TIER_RANK[tier];
                 document.querySelectorAll('[data-min-access]').forEach((el) => {
                     const min = parseInt(el.getAttribute('data-min-access'), 10);
@@ -3110,6 +3185,7 @@
                         confEl.textContent = confidenceLoop[confidenceIdx];
                     }, 1500);
                 }
+                updateUnlockVisibility(tier);
             }
 
             async function refreshAccessFromServer() {
@@ -3134,13 +3210,79 @@
                 applyAccessTier(tier);
             }
 
-            refreshAccessFromServer();
-
-            const params = new URLSearchParams(window.location.search);
-            if (params.get('checkout') === 'success') {
-                refreshAccessFromServer();
-                window.history.replaceState({}, '', window.location.pathname);
+            function openCheckoutSuccessModal(resolvedTier) {
+                const dlg = document.getElementById('checkoutSuccessModal');
+                if (!dlg) return;
+                const title = document.getElementById('checkoutSuccessTitle');
+                const body = dlg.querySelector('.checkout-feedback-body');
+                if (resolvedTier === 'pro' || resolvedTier === 'core') {
+                    dlg.dataset.tier = resolvedTier;
+                    delete dlg.dataset.successMode;
+                    if (title) title.textContent = 'Access unlocked';
+                    if (body) {
+                        body.textContent =
+                            'Your subscription is active. Full STRCTR system is now available.';
+                    }
+                } else {
+                    delete dlg.dataset.tier;
+                    dlg.dataset.successMode = 'generic';
+                    if (title) title.textContent = 'Access activated';
+                    if (body) {
+                        body.textContent = 'Your access is active. Continue to explore STRCTR.';
+                    }
+                }
+                dlg.showModal();
             }
+
+            function openCheckoutCanceledModal() {
+                document.getElementById('checkoutCanceledModal')?.showModal();
+            }
+
+            function scrollToPostCheckoutSection(tier) {
+                let sel = '#access';
+                if (tier === 'core') sel = '#action';
+                else if (tier === 'pro') sel = '#access';
+                const el = document.querySelector(sel);
+                el?.scrollIntoView({
+                    behavior: reducedMotion ? 'auto' : 'smooth',
+                    block: 'start'
+                });
+            }
+
+            let checkoutFeedbackInitPromise = null;
+
+            function initAccessAndCheckoutFeedback() {
+                if (checkoutFeedbackInitPromise) return checkoutFeedbackInitPromise;
+                checkoutFeedbackInitPromise = (async () => {
+                    await refreshAccessFromServer();
+                    const params = new URLSearchParams(window.location.search);
+                    const isSuccess =
+                        params.get('success') === 'true' || params.get('checkout') === 'success';
+                    const isCanceled =
+                        params.get('canceled') === 'true' || params.get('checkout') === 'canceled';
+
+                    if (!isSuccess && !isCanceled) return;
+
+                    if (isSuccess) {
+                        const q = params.get('tier');
+                        let tier = q === 'pro' || q === 'core' ? q : null;
+                        if (!tier) {
+                            const t = getStoredTier();
+                            tier = t === 'pro' || t === 'core' ? t : null;
+                        }
+                        openCheckoutSuccessModal(tier);
+                        window.history.replaceState({}, '', window.location.pathname);
+                        return;
+                    }
+                    if (isCanceled) {
+                        openCheckoutCanceledModal();
+                        window.history.replaceState({}, '', window.location.pathname);
+                    }
+                })();
+                return checkoutFeedbackInitPromise;
+            }
+
+            initAccessAndCheckoutFeedback();
 
             const paywallModal = document.getElementById('paywallModal');
             const openPaywall = () => {
@@ -3192,6 +3334,43 @@
                 const inside = event.clientX >= rect.left && event.clientX <= rect.right &&
                     event.clientY >= rect.top && event.clientY <= rect.bottom;
                 if (!inside) paywallModal.close();
+            });
+
+            const checkoutSuccessModal = document.getElementById('checkoutSuccessModal');
+            const checkoutCanceledModal = document.getElementById('checkoutCanceledModal');
+
+            document.getElementById('checkoutSuccessContinue')?.addEventListener('click', () => {
+                const dlg = checkoutSuccessModal;
+                const raw = dlg?.dataset.tier;
+                if (raw === 'pro' || raw === 'core') {
+                    applyAccessTier(raw);
+                } else {
+                    applyAccessTier(getStoredTier());
+                }
+                dlg?.close();
+                const scrollTier =
+                    raw === 'pro' || raw === 'core' ? raw : getStoredTier();
+                scrollToPostCheckoutSection(scrollTier);
+            });
+
+            function bindFeedbackModalClose(dlg) {
+                if (!dlg) return;
+                dlg.querySelectorAll('[data-checkout-feedback-close]').forEach((btn) => {
+                    btn.addEventListener('click', () => dlg.close());
+                });
+                dlg.addEventListener('click', (event) => {
+                    const rect = dlg.getBoundingClientRect();
+                    const inside = event.clientX >= rect.left && event.clientX <= rect.right &&
+                        event.clientY >= rect.top && event.clientY <= rect.bottom;
+                    if (!inside) dlg.close();
+                });
+            }
+
+            bindFeedbackModalClose(checkoutSuccessModal);
+            bindFeedbackModalClose(checkoutCanceledModal);
+
+            document.getElementById('checkoutCanceledBack')?.addEventListener('click', () => {
+                checkoutCanceledModal?.close();
             });
 
             const dialog = document.getElementById('commandPalette');
