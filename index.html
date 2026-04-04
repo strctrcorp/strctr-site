@@ -425,6 +425,15 @@
             color: #e5e7eb;
         }
 
+        .paywall-block-meta {
+            margin: 0;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(148, 156, 168, 0.92);
+        }
+
         .paywall-actions .btn {
             width: 100%;
             justify-content: center;
@@ -459,6 +468,20 @@
             filter: brightness(1.04);
             box-shadow: 0 0 28px rgba(59, 130, 246, 0.36), 0 0 0 1px rgba(59, 130, 246, 0.28) inset;
             transform: scale(1.035);
+        }
+
+        .paywall-actions .paywall-btn-operator-apply {
+            background: rgba(255, 255, 255, 0.035);
+            border-color: rgba(96, 165, 250, 0.48);
+            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.12) inset;
+            transform: none;
+            filter: none;
+        }
+
+        .paywall-actions .paywall-btn-operator-apply:hover {
+            filter: brightness(1.06);
+            border-color: rgba(120, 180, 255, 0.62);
+            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.2) inset;
         }
 
         .paywall-note {
@@ -1557,6 +1580,10 @@
 
         .tier-core p {
             color: #dbeafe;
+        }
+
+        .tier-core .tier-billing {
+            color: rgba(148, 156, 168, 0.88);
         }
 
         .core-live-label {
@@ -3018,6 +3045,7 @@
                             <li data-motion="item">→ SEE</li>
                         </ul>
                         <p class="tier-price" data-motion="item">Free</p>
+                        <p class="tier-billing" data-motion="item">see structure</p>
                     </article>
 
                     <article class="tier tier-pro reveal d3" data-motion="card">
@@ -3025,6 +3053,7 @@
                         <h3 class="layer-title" data-motion="item">Interpreter</h3>
                         <ul class="layer-points">
                             <li data-motion="item">→ UNDERSTAND</li>
+                            <li data-motion="item">scenario · probability · structure</li>
                         </ul>
                         <p class="tier-price" data-motion="item">$39 / month</p>
                         <p class="tier-billing" data-motion="item">billed via Stripe</p>
@@ -3032,13 +3061,13 @@
 
                     <article class="tier tier-core reveal d4" data-motion="card">
                         <div class="name" data-motion="item">CORE</div>
-                        <div class="core-live-label" data-motion="item">LIVE SYSTEM</div>
+                        <div class="core-live-label" data-motion="item">RESTRICTED</div>
                         <h3 class="layer-title" data-motion="item">Operator</h3>
                         <ul class="layer-points">
                             <li data-motion="item">→ ACT</li>
                         </ul>
-                        <p class="tier-price" data-motion="item">$119 / month</p>
-                        <p class="tier-billing" data-motion="item">billed via Stripe</p>
+                        <p class="tier-price" data-motion="item">Application required</p>
+                        <p class="tier-billing" data-motion="item">restricted access</p>
                     </article>
                 </div>
             </div>
@@ -3270,20 +3299,21 @@
                 <div class="paywall-actions">
                     <div class="paywall-cta-block paywall-cta-block--pro">
                         <span class="paywall-block-role">INTERPRETER</span>
-                        <p class="paywall-block-desc">Understand structure<br />Access scenario + probability</p>
+                        <p class="paywall-block-desc">Understand structure<br />Access scenario + probability + structure
+                            logic</p>
                         <p class="paywall-block-price">$39 / month</p>
                         <button type="button" class="btn btn-primary paywall-btn-pro" data-checkout-tier="pro">Unlock
                             Interpreter</button>
                     </div>
                     <div class="paywall-cta-block paywall-cta-block--core">
                         <span class="paywall-block-role">OPERATOR</span>
-                        <p class="paywall-block-desc">Full execution control<br />Entry / manage / exit</p>
-                        <p class="paywall-block-price">$119 / month</p>
-                        <button type="button" class="btn btn-primary paywall-btn-core" data-checkout-tier="core">Unlock
-                            Operator</button>
+                        <p class="paywall-block-desc">Full execution layer<br />Restricted access</p>
+                        <p class="paywall-block-meta">Application required</p>
+                        <button type="button" class="btn btn-primary paywall-btn-operator-apply"
+                            data-operator-apply>Apply for Operator</button>
                     </div>
                 </div>
-                <p class="paywall-note">Instant access after payment</p>
+                <p class="paywall-note">Interpreter unlocks after payment. Operator: application · approved members only.</p>
             </div>
         </dialog>
 
@@ -3328,6 +3358,7 @@
                     <button class="cmd-item" type="button" data-target="#action">Go: Execution</button>
                     <button class="cmd-item" type="button" data-target="#access">Go: Access</button>
                     <button class="cmd-item" type="button" data-link="https://t.me/">ENTER LIVE FEED</button>
+                    <button class="cmd-item" type="button" data-operator-apply>Request: Operator access</button>
                 </div>
             </div>
         </dialog>
@@ -3529,6 +3560,20 @@
                 btn.addEventListener('click', () => paywallModal?.close());
             });
 
+            function operatorApply() {
+                window.location.href =
+                    'mailto:strctr.system@gmail.com?subject=' +
+                    encodeURIComponent('STRCTR Operator access request');
+            }
+
+            document.querySelectorAll('[data-operator-apply]').forEach((btn) => {
+                if (btn.classList.contains('cmd-item')) return;
+                btn.addEventListener('click', () => {
+                    operatorApply();
+                    paywallModal?.close();
+                });
+            });
+
             document.querySelectorAll('[data-checkout-tier]').forEach((btn) => {
                 btn.addEventListener('click', async () => {
                     const tier = btn.getAttribute('data-checkout-tier');
@@ -3670,6 +3715,11 @@
 
             cmdItems.forEach((item) => {
                 item.addEventListener('click', () => {
+                    if (item.hasAttribute('data-operator-apply')) {
+                        operatorApply();
+                        closePalette();
+                        return;
+                    }
                     const targetSelector = item.getAttribute('data-target');
                     const link = item.getAttribute('data-link');
 
