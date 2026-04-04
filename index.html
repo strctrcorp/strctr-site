@@ -842,6 +842,33 @@
             color: #bfdbfe;
         }
 
+        [data-role="refresh-status"] {
+            display: inline-block;
+            vertical-align: middle;
+            box-sizing: border-box;
+            flex: 0 0 170px;
+            width: 170px;
+            min-width: 170px;
+            max-width: 170px;
+            min-height: 1.35em;
+            line-height: 1.35;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hero-stack .panel-top {
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+
+        .hero-stack .panel-top-left {
+            flex-wrap: nowrap;
+            align-items: center;
+            min-width: 0;
+            flex: 1 1 auto;
+        }
+
         .btn-unlock {
             height: 32px;
             padding: 0 12px;
@@ -1000,6 +1027,25 @@
             text-shadow: 0 1px 12px rgba(0, 0, 0, 0.85);
             pointer-events: none;
             z-index: 2;
+        }
+
+        /* Dev override: localStorage strctrDev=1 — visual unlock only, production unchanged */
+        html.strctr-dev .term-stat.is-locked .v,
+        html.strctr-dev .plan.is-locked .v {
+            filter: none !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            user-select: auto !important;
+        }
+
+        html.strctr-dev .term-stat.is-locked::after,
+        html.strctr-dev .plan.is-locked::after {
+            display: none !important;
+            content: none !important;
+        }
+
+        html.strctr-dev .term-stat.is-locked {
+            cursor: default;
         }
 
         .term-stat {
@@ -2211,6 +2257,21 @@
                 margin-bottom: 10px;
                 flex-direction: column;
                 align-items: flex-start;
+                flex-wrap: nowrap;
+            }
+
+            .hero-stack .panel-top-left {
+                flex-wrap: wrap;
+                width: 100%;
+            }
+
+            .hero-stack .panel-top-left [data-role="refresh-status"] {
+                flex: 0 0 auto;
+                flex-basis: 100%;
+                width: 100%;
+                min-width: 0;
+                max-width: none;
+                min-height: 1.35em;
             }
 
             .hero-stack .panel-top-right {
@@ -3163,6 +3224,8 @@
     <script>
         (function () {
             const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const isDev = localStorage.getItem('strctrDev') === '1';
+            if (isDev) document.documentElement.classList.add('strctr-dev');
 
             const items = document.querySelectorAll('.reveal');
             if (items.length) {
@@ -3219,6 +3282,11 @@
                     if (Number.isNaN(min)) return;
                     el.classList.toggle('is-locked', r < min);
                 });
+                if (isDev) {
+                    document.querySelectorAll('[data-min-access]').forEach((el) => {
+                        el.classList.remove('is-locked');
+                    });
+                }
                 const badge = document.getElementById('accessTierBadge');
                 if (badge) {
                     badge.textContent = tier === 'core' ? 'CORE' : tier === 'pro' ? 'PRO' : 'FREE';
@@ -3228,7 +3296,7 @@
                     clearInterval(confidenceTimer);
                     confidenceTimer = null;
                 }
-                if (confEl && !reducedMotion && r >= TIER_RANK.pro) {
+                if (confEl && !reducedMotion && r >= TIER_RANK.pro && !isDev) {
                     const confidenceLoop = ['82%', '81%', '83%'];
                     let confidenceIdx = 0;
                     confidenceTimer = setInterval(() => {
