@@ -492,6 +492,76 @@
             line-height: 1.45;
         }
 
+        .paywall-inline-note {
+            margin: 0 0 10px;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(148, 156, 168, 0.9);
+            line-height: 1.45;
+        }
+
+        #coreApplyModal .paywall-inner {
+            max-width: min(420px, calc(100vw - 40px));
+        }
+
+        .core-form {
+            display: grid;
+            gap: 14px;
+            margin-top: 8px;
+        }
+
+        .core-form label {
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(148, 156, 168, 0.95);
+            margin-bottom: 4px;
+        }
+
+        .core-form input,
+        .core-form textarea {
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.03);
+            color: #e8eaef;
+            font-size: 14px;
+            padding: 10px 12px;
+            font-family: inherit;
+        }
+
+        .core-form textarea {
+            min-height: 88px;
+            resize: vertical;
+            line-height: 1.45;
+        }
+
+        .core-form input::placeholder,
+        .core-form textarea::placeholder {
+            color: rgba(120, 126, 136, 0.9);
+        }
+
+        .core-form-done {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.55;
+            color: rgba(196, 210, 224, 0.95);
+            display: none;
+        }
+
+        .core-form-done.is-visible {
+            display: block;
+        }
+
+        #coreApplyForm.is-hidden {
+            display: none;
+        }
+
         .checkout-feedback-modal.checkout-cancel-modal {
             border-color: rgba(255, 255, 255, 0.1);
             box-shadow: 0 24px 56px rgba(0, 0, 0, 0.52), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
@@ -1627,6 +1697,31 @@
             position: relative;
             overflow: hidden;
             transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease, filter .2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tier .levels-list {
+            flex: 1 1 auto;
+        }
+
+        .tier-actions {
+            margin-top: 20px;
+        }
+
+        .tier-actions .btn {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .tier-crypto {
+            margin: 12px 0 0;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            line-height: 1.45;
+            text-transform: uppercase;
+            color: rgba(148, 156, 168, 0.88);
         }
 
         .metric:hover,
@@ -3277,6 +3372,11 @@
                             <li data-motion="item">Full context</li>
                             <li data-motion="item">Priority alerts</li>
                         </ul>
+                        <div class="tier-actions">
+                            <!-- Replace href with your Stripe Payment Link; set success URL to /success/ -->
+                            <a class="btn btn-primary" data-motion="item" data-stripe-pro
+                                href="https://checkout.stripe.com/pay/your_link_here">Upgrade to PRO</a>
+                        </div>
                     </article>
 
                     <article class="tier tier-core reveal d4" data-motion="card">
@@ -3288,11 +3388,12 @@
                             <li data-motion="item">Position management</li>
                             <li data-motion="item">Institutional model</li>
                         </ul>
+                        <p class="tier-crypto" data-motion="item">Crypto access available on request.</p>
+                        <div class="tier-actions">
+                            <button type="button" class="btn btn-primary paywall-btn-operator-apply" data-motion="item"
+                                data-core-apply>Apply for CORE</button>
+                        </div>
                     </article>
-                </div>
-                <div class="tiers-cta reveal">
-                    <button type="button" class="btn btn-primary" data-open-paywall
-                        aria-haspopup="dialog" aria-controls="paywallModal">Upgrade access</button>
                 </div>
             </div>
         </section>
@@ -3530,24 +3631,51 @@
                 <p id="paywallSub" class="paywall-sub">Choose your level of control</p>
                 <div class="paywall-actions">
                     <div class="paywall-cta-block paywall-cta-block--pro">
-                        <span class="paywall-block-role">INTERPRETER</span>
-                        <p class="paywall-block-desc">Understand structure<br />Access scenario + probability +
-                            structure
-                            logic</p>
+                        <span class="paywall-block-role">PRO</span>
+                        <p class="paywall-block-desc">Real-time signals · full context · priority alerts</p>
                         <p class="paywall-block-price">$39 / month</p>
-                        <button type="button" class="btn btn-primary paywall-btn-pro" data-checkout-tier="pro">Unlock
-                            Interpreter</button>
+                        <a class="btn btn-primary paywall-btn-pro" data-stripe-pro
+                            href="https://checkout.stripe.com/pay/your_link_here">Upgrade to PRO</a>
                     </div>
                     <div class="paywall-cta-block paywall-cta-block--core">
-                        <span class="paywall-block-role">OPERATOR</span>
-                        <p class="paywall-block-desc">Full execution layer<br />Restricted access</p>
+                        <span class="paywall-block-role">CORE</span>
+                        <p class="paywall-block-desc">Full execution system · position management</p>
                         <p class="paywall-block-meta">Application required</p>
+                        <p class="paywall-inline-note">Crypto access available on request.</p>
                         <button type="button" class="btn btn-primary paywall-btn-operator-apply"
-                            data-operator-apply>Apply for Operator</button>
+                            data-core-apply>Apply for CORE</button>
                     </div>
                 </div>
-                <p class="paywall-note">Interpreter unlocks after payment. Operator: application · approved members
-                    only.</p>
+                <p class="paywall-note">PRO: Stripe checkout. CORE: application review.</p>
+            </div>
+        </dialog>
+
+        <dialog id="coreApplyModal" class="paywall-dialog" aria-labelledby="coreApplyTitle">
+            <div class="paywall-inner">
+                <button type="button" class="paywall-close" data-core-apply-close aria-label="Close">×</button>
+                <h2 id="coreApplyTitle" class="paywall-title">CORE application</h2>
+                <p id="coreApplySub" class="paywall-sub">Restricted execution layer. Short answers only.</p>
+                <form id="coreApplyForm" class="core-form" novalidate>
+                    <div>
+                        <label for="coreApplyName">Name</label>
+                        <input id="coreApplyName" name="name" type="text" autocomplete="name" required
+                            placeholder="Your name" />
+                    </div>
+                    <div>
+                        <label for="coreApplyTg">Telegram username</label>
+                        <input id="coreApplyTg" name="telegram" type="text" autocomplete="username" required
+                            placeholder="@username" />
+                    </div>
+                    <div>
+                        <label for="coreApplyExp">Trading experience</label>
+                        <textarea id="coreApplyExp" name="experience" required
+                            placeholder="Markets, timeframe, size — one short paragraph."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary paywall-btn-pro" style="margin-top: 4px;">Submit
+                        application</button>
+                </form>
+                <p id="coreApplyDone" class="core-form-done" role="status">Application received. We will review and
+                    contact you.</p>
             </div>
         </dialog>
 
@@ -3595,7 +3723,9 @@
                     <button class="cmd-item" type="button" data-target="#access">Go: Access</button>
                     <button class="cmd-item" type="button" data-link="https://t.me/">Join FREE channel</button>
                     <button class="cmd-item" type="button" data-open-paywall>Upgrade access</button>
-                    <button class="cmd-item" type="button" data-operator-apply>Request: Operator access</button>
+                    <button class="cmd-item" type="button" data-link="https://checkout.stripe.com/pay/your_link_here">Upgrade
+                        to PRO</button>
+                    <button class="cmd-item" type="button" data-core-apply>Apply for CORE</button>
                 </div>
             </div>
         </dialog>
@@ -3800,44 +3930,47 @@
                 btn.addEventListener('click', () => paywallModal?.close());
             });
 
-            function operatorApply() {
-                window.location.href =
-                    'mailto:strctr.system@gmail.com?subject=' +
-                    encodeURIComponent('STRCTR Operator access request');
+            const coreApplyModal = document.getElementById('coreApplyModal');
+            const coreApplyForm = document.getElementById('coreApplyForm');
+            const coreApplyDone = document.getElementById('coreApplyDone');
+
+            function openCoreApply() {
+                if (!coreApplyModal) return;
+                coreApplyForm?.classList.remove('is-hidden');
+                coreApplyDone?.classList.remove('is-visible');
+                coreApplyForm?.reset();
+                paywallModal?.close();
+                coreApplyModal.showModal();
             }
 
-            document.querySelectorAll('[data-operator-apply]').forEach((btn) => {
+            function closeCoreApply() {
+                coreApplyModal?.close();
+            }
+
+            document.querySelectorAll('[data-core-apply]').forEach((btn) => {
                 if (btn.classList.contains('cmd-item')) return;
-                btn.addEventListener('click', () => {
-                    operatorApply();
-                    paywallModal?.close();
-                });
+                btn.addEventListener('click', () => openCoreApply());
             });
 
-            document.querySelectorAll('[data-checkout-tier]').forEach((btn) => {
-                btn.addEventListener('click', async () => {
-                    const tier = btn.getAttribute('data-checkout-tier');
-                    if (tier !== 'pro' && tier !== 'core') return;
-                    btn.disabled = true;
-                    try {
-                        const r = await fetch('/api/create-checkout-session', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            credentials: 'same-origin',
-                            body: JSON.stringify({ tier })
-                        });
-                        const j = await r.json().catch(() => ({}));
-                        if (j.url) {
-                            window.location.href = j.url;
-                            return;
-                        }
-                        alert(j.error || 'Checkout is not available. Configure Stripe and price IDs on the server.');
-                    } catch {
-                        alert('Could not start checkout. Is the server running?');
-                    } finally {
-                        btn.disabled = false;
-                    }
-                });
+            coreApplyModal?.querySelectorAll('[data-core-apply-close]').forEach((btn) => {
+                btn.addEventListener('click', () => closeCoreApply());
+            });
+
+            coreApplyModal?.addEventListener('click', (event) => {
+                const rect = coreApplyModal.getBoundingClientRect();
+                const inside = event.clientX >= rect.left && event.clientX <= rect.right &&
+                    event.clientY >= rect.top && event.clientY <= rect.bottom;
+                if (!inside) coreApplyModal.close();
+            });
+
+            coreApplyForm?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (!coreApplyForm.checkValidity()) {
+                    coreApplyForm.reportValidity();
+                    return;
+                }
+                coreApplyForm.classList.add('is-hidden');
+                coreApplyDone?.classList.add('is-visible');
             });
 
             document.querySelector('.hero-stack .terminal')?.addEventListener('click', (e) => {
@@ -3955,8 +4088,8 @@
 
             cmdItems.forEach((item) => {
                 item.addEventListener('click', () => {
-                    if (item.hasAttribute('data-operator-apply')) {
-                        operatorApply();
+                    if (item.hasAttribute('data-core-apply')) {
+                        openCoreApply();
                         closePalette();
                         return;
                     }
