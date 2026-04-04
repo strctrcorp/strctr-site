@@ -4,9 +4,6 @@
  */
 
 const CYCLE_MS = 56000;
-const SEMANTIC_MS = 78000;
-const IDLE_POINTER_MS = 28000;
-const IDLE_POLL_MS = 14000;
 
 const STAGES = ['Confirmation', 'Trigger', 'Setup'];
 const TIMINGS = ['Optimal', 'Tight', 'Deferred'];
@@ -24,6 +21,27 @@ const PLAN_HTML = [
   'Scale → acceptance<br>Reduce → failure<br>Exit → invalidation'
 ];
 
+/** Idle status trace — decision data unchanged. */
+const systemStates = [
+  'monitoring',
+  'liquidity scan',
+  'structure track',
+  'alignment wait',
+  'no anomaly'
+];
+
+let ambientPauseUntil = 0;
+let lastTraceLine = '';
+
+export function randomBetween(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+/** Pauses ambient status-line writes (e.g. CTA connection copy). */
+export function pauseStrctrAmbient(ms) {
+  ambientPauseUntil = Date.now() + (ms ?? 3000);
+}
+
 export function initStrctrIntelligence({ root, reducedMotion }) {
   if (reducedMotion) return;
   if (document.getElementById('strctr-intel-styles')) return;
@@ -32,24 +50,34 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
   style.id = 'strctr-intel-styles';
   style.textContent = `
     .strctr-active-step {
-      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.35);
-      background: rgba(59, 130, 246, 0.05);
-      transition: box-shadow 0.2s ease, background 0.2s ease;
-    }
-
-    .strctr-update-flash {
-      background: rgba(255, 255, 255, 0.04);
-      transition: background 0.25s ease;
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.28);
+      background: rgba(59, 130, 246, 0.04);
+      transition: box-shadow 0.12s ease, background 0.12s ease;
     }
 
     .strctr-state-shift {
-      letter-spacing: 0.04em;
-      transition: letter-spacing 0.2s ease;
+      letter-spacing: 0.06em;
+      transition: letter-spacing 0.12s ease;
     }
 
-    .plan .v.strctr-plan-emerge {
-      opacity: 1;
-      transition: opacity 0.3s ease;
+    html.strctr-v8 .hero-stack .terminal .state {
+      font-weight: 620;
+      color: #f3f4f6;
+      letter-spacing: -0.035em;
+    }
+
+    html.strctr-v8 .hero-stack .terminal .plan.strctr-plan-command {
+      border-color: rgba(255, 255, 255, 0.14);
+      background: linear-gradient(180deg, rgba(20, 20, 20, 0.98), rgba(12, 12, 12, 0.98));
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 8px 22px rgba(0, 0, 0, 0.4);
+      transition: none;
+    }
+
+    html.strctr-v8 .hero-stack .terminal .plan.strctr-plan-command .v {
+      color: #f9fafb;
+      font-weight: 540;
+      line-height: 1.55;
+      letter-spacing: 0.025em;
     }
 
     html.strctr-v8 .panel-top-left [data-role="refresh-status"] {
@@ -59,59 +87,16 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
       letter-spacing: 0.04em;
     }
 
-    .strctr-intel-focus {
-      transition: box-shadow 0.35s ease, border-color 0.35s ease;
-    }
-    html.strctr-v8 .strctr-intel-focus {
-      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.2);
-    }
-
-    .strctr-intel-route {
-      transition: box-shadow 0.45s ease, border-color 0.45s ease, opacity 0.45s ease;
-    }
-    html.strctr-v8 .strctr-intel-route {
-      box-shadow:
-        0 0 0 1px rgba(59, 130, 246, 0.12),
-        0 0 18px rgba(59, 130, 246, 0.05);
-    }
-
-    .strctr-intel-semantic {
-      transition: box-shadow 0.55s ease, opacity 0.55s ease;
-    }
-    html.strctr-v8 .strctr-intel-semantic {
-      opacity: 0.99;
-      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.1);
-    }
-
-    .strctr-intel-ping {
-      animation: strctrIntelPing 1.1s ease-out 1;
-    }
-    @keyframes strctrIntelPing {
-      0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
-      40% { box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.16), 0 0 16px rgba(59, 130, 246, 0.06); }
-      100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
-    }
-
     #accessTierBadge.strctr-intel-proc {
-      animation: strctrIntelHb 5s ease-in-out infinite;
-    }
-    @keyframes strctrIntelHb {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.93; }
+      opacity: 1;
     }
 
-    .strctr-intel-cycle-pulse {
-      animation: strctrIntelCp 2.2s ease-in-out 1;
-    }
-    @keyframes strctrIntelCp {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.88; }
+    .strctr-surface-row {
+      cursor: pointer;
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .strctr-intel-ping,
-      #accessTierBadge.strctr-intel-proc,
-      .strctr-intel-cycle-pulse {
+      #accessTierBadge.strctr-intel-proc {
         animation: none !important;
       }
     }
@@ -119,6 +104,7 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
   document.head.appendChild(style);
 
   const terminal = document.querySelector('.hero-stack .terminal');
+  const heroPanel = document.querySelector('.hero-stack .panel');
   if (!terminal) return;
 
   const grid = terminal.querySelector('.term-grid');
@@ -133,23 +119,11 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
   const stateEl = terminal.querySelector('.state');
   const planBlock = terminal.querySelector('.plan');
   const planEl = planBlock?.querySelector('.v');
+  planBlock?.classList.add('strctr-plan-command');
   const statusEl = document.querySelector('[data-role="refresh-status"]');
   const pillEl = terminal.querySelector('.terminal-head .pill.blue');
-  const liveEl = terminal.querySelector('.panel-top .live');
 
   const badge = document.getElementById('accessTierBadge');
-
-  const cardScenario = document.querySelector('#system .system-grid .card:nth-child(1)');
-  const cardExecution = document.querySelector('#system .system-grid .card:nth-child(2)');
-  const cardOutput = document.querySelector('#outputs .outputs .card:nth-child(1)');
-  const blockAccess = document.querySelector('#access .cta');
-  const sectionAccess = document.getElementById('access');
-
-  const idlePool = [
-    document.querySelector('.how-card'),
-    document.querySelector('.trust-grid .trust-card'),
-    document.querySelector('.action-grid .card')
-  ].filter(Boolean);
 
   let si = 0;
   let ti = 0;
@@ -157,9 +131,9 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
   let sti = 0;
   let pli = 0;
   let sci = 0;
+  let holdStateToggle = 0;
 
-  let cycleLock = false;
-  let lastPointer = Date.now();
+  let intelBusy = false;
 
   const isDevMode = () =>
     typeof localStorage !== 'undefined' && localStorage.getItem('strctrDev') === '1';
@@ -172,6 +146,12 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
 
   const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
+  const procDelay = (min, max) => {
+    const lo = min ?? 200;
+    const hi = max ?? 400;
+    return delay(lo + Math.floor(Math.random() * (hi - lo + 1)));
+  };
+
   let activeStepEl = null;
 
   function setActiveStep(el) {
@@ -180,154 +160,171 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
     el?.classList.add('strctr-active-step');
   }
 
-  function flash(el) {
-    if (!el) return;
-    el.classList.add('strctr-update-flash');
-    setTimeout(() => el.classList.remove('strctr-update-flash'), 200);
-  }
-
   function setStatus(t) {
     if (statusEl) statusEl.textContent = t;
   }
 
+  function ambientCanWrite() {
+    return !intelBusy && !document.hidden && Date.now() >= ambientPauseUntil;
+  }
+
+  let traceIdx = 0;
+
+  function scheduleLiveTrace() {
+    setTimeout(() => {
+      if (!document.hidden && ambientCanWrite() && statusEl) {
+        lastTraceLine = `> ${systemStates[traceIdx % systemStates.length]}`;
+        traceIdx = (traceIdx + 1) % systemStates.length;
+        statusEl.textContent = lastTraceLine;
+      }
+      scheduleLiveTrace();
+    }, randomBetween(14000, 22000));
+  }
+
   if (badge) badge.classList.add('strctr-intel-proc');
 
-  async function runDecisionCycle() {
-    if (cycleLock || document.hidden) return;
-    cycleLock = true;
+  [rowScenario, rowStage, rowTiming].forEach((el) => el?.classList.add('strctr-surface-row'));
+
+  async function runManualRowCycle(rowEl) {
+    if (intelBusy || document.hidden) return;
+    intelBusy = true;
     try {
-      pillEl?.classList.add('strctr-intel-cycle-pulse');
-      liveEl?.classList.add('strctr-intel-cycle-pulse');
-      setTimeout(() => {
-        pillEl?.classList.remove('strctr-intel-cycle-pulse');
-        liveEl?.classList.remove('strctr-intel-cycle-pulse');
-      }, 2400);
+      await procDelay(300, 500);
+      setStatus('> manual');
+      await procDelay(200, 400);
 
-      setStatus('> input...');
+      if (rowEl === rowScenario) {
+        setActiveStep(rowScenario);
+        sci = (sci + 1) % SCENARIO_HTML.length;
+        if (scenarioV) scenarioV.innerHTML = SCENARIO_HTML[sci];
+      } else if (rowEl === rowStage) {
+        setActiveStep(rowStage);
+        si = (si + 1) % STAGES.length;
+        if (stageEl) stageEl.textContent = STAGES[si];
+        if (pillEl) pillEl.textContent = STAGES[si];
+      } else if (rowEl === rowTiming) {
+        setActiveStep(rowTiming);
+        ti = (ti + 1) % TIMINGS.length;
+        if (timingEl) timingEl.textContent = TIMINGS[ti];
+      }
+
+      await delay(900);
+      setStatus('');
       setActiveStep(null);
-      await delay(380);
+    } finally {
+      intelBusy = false;
+    }
+  }
 
-      setStatus('> building scenario...');
+  async function runPanelMiniPing() {
+    if (intelBusy || document.hidden) return;
+    intelBusy = true;
+    try {
+      await procDelay(200, 400);
+      await delay(120);
+    } finally {
+      intelBusy = false;
+    }
+  }
+
+  function wireHeroSurfaceInteractions() {
+    if (!heroPanel) return;
+
+    heroPanel.addEventListener('click', (e) => {
+      if (e.target.closest('#btnUnlockAccess, .btn-unlock')) return;
+      if (e.target.closest('button')) return;
+
+      const locked = e.target.closest('.term-stat.is-locked, .plan.is-locked');
+      if (locked) return;
+
+      const row = e.target.closest('.term-stat');
+      if (row && (row === rowScenario || row === rowStage || row === rowTiming)) {
+        e.preventDefault();
+        void runManualRowCycle(row);
+        return;
+      }
+
+      void runPanelMiniPing();
+    });
+  }
+
+  wireHeroSurfaceInteractions();
+
+  async function runDecisionCycle() {
+    if (intelBusy || document.hidden) return;
+    intelBusy = true;
+    try {
+      setStatus('> scenario pending');
+      setActiveStep(null);
+      await delay(320);
+
+      setStatus('> scenario confirmed');
       setActiveStep(rowScenario);
       sci = (sci + 1) % SCENARIO_HTML.length;
-      if (scenarioV) {
-        scenarioV.innerHTML = SCENARIO_HTML[sci];
-        flash(scenarioV);
-      }
-      flash(cardScenario);
-      await delay(1600);
-
-      setStatus('> confirming...');
-      setActiveStep(rowStage);
-      si = (si + 1) % STAGES.length;
-      if (stageEl) {
-        stageEl.textContent = STAGES[si];
-        flash(stageEl);
-      }
-      if (pillEl) pillEl.textContent = STAGES[si];
+      if (scenarioV) scenarioV.innerHTML = SCENARIO_HTML[sci];
       await delay(1400);
 
-      setStatus('> calculating timing...');
-      setActiveStep(rowTiming);
-      ti = (ti + 1) % TIMINGS.length;
-      if (timingEl) {
-        timingEl.textContent = TIMINGS[ti];
-        flash(timingEl);
-      }
+      setStatus('> confirmation set');
+      setActiveStep(rowStage);
+      si = (si + 1) % STAGES.length;
+      if (stageEl) stageEl.textContent = STAGES[si];
+      if (pillEl) pillEl.textContent = STAGES[si];
       await delay(1200);
 
-      setStatus('> computing probability...');
-      setActiveStep(rowProb);
-      if (!paid() && probEl) {
-        pi = (pi + 1) % PROBS.length;
-        probEl.textContent = PROBS[pi];
-        flash(probEl);
-      }
+      setStatus('> timing optimal');
+      setActiveStep(rowTiming);
+      ti = 0;
+      if (timingEl) timingEl.textContent = 'Optimal';
       await delay(1100);
 
+      setStatus('> probability computed');
+      setActiveStep(rowProb);
+      pi = 2;
+      if (!paid() && probEl) probEl.textContent = '82%';
+      await delay(1000);
+
+      setStatus('> position set');
       sti = (sti + 1) % STATES.length;
       if (stateEl) {
         stateEl.textContent = STATES[sti];
         stateEl.classList.add('strctr-state-shift');
-        setTimeout(() => stateEl.classList.remove('strctr-state-shift'), 600);
-        flash(stateEl);
+        setTimeout(() => stateEl.classList.remove('strctr-state-shift'), 450);
       }
-      await delay(1200);
+      await delay(1000);
 
-      setStatus('> forming plan...');
-      await delay(600);
-
+      setStatus('> plan issued');
       setActiveStep(planBlock);
       pli = (pli + 1) % PLAN_HTML.length;
-      if (planEl) {
-        planEl.innerHTML = PLAN_HTML[pli];
-        planEl.style.opacity = '0.9';
-        planEl.classList.add('strctr-plan-emerge');
-        requestAnimationFrame(() => {
-          planEl.style.opacity = '1';
-        });
-        setTimeout(() => {
-          planEl.classList.remove('strctr-plan-emerge');
-          planEl.style.removeProperty('opacity');
-        }, 300);
-        flash(planEl);
-      }
-      flash(cardOutput);
-      await delay(2000);
+      if (planEl) planEl.innerHTML = PLAN_HTML[pli];
+      await delay(1800);
 
-      setStatus('> routing execution...');
+      setStatus('> execution ready');
       setActiveStep(null);
-      flash(cardExecution);
-      await delay(1600);
+      await delay(1100);
 
-      setStatus('> done');
-      flash(sectionAccess || blockAccess);
-      await delay(900);
+      ti = 0;
+      pi = 2;
+      if (timingEl) timingEl.textContent = 'Optimal';
+      if (!paid() && probEl) probEl.textContent = '82%';
+      sti = holdStateToggle % 2;
+      holdStateToggle += 1;
+      if (stateEl) {
+        stateEl.textContent = STATES[sti];
+        stateEl.classList.add('strctr-state-shift');
+        setTimeout(() => stateEl.classList.remove('strctr-state-shift'), 450);
+      }
 
       setActiveStep(null);
       setStatus('');
     } finally {
-      cycleLock = false;
+      intelBusy = false;
     }
   }
-
-  const semantic = [
-    () => cardScenario,
-    () => cardExecution,
-    () => cardOutput,
-    () => blockAccess
-  ];
-  let semIdx = 0;
-
-  function pulseSemantic() {
-    if (document.hidden) return;
-    const el = semantic[semIdx]?.();
-    semIdx = (semIdx + 1) % semantic.length;
-    if (!el) return;
-    el.classList.add('strctr-intel-semantic');
-    setTimeout(() => el.classList.remove('strctr-intel-semantic'), 4200);
-  }
-
-  function idlePing() {
-    if (document.hidden || Date.now() - lastPointer < IDLE_POINTER_MS) return;
-    const el = idlePool[Math.floor(Math.random() * idlePool.length)];
-    if (!el) return;
-    el.classList.add('strctr-intel-ping');
-    setTimeout(() => el.classList.remove('strctr-intel-ping'), 1100);
-    lastPointer = Date.now();
-  }
-
-  document.addEventListener('pointermove', () => { lastPointer = Date.now(); }, { passive: true });
 
   setTimeout(() => {
     runDecisionCycle();
     setInterval(runDecisionCycle, CYCLE_MS);
   }, 5000);
 
-  setTimeout(() => {
-    pulseSemantic();
-    setInterval(pulseSemantic, SEMANTIC_MS);
-  }, 16000);
-
-  setInterval(idlePing, IDLE_POLL_MS);
+  setTimeout(() => scheduleLiveTrace(), randomBetween(8000, 16000));
 }
