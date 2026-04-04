@@ -1,12 +1,10 @@
 // STRCTR Motion + Interactions Layer (V8)
 // Self-contained; avoids changing existing app logic.
 
-import { initStrctrIntelligence } from './strctr_intelligence.js';
+import { initStrctrIntelligence, pauseStrctrAmbient } from './strctr_intelligence.js';
 
 const PROX_RADIUS = 200;
 const STAGGER_MS = 48;
-const HERO_DRIFT_SEC = 16;
-const GRID_DRIFT_SEC = 28;
 const REFRESH_MIN_MS = 6000;
 const REFRESH_RANGE_MS = 2000;
 
@@ -32,7 +30,7 @@ export function initStrctrMotion() {
   wireLiveDots();
   wireSystemCardRefresh(reducedMotion, v9Off);
   wireLockedFieldSwaps();
-  wireMicroSystemLines();
+  wireMicroSystemLines(v9Off);
   wireCardHoverStates();
   wireAccessCardLabels();
   wireFinalCtaConnect();
@@ -106,16 +104,10 @@ function injectBaseStyles() {
       height: 8px;
       border-radius: 999px;
       background: var(--strctr-blue);
-      box-shadow: 0 0 8px rgba(59, 130, 246, 0.45);
-      animation: strctrHeartbeat 2.4s infinite;
+      box-shadow: 0 0 6px rgba(59, 130, 246, 0.32);
       vertical-align: middle;
       margin-right: 8px;
-    }
-
-    @keyframes strctrHeartbeat {
-      0%, 100% { opacity: 0.42; transform: scale(0.88); }
-      45% { opacity: 1; transform: scale(1); }
-      55% { opacity: 0.78; transform: scale(0.94); }
+      opacity: 0.92;
     }
 
     .strctr-refreshing {
@@ -166,11 +158,11 @@ function injectBaseStyles() {
 
     .strctr-hover-card:hover,
     [data-motion='card']:hover {
-      transform: translateY(-2px);
-      border-color: rgba(59, 130, 246, 0.32) !important;
+      transform: translateY(-1px);
+      border-color: rgba(59, 130, 246, 0.26) !important;
       box-shadow:
-        0 0 0 1px rgba(59, 130, 246, 0.1),
-        0 12px 32px rgba(0, 0, 0, 0.28);
+        0 0 0 1px rgba(59, 130, 246, 0.08),
+        0 8px 24px rgba(0, 0, 0, 0.22);
     }
 
     .strctr-proximity-target {
@@ -237,15 +229,6 @@ function injectBaseStyles() {
       color: rgba(255,255,255,0.78);
     }
 
-    .strctr-core-pulse {
-      animation: strctrCorePulse 4.2s infinite;
-    }
-
-    @keyframes strctrCorePulse {
-      0%, 100% { box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.16), 0 0 18px rgba(59, 130, 246, 0.05); }
-      50% { box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.24), 0 0 26px rgba(59, 130, 246, 0.1); }
-    }
-
     #strctr-cursor-glow {
       position: fixed;
       left: 0;
@@ -255,8 +238,8 @@ function injectBaseStyles() {
       margin: -190px 0 0 -190px;
       pointer-events: none;
       z-index: 1;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.055) 0%, transparent 62%);
-      opacity: 0.9;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.03) 0%, transparent 62%);
+      opacity: 0.75;
       will-change: transform;
     }
 
@@ -265,22 +248,12 @@ function injectBaseStyles() {
       z-index: 2;
     }
 
-    @keyframes strctrHeroDrift {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-3px); }
-    }
-
     html.strctr-v8 .hero-stack .panel.panel-updating {
-      animation: strctrHeroDrift ${HERO_DRIFT_SEC}s ease-in-out infinite;
-    }
-
-    @keyframes strctrGridDrift {
-      0% { background-position: 0 0, 0 0; }
-      100% { background-position: 52px 26px, -26px 52px; }
+      animation: none;
     }
 
     html.strctr-v8 body::before {
-      animation: strctrGridDrift ${GRID_DRIFT_SEC}s linear infinite;
+      animation: none;
     }
 
     html.strctr-v8 .btn.strctr-btn-shine {
@@ -305,6 +278,17 @@ function injectBaseStyles() {
 
     html.strctr-v8 .btn.strctr-btn-shine:hover::after {
       transform: translateX(130%);
+    }
+
+    html.strctr-v8 .btn.strctr-gateway {
+      transition: box-shadow 0.28s ease, border-color 0.28s ease;
+    }
+
+    html.strctr-v8 .btn.strctr-gateway:hover {
+      border-color: rgba(59, 130, 246, 0.42) !important;
+      box-shadow:
+        0 0 0 1px rgba(59, 130, 246, 0.18),
+        0 0 16px rgba(59, 130, 246, 0.07);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -380,12 +364,26 @@ function wireFinalCtaConnect() {
   const cta = document.querySelector('[data-role="cta-connect"]');
   if (!cta) return;
 
-  cta.classList.add('strctr-button-swap');
+  const delay = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  cta.classList.add('strctr-button-swap', 'strctr-gateway');
   cta.addEventListener('mouseenter', () => cta.classList.add('is-hover'));
   cta.addEventListener('mouseleave', () => cta.classList.remove('is-hover'));
   cta.addEventListener('click', () => {
+    pauseStrctrAmbient(4200);
     cta.classList.add('is-active');
     setTimeout(() => cta.classList.remove('is-active'), 1200);
+
+    const statusLine = document.querySelector('[data-role="refresh-status"]');
+    const run = async () => {
+      await delay(240);
+      if (statusLine) statusLine.textContent = '> connecting';
+      await delay(320);
+      if (statusLine) statusLine.textContent = '> stream open';
+      await delay(680);
+      if (statusLine) statusLine.textContent = '';
+    };
+    void run();
   });
 }
 
@@ -433,7 +431,9 @@ function wireLockedFieldSwaps() {
   });
 }
 
-function wireMicroSystemLines() {
+function wireMicroSystemLines(v9Off) {
+  if (!v9Off) return;
+
   const ambientHosts = [...document.querySelectorAll('[data-role="ambient-lines"]')];
   const rotating = [
     '> monitoring...',
@@ -476,8 +476,6 @@ function wireCardHoverStates() {
     card.classList.add('strctr-hover-card');
   });
 
-  const coreCard = document.querySelector('[data-role="core-card"]');
-  if (coreCard) coreCard.classList.add('strctr-core-pulse');
 }
 
 function wireAccessCardLabels() {
