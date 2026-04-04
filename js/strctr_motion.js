@@ -1,6 +1,8 @@
 // STRCTR Motion + Interactions Layer (V8)
 // Self-contained; avoids changing existing app logic.
 
+import { initStrctrIntelligence } from './strctr_intelligence.js';
+
 const PROX_RADIUS = 200;
 const STAGGER_MS = 48;
 const HERO_DRIFT_SEC = 16;
@@ -16,6 +18,11 @@ export function initStrctrMotion() {
     root.dataset.strctrV8 === 'false' ||
     localStorage.getItem('strctrV8') === '0';
 
+  const v9Off =
+    root.dataset.strctrV9 === '0' ||
+    root.dataset.strctrV9 === 'false' ||
+    localStorage.getItem('strctrV9') === '0';
+
   root.classList.add('motion-ready');
   if (!v8Off) root.classList.add('strctr-v8');
 
@@ -23,7 +30,7 @@ export function initStrctrMotion() {
   wireSectionReveal(reducedMotion);
   wireButtonStates();
   wireLiveDots();
-  wireSystemCardRefresh(reducedMotion);
+  wireSystemCardRefresh(reducedMotion, v9Off);
   wireLockedFieldSwaps();
   wireMicroSystemLines();
   wireCardHoverStates();
@@ -33,6 +40,10 @@ export function initStrctrMotion() {
   if (!v8Off && !reducedMotion) {
     wirePointerSystem();
     wireButtonShine();
+  }
+
+  if (!v9Off && !reducedMotion) {
+    initStrctrIntelligence({ root, reducedMotion });
   }
 }
 
@@ -384,11 +395,12 @@ function wireLiveDots() {
   });
 }
 
-function wireSystemCardRefresh(reducedMotion) {
+function wireSystemCardRefresh(reducedMotion, v9Off) {
   const refreshables = [...document.querySelectorAll('[data-role="refreshable"]')];
   const statusLine = document.querySelector('[data-role="refresh-status"]');
   if (!refreshables.length) return;
   if (reducedMotion) return;
+  if (!v9Off) return;
 
   const tick = () => {
     const item = refreshables[Math.floor(Math.random() * refreshables.length)];
