@@ -156,7 +156,11 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
   let cycleLock = false;
   let lastPointer = Date.now();
 
+  const isDevMode = () =>
+    typeof localStorage !== 'undefined' && localStorage.getItem('strctrDev') === '1';
+
   const paid = () => {
+    if (isDevMode()) return false;
     const t = badge?.textContent?.trim().toUpperCase();
     return t === 'PRO' || t === 'CORE';
   };
