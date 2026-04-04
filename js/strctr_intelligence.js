@@ -31,6 +31,29 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
   const style = document.createElement('style');
   style.id = 'strctr-intel-styles';
   style.textContent = `
+    .strctr-active-step {
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.25);
+      background: rgba(59, 130, 246, 0.03);
+      transition: box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .strctr-update-flash {
+      background: rgba(255, 255, 255, 0.04);
+      transition: background 0.25s ease;
+    }
+
+    .strctr-state-shift {
+      letter-spacing: 0.02em;
+      transition: letter-spacing 0.2s ease;
+    }
+
+    html.strctr-v8 .panel-top-left [data-role="refresh-status"] {
+      color: rgba(209, 213, 220, 0.92);
+      opacity: 1;
+      font-size: 11px;
+      letter-spacing: 0.07em;
+    }
+
     .strctr-intel-focus {
       transition: box-shadow 0.35s ease, border-color 0.35s ease;
     }
@@ -80,13 +103,6 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
       50% { opacity: 0.88; }
     }
 
-    .strctr-intel-tick {
-      transition: opacity 0.26s ease;
-    }
-    .strctr-intel-tick.strctr-intel-dim {
-      opacity: 0.74;
-    }
-
     @media (prefers-reduced-motion: reduce) {
       .strctr-intel-ping,
       #accessTierBadge.strctr-intel-proc,
@@ -101,12 +117,17 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
   if (!terminal) return;
 
   const grid = terminal.querySelector('.term-grid');
-  const scenarioV = grid?.querySelector('.term-stat:nth-child(1) .v');
-  const stageEl = grid?.querySelector('.term-stat:nth-child(2) .v');
+  const rowScenario = grid?.querySelector('.term-stat:nth-child(1)');
+  const rowStage = grid?.querySelector('.term-stat:nth-child(2)');
+  const rowProb = grid?.querySelector('.term-stat:nth-child(3)');
+  const rowTiming = grid?.querySelector('.term-stat:nth-child(4)');
+  const scenarioV = rowScenario?.querySelector('.v');
+  const stageEl = rowStage?.querySelector('.v');
   const probEl = document.getElementById('liveConfidence');
-  const timingEl = grid?.querySelector('.term-stat:nth-child(4) .v');
+  const timingEl = rowTiming?.querySelector('.v');
   const stateEl = terminal.querySelector('.state');
-  const planEl = terminal.querySelector('.plan .v');
+  const planBlock = terminal.querySelector('.plan');
+  const planEl = planBlock?.querySelector('.v');
   const statusEl = document.querySelector('[data-role="refresh-status"]');
   const pillEl = terminal.querySelector('.terminal-head .pill.blue');
   const liveEl = terminal.querySelector('.panel-top .live');
@@ -117,6 +138,7 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
   const cardExecution = document.querySelector('#system .system-grid .card:nth-child(2)');
   const cardOutput = document.querySelector('#outputs .outputs .card:nth-child(1)');
   const blockAccess = document.querySelector('#access .cta');
+  const sectionAccess = document.getElementById('access');
 
   const idlePool = [
     document.querySelector('.how-card'),
@@ -141,13 +163,18 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
 
   const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  function tickEl(el) {
+  let activeStepEl = null;
+
+  function setActiveStep(el) {
+    activeStepEl?.classList.remove('strctr-active-step');
+    activeStepEl = el || null;
+    el?.classList.add('strctr-active-step');
+  }
+
+  function flash(el) {
     if (!el) return;
-    el.classList.add('strctr-intel-tick', 'strctr-intel-dim');
-    requestAnimationFrame(() => {
-      el.classList.remove('strctr-intel-dim');
-      setTimeout(() => el.classList.remove('strctr-intel-tick'), 280);
-    });
+    el.classList.add('strctr-update-flash');
+    setTimeout(() => el.classList.remove('strctr-update-flash'), 200);
   }
 
   function setStatus(t) {
@@ -167,70 +194,79 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
         liveEl?.classList.remove('strctr-intel-cycle-pulse');
       }, 2400);
 
-      setStatus('> input…');
+      setStatus('> input...');
+      setActiveStep(null);
       await delay(380);
 
+      setStatus('> building scenario...');
+      setActiveStep(rowScenario);
       sci = (sci + 1) % SCENARIO_HTML.length;
       if (scenarioV) {
         scenarioV.innerHTML = SCENARIO_HTML[sci];
-        tickEl(scenarioV);
+        flash(scenarioV);
       }
-      cardScenario?.classList.add('strctr-intel-route');
-      setStatus('> scenario…');
+      flash(cardScenario);
       await delay(1600);
 
-      cardScenario?.classList.remove('strctr-intel-route');
+      setStatus('> confirming...');
+      setActiveStep(rowStage);
       si = (si + 1) % STAGES.length;
       if (stageEl) {
         stageEl.textContent = STAGES[si];
-        tickEl(stageEl);
+        flash(stageEl);
       }
       if (pillEl) pillEl.textContent = STAGES[si];
-      setStatus('> confirm…');
       await delay(1400);
 
+      setStatus('> calculating timing...');
+      setActiveStep(rowTiming);
       ti = (ti + 1) % TIMINGS.length;
       if (timingEl) {
         timingEl.textContent = TIMINGS[ti];
-        tickEl(timingEl);
+        flash(timingEl);
       }
-      setStatus('> timing…');
       await delay(1200);
 
+      setStatus('> computing probability...');
+      setActiveStep(rowProb);
       if (!paid() && probEl) {
         pi = (pi + 1) % PROBS.length;
         probEl.textContent = PROBS[pi];
-        tickEl(probEl);
+        flash(probEl);
       }
-      setStatus('> probability…');
       await delay(1100);
 
       sti = (sti + 1) % STATES.length;
       if (stateEl) {
         stateEl.textContent = STATES[sti];
-        tickEl(stateEl);
+        stateEl.classList.add('strctr-state-shift');
+        setTimeout(() => stateEl.classList.remove('strctr-state-shift'), 600);
+        flash(stateEl);
       }
-      setStatus('> state…');
       await delay(1200);
 
-      setStatus('> entry…');
+      setStatus('> forming plan...');
       await delay(700);
 
+      setActiveStep(planBlock);
       pli = (pli + 1) % PLAN_HTML.length;
       if (planEl) {
         planEl.innerHTML = PLAN_HTML[pli];
-        tickEl(planEl);
+        flash(planEl);
       }
-      cardExecution?.classList.add('strctr-intel-route');
-      setStatus('> plan…');
+      flash(cardOutput);
       await delay(2000);
 
-      cardExecution?.classList.remove('strctr-intel-route');
-      cardOutput?.classList.add('strctr-intel-route');
-      setStatus('> route…');
+      setStatus('> routing execution...');
+      setActiveStep(null);
+      flash(cardExecution);
       await delay(1600);
 
-      cardOutput?.classList.remove('strctr-intel-route');
+      setStatus('> done');
+      flash(sectionAccess || blockAccess);
+      await delay(900);
+
+      setActiveStep(null);
       setStatus('');
     } finally {
       cycleLock = false;
