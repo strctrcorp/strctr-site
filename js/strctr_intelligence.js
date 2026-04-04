@@ -32,8 +32,8 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
   style.id = 'strctr-intel-styles';
   style.textContent = `
     .strctr-active-step {
-      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.25);
-      background: rgba(59, 130, 246, 0.03);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.35);
+      background: rgba(59, 130, 246, 0.05);
       transition: box-shadow 0.2s ease, background 0.2s ease;
     }
 
@@ -43,15 +43,20 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
     }
 
     .strctr-state-shift {
-      letter-spacing: 0.02em;
+      letter-spacing: 0.04em;
       transition: letter-spacing 0.2s ease;
+    }
+
+    .plan .v.strctr-plan-emerge {
+      opacity: 1;
+      transition: opacity 0.3s ease;
     }
 
     html.strctr-v8 .panel-top-left [data-role="refresh-status"] {
       color: rgba(209, 213, 220, 0.92);
       opacity: 1;
       font-size: 11px;
-      letter-spacing: 0.07em;
+      letter-spacing: 0.04em;
     }
 
     .strctr-intel-focus {
@@ -250,12 +255,21 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
       await delay(1200);
 
       setStatus('> forming plan...');
-      await delay(700);
+      await delay(600);
 
       setActiveStep(planBlock);
       pli = (pli + 1) % PLAN_HTML.length;
       if (planEl) {
         planEl.innerHTML = PLAN_HTML[pli];
+        planEl.style.opacity = '0.9';
+        planEl.classList.add('strctr-plan-emerge');
+        requestAnimationFrame(() => {
+          planEl.style.opacity = '1';
+        });
+        setTimeout(() => {
+          planEl.classList.remove('strctr-plan-emerge');
+          planEl.style.removeProperty('opacity');
+        }, 300);
         flash(planEl);
       }
       flash(cardOutput);
