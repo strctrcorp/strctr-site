@@ -76,7 +76,7 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
     html.strctr-v8 .hero-stack .terminal .plan.strctr-plan-command .v {
       color: #f9fafb;
       font-weight: 540;
-      line-height: 1.55;
+      line-height: 1.5;
       letter-spacing: 0.025em;
     }
 
