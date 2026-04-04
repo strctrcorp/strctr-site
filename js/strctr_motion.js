@@ -1,21 +1,39 @@
-// STRCTR Motion + Interactions Layer
-// Add as a new file and initialize from index.html AFTER the DOM is ready.
-// This file is intentionally self-contained and avoids changing existing app logic.
+// STRCTR Motion + Interactions Layer (V8)
+// Self-contained; avoids changing existing app logic.
+
+const PROX_RADIUS = 200;
+const STAGGER_MS = 48;
+const HERO_DRIFT_SEC = 16;
+const GRID_DRIFT_SEC = 28;
+const REFRESH_MIN_MS = 6000;
+const REFRESH_RANGE_MS = 2000;
 
 export function initStrctrMotion() {
   const root = document.documentElement;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const v8Off =
+    root.dataset.strctrV8 === '0' ||
+    root.dataset.strctrV8 === 'false' ||
+    localStorage.getItem('strctrV8') === '0';
+
   root.classList.add('motion-ready');
+  if (!v8Off) root.classList.add('strctr-v8');
 
   injectBaseStyles();
-  wireSectionReveal();
+  wireSectionReveal(reducedMotion);
   wireButtonStates();
   wireLiveDots();
-  wireSystemCardRefresh();
+  wireSystemCardRefresh(reducedMotion);
   wireLockedFieldSwaps();
   wireMicroSystemLines();
   wireCardHoverStates();
   wireAccessCardLabels();
   wireFinalCtaConnect();
+
+  if (!v8Off && !reducedMotion) {
+    wirePointerSystem();
+    wireButtonShine();
+  }
 }
 
 function injectBaseStyles() {
@@ -26,47 +44,38 @@ function injectBaseStyles() {
   style.textContent = `
     :root {
       --strctr-ease: cubic-bezier(0.22, 1, 0.36, 1);
-      --strctr-blue: #4d63ff;
-      --strctr-blue-soft: rgba(77, 99, 255, 0.18);
-      --strctr-blue-border: rgba(77, 99, 255, 0.42);
+      --strctr-blue: #3b82f6;
+      --strctr-blue-soft: rgba(59, 130, 246, 0.14);
+      --strctr-blue-border: rgba(59, 130, 246, 0.38);
       --strctr-text-dim: rgba(216, 224, 255, 0.42);
       --strctr-text-mid: rgba(216, 224, 255, 0.68);
     }
 
-    html.motion-ready body {
-      background-image:
-        radial-gradient(circle at 30% 18%, rgba(77, 99, 255, 0.06), transparent 24%),
-        radial-gradient(circle at 72% 54%, rgba(77, 99, 255, 0.04), transparent 26%),
-        linear-gradient(90deg, rgba(77, 99, 255, 0.028) 0%, rgba(77, 99, 255, 0) 18%, rgba(77, 99, 255, 0.03) 48%, rgba(77, 99, 255, 0) 74%, rgba(77, 99, 255, 0.022) 100%);
-      background-attachment: fixed;
-    }
+    /* Preserve index.html body background — no overlay stack here. */
 
     .motion-section,
     [data-motion='section'] {
       opacity: 0;
-      transform: translateY(18px);
-      filter: blur(4px);
+      transform: translateY(14px);
       transition:
-        opacity 420ms var(--strctr-ease),
-        transform 420ms var(--strctr-ease),
-        filter 420ms var(--strctr-ease);
-      will-change: opacity, transform, filter;
+        opacity 380ms var(--strctr-ease),
+        transform 380ms var(--strctr-ease);
+      will-change: opacity, transform;
     }
 
     .motion-section.is-visible,
     [data-motion='section'].is-visible {
       opacity: 1;
       transform: translateY(0);
-      filter: blur(0);
     }
 
     .motion-item,
     [data-motion='item'] {
       opacity: 0;
-      transform: translateY(8px);
+      transform: translateY(6px);
       transition:
-        opacity 280ms var(--strctr-ease),
-        transform 280ms var(--strctr-ease);
+        opacity 260ms var(--strctr-ease),
+        transform 260ms var(--strctr-ease);
       will-change: opacity, transform;
     }
 
@@ -77,7 +86,7 @@ function injectBaseStyles() {
     }
 
     .strctr-glow-soft {
-      text-shadow: 0 0 18px rgba(77, 99, 255, 0.16), 0 0 34px rgba(77, 99, 255, 0.08);
+      text-shadow: 0 0 14px rgba(59, 130, 246, 0.12), 0 0 28px rgba(59, 130, 246, 0.06);
     }
 
     .strctr-live-dot {
@@ -86,7 +95,7 @@ function injectBaseStyles() {
       height: 8px;
       border-radius: 999px;
       background: var(--strctr-blue);
-      box-shadow: 0 0 10px rgba(77, 99, 255, 0.55);
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.45);
       animation: strctrHeartbeat 2.4s infinite;
       vertical-align: middle;
       margin-right: 8px;
@@ -99,13 +108,12 @@ function injectBaseStyles() {
     }
 
     .strctr-refreshing {
-      animation: strctrRefresh 420ms var(--strctr-ease);
+      animation: strctrRefresh 680ms var(--strctr-ease);
     }
 
     @keyframes strctrRefresh {
-      0% { opacity: 1; }
-      40% { opacity: 0.54; }
-      100% { opacity: 1; }
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.88; }
     }
 
     .strctr-system-line {
@@ -139,18 +147,32 @@ function injectBaseStyles() {
     .strctr-hover-card,
     [data-motion='card'] {
       transition:
-        border-color 180ms var(--strctr-ease),
-        box-shadow 180ms var(--strctr-ease),
-        background-color 180ms var(--strctr-ease),
+        border-color 160ms var(--strctr-ease),
+        box-shadow 160ms var(--strctr-ease),
         transform 180ms var(--strctr-ease);
-      will-change: transform, box-shadow;
+      will-change: transform;
     }
 
     .strctr-hover-card:hover,
     [data-motion='card']:hover {
       transform: translateY(-2px);
-      border-color: rgba(77, 99, 255, 0.28) !important;
-      box-shadow: 0 0 0 1px rgba(77, 99, 255, 0.08), 0 18px 42px rgba(4, 8, 22, 0.22);
+      border-color: rgba(59, 130, 246, 0.32) !important;
+      box-shadow:
+        0 0 0 1px rgba(59, 130, 246, 0.1),
+        0 12px 32px rgba(0, 0, 0, 0.28);
+    }
+
+    .strctr-proximity-target {
+      --strctr-prox: 0;
+      transition:
+        border-color 140ms var(--strctr-ease),
+        box-shadow 140ms var(--strctr-ease);
+    }
+
+    html.strctr-v8 .strctr-proximity-target {
+      box-shadow:
+        0 0 0 1px rgba(59, 130, 246, calc(var(--strctr-prox) * 0.18)),
+        0 0 calc(8px + var(--strctr-prox) * 14px) rgba(59, 130, 246, calc(0.035 * var(--strctr-prox)));
     }
 
     .strctr-button-swap {
@@ -209,35 +231,124 @@ function injectBaseStyles() {
     }
 
     @keyframes strctrCorePulse {
-      0%, 100% { box-shadow: 0 0 0 1px rgba(77, 99, 255, 0.18), 0 0 22px rgba(77, 99, 255, 0.06); }
-      50% { box-shadow: 0 0 0 1px rgba(77, 99, 255, 0.28), 0 0 30px rgba(77, 99, 255, 0.12); }
+      0%, 100% { box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.16), 0 0 18px rgba(59, 130, 246, 0.05); }
+      50% { box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.24), 0 0 26px rgba(59, 130, 246, 0.1); }
+    }
+
+    #strctr-cursor-glow {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 380px;
+      height: 380px;
+      margin: -190px 0 0 -190px;
+      pointer-events: none;
+      z-index: 1;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.055) 0%, transparent 62%);
+      opacity: 0.9;
+      will-change: transform;
+    }
+
+    html.strctr-v8 main {
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes strctrHeroDrift {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    html.strctr-v8 .hero-stack .panel.panel-updating {
+      animation: strctrHeroDrift ${HERO_DRIFT_SEC}s ease-in-out infinite;
+    }
+
+    @keyframes strctrGridDrift {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 52px 26px, -26px 52px; }
+    }
+
+    html.strctr-v8 body::before {
+      animation: strctrGridDrift ${GRID_DRIFT_SEC}s linear infinite;
+    }
+
+    html.strctr-v8 .btn.strctr-btn-shine {
+      position: relative;
+      overflow: hidden;
+    }
+
+    html.strctr-v8 .btn.strctr-btn-shine::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        100deg,
+        transparent 38%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 62%
+      );
+      transform: translateX(-130%);
+      transition: transform 0.55s var(--strctr-ease);
+      pointer-events: none;
+    }
+
+    html.strctr-v8 .btn.strctr-btn-shine:hover::after {
+      transform: translateX(130%);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      [data-motion='section'],
+      .motion-section,
+      [data-motion='item'],
+      .motion-item {
+        opacity: 1 !important;
+        transform: none !important;
+        transition-duration: 0.01ms !important;
+      }
+      #strctr-cursor-glow {
+        display: none !important;
+      }
+      html.strctr-v8 .hero-stack .panel.panel-updating {
+        animation: none !important;
+      }
+      html.strctr-v8 body::before {
+        animation: none !important;
+      }
+      .strctr-proximity-target {
+        box-shadow: none !important;
+      }
     }
   `;
 
   document.head.appendChild(style);
 }
 
-function wireSectionReveal() {
+function wireSectionReveal(reducedMotion) {
   const sections = [...document.querySelectorAll('[data-motion="section"], .motion-section')];
   if (!sections.length) return;
 
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      const section = entry.target;
-      section.classList.add('is-visible');
-      staggerSectionItems(section);
-      io.unobserve(section);
-    });
-  }, { threshold: 0.16, rootMargin: '0px 0px -12% 0px' });
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const section = entry.target;
+        section.classList.add('is-visible');
+        staggerSectionItems(section, reducedMotion);
+        io.unobserve(section);
+      });
+    },
+    { threshold: 0.16, rootMargin: '0px 0px -12% 0px' }
+  );
 
   sections.forEach((section) => io.observe(section));
 }
 
-function staggerSectionItems(section) {
+function staggerSectionItems(section, reducedMotion) {
   const items = [...section.querySelectorAll('[data-motion="item"], .motion-item')];
+  const delay = reducedMotion ? 0 : STAGGER_MS;
   items.forEach((item, index) => {
-    item.style.transitionDelay = `${index * 70}ms`;
+    const ms = Math.min(index * delay, 520);
+    item.style.transitionDelay = reducedMotion ? '0ms' : `${ms}ms`;
   });
 }
 
@@ -273,22 +384,23 @@ function wireLiveDots() {
   });
 }
 
-function wireSystemCardRefresh() {
+function wireSystemCardRefresh(reducedMotion) {
   const refreshables = [...document.querySelectorAll('[data-role="refreshable"]')];
   const statusLine = document.querySelector('[data-role="refresh-status"]');
   if (!refreshables.length) return;
+  if (reducedMotion) return;
 
   const tick = () => {
     const item = refreshables[Math.floor(Math.random() * refreshables.length)];
     item.classList.add('strctr-refreshing');
     if (statusLine) pulseSystemLine(statusLine, '> updating...');
-    setTimeout(() => item.classList.remove('strctr-refreshing'), 420);
+    window.setTimeout(() => item.classList.remove('strctr-refreshing'), 680);
 
-    const next = 6000 + Math.random() * 6000;
+    const next = REFRESH_MIN_MS + Math.random() * REFRESH_RANGE_MS;
     window.setTimeout(tick, next);
   };
 
-  window.setTimeout(tick, 2400);
+  window.setTimeout(tick, 3200 + Math.random() * 2000);
 }
 
 function wireLockedFieldSwaps() {
@@ -339,7 +451,6 @@ function wireMicroSystemLines() {
 function pulseSystemLine(el, text) {
   el.textContent = text;
   el.classList.remove('is-visible', 'is-pulse');
-  // force reflow
   void el.offsetWidth;
   el.classList.add('is-pulse');
   window.setTimeout(() => {
@@ -377,5 +488,64 @@ function wireAccessCardLabels() {
       hoverLabel.style.opacity = '0';
       hoverLabel.style.transform = 'translateY(4px)';
     });
+  });
+}
+
+function distToRect(px, py, r) {
+  const nx = Math.max(r.left, Math.min(px, r.right));
+  const ny = Math.max(r.top, Math.min(py, r.bottom));
+  return Math.hypot(px - nx, py - ny);
+}
+
+/** Single rAF path: cursor glow + proximity (--strctr-prox). */
+function wirePointerSystem() {
+  if (document.getElementById('strctr-cursor-glow')) return;
+
+  const glow = document.createElement('div');
+  glow.id = 'strctr-cursor-glow';
+  glow.setAttribute('aria-hidden', 'true');
+  document.body.insertBefore(glow, document.body.firstChild);
+
+  const nodes = document.querySelectorAll(
+    '.card, .metric, .term-stat, .plan, .stream-item, .tier'
+  );
+  const targets = [...nodes];
+  targets.forEach((t) => t.classList.add('strctr-proximity-target'));
+
+  let mx = window.innerWidth * 0.5;
+  let my = window.innerHeight * 0.35;
+  let raf = 0;
+
+  const frame = () => {
+    raf = 0;
+    glow.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
+    for (let i = 0; i < targets.length; i++) {
+      const el = targets[i];
+      const r = el.getBoundingClientRect();
+      const d = distToRect(mx, my, r);
+      const prox = Math.max(0, 1 - d / PROX_RADIUS);
+      el.style.setProperty('--strctr-prox', prox.toFixed(4));
+    }
+  };
+
+  const schedule = () => {
+    if (!raf) raf = requestAnimationFrame(frame);
+  };
+
+  const onPointer = (e) => {
+    mx = e.clientX;
+    my = e.clientY;
+    schedule();
+  };
+
+  window.addEventListener('pointermove', onPointer, { passive: true });
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule, { passive: true });
+  frame();
+}
+
+function wireButtonShine() {
+  document.querySelectorAll('.btn').forEach((btn) => {
+    btn.classList.add('strctr-btn-shine');
   });
 }
