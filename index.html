@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>STRCTR — structure, liquidity, execution</title>
+    <title>STRCTR — Trade liquidity. Not noise.</title>
     <meta name="description"
-        content="STRCTR — market structure, positioning, and execution output. Cold. Minimal. System-first." />
+        content="AI-powered signals from real derivatives data — liquidity, open interest, and positioning. Built for traders who understand how markets move." />
     <style>
         :root {
             --bg: #0B0B0C;
@@ -607,9 +607,18 @@
         }
 
         .hero {
-            padding: 80px 0 40px;
+            padding: 80px 0 48px;
             position: relative;
             overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.32) 45%, rgba(0, 0, 0, 0.14) 100%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         .hero-watermark {
@@ -621,7 +630,7 @@
             justify-content: flex-end;
             align-items: center;
             padding-right: 32px;
-            opacity: .022;
+            opacity: .012;
             pointer-events: none;
             z-index: 0;
             mask-image: linear-gradient(90deg, transparent 6%, rgba(0, 0, 0, .9) 26%, rgba(0, 0, 0, .95) 78%, transparent 98%);
@@ -703,6 +712,41 @@
             transform: translateY(-2px);
         }
 
+        .hero h1.hero-headline {
+            font-size: clamp(34px, 4.1vw, 52px);
+            line-height: 1.1;
+            letter-spacing: -0.035em;
+            max-width: 640px;
+            margin: 10px 0 0;
+            color: #f3f4f6;
+            text-shadow: 0 2px 28px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(0, 0, 0, 0.4);
+            font-weight: 720;
+        }
+
+        .hero-lead {
+            max-width: 560px;
+            margin: 16px 0 0;
+            color: #e5e7eb;
+            font-size: clamp(15px, 1.65vw, 17px);
+            line-height: 1.55;
+            letter-spacing: 0.01em;
+            text-shadow: 0 1px 18px rgba(0, 0, 0, 0.45);
+        }
+
+        .hero-support {
+            max-width: 520px;
+            margin: 12px 0 0;
+            color: rgba(203, 210, 218, 0.96);
+            font-size: 14px;
+            line-height: 1.5;
+            letter-spacing: 0.02em;
+            text-shadow: 0 1px 14px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero .btn-row {
+            margin-top: 22px;
+        }
+
         h1 span {
             color: #f9f9ff;
             background: linear-gradient(180deg, #f8fafc 0%, #e8eef8 62%, #d4e2fc 100%);
@@ -742,6 +786,11 @@
             letter-spacing: .12em;
             text-transform: uppercase;
             line-height: 1.3;
+        }
+
+        .hero .hero-line {
+            color: rgba(209, 213, 219, 0.92);
+            text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
         }
 
         .hero-sigil {
@@ -839,7 +888,7 @@
             background:
                 radial-gradient(88% 72% at 64% 38%, rgba(59, 130, 246, .12), transparent 70%),
                 radial-gradient(70% 56% at 36% 60%, rgba(255, 255, 255, .04), transparent 76%);
-            opacity: .42;
+            opacity: .28;
             pointer-events: none;
             z-index: -1;
             filter: saturate(95%);
@@ -1263,7 +1312,7 @@
         }
 
         .section+.section {
-            margin-top: 32px;
+            margin-top: 40px;
         }
 
         .section+.section::before {
@@ -1344,11 +1393,123 @@
 
         .system-grid,
         .trust-grid,
+        .how-works-grid,
         .action-grid,
         .outputs {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: var(--grid-gap);
+        }
+
+        .how-works-grid .card-title-sm {
+            margin: 0 0 10px;
+            font-size: 15px;
+            font-weight: 650;
+            letter-spacing: 0.04em;
+            color: #e8edf5;
+        }
+
+        .how-works-grid .card-body-sm {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.55;
+            color: rgba(200, 208, 218, 0.92);
+            letter-spacing: 0.02em;
+        }
+
+        .signal-example-inner {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .signal-tg {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            background:
+                linear-gradient(165deg, rgba(59, 130, 246, 0.07), transparent 42%),
+                linear-gradient(180deg, #141a22, #0c1014);
+            box-shadow: var(--module-shadow), var(--module-inset), 0 0 48px rgba(59, 130, 246, 0.1);
+            padding: 18px 20px;
+            font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.65;
+            color: #e5e7eb;
+            text-align: left;
+        }
+
+        .signal-tg .tg-k {
+            color: rgba(147, 197, 253, 0.95);
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .signal-tg .tg-accent {
+            color: #93c5fd;
+        }
+
+        .signal-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .levels-list {
+            margin: 12px 0 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .levels-list li {
+            position: relative;
+            padding: 8px 0 8px 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 12px;
+            line-height: 1.45;
+            letter-spacing: 0.04em;
+            color: rgba(214, 220, 229, 0.9);
+        }
+
+        .levels-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: rgba(59, 130, 246, 0.65);
+            font-size: 11px;
+        }
+
+        .tiers-cta {
+            margin-top: 28px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .final-cta-box {
+            text-align: center;
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 36px 28px;
+            border: 1px solid rgba(59, 130, 246, 0.22);
+            border-radius: 24px;
+            background:
+                linear-gradient(180deg, rgba(59, 130, 246, 0.06), transparent 55%),
+                var(--module-bg);
+            box-shadow: var(--module-shadow), var(--module-inset), 0 0 40px rgba(59, 130, 246, 0.08);
+        }
+
+        .final-cta-box h2 {
+            margin: 0 0 10px;
+            font-size: clamp(26px, 2.6vw, 34px);
+            font-weight: 720;
+            letter-spacing: -0.02em;
+        }
+
+        .final-cta-box p {
+            margin: 0 0 20px;
+            color: rgba(229, 231, 235, 0.78);
+            font-size: 15px;
+            line-height: 1.5;
         }
 
         .tiers {
@@ -2190,6 +2351,7 @@
         .cmd-input:focus-visible,
         .cmd-item:focus-visible,
         [data-cmd-open]:focus-visible,
+        [data-open-paywall]:focus-visible,
         .btn-unlock:focus-visible,
         .paywall-close:focus-visible,
         .paywall-actions .btn:focus-visible,
@@ -2216,6 +2378,7 @@
             }
 
             .system-grid,
+            .how-works-grid,
             .tiers,
             .outputs,
             .how-grid {
@@ -2343,6 +2506,24 @@
                 transform: translateY(-1px);
             }
 
+            .hero h1.hero-headline {
+                font-size: clamp(26px, 6.8vw, 38px);
+                line-height: 1.14;
+                letter-spacing: -0.04em;
+            }
+
+            .hero-lead {
+                font-size: clamp(14px, 3.6vw, 16px);
+                line-height: 1.45;
+                margin-top: 10px;
+            }
+
+            .hero-support {
+                font-size: 13px;
+                line-height: 1.45;
+                margin-top: 8px;
+            }
+
             .hero-sub {
                 font-size: clamp(13px, 3.4vw, 16px);
                 line-height: 1.2;
@@ -2460,6 +2641,7 @@
 
             .system-grid,
             .trust-grid,
+            .how-works-grid,
             .action-grid,
             .outputs,
             .tiers,
@@ -2483,7 +2665,8 @@
                 padding: 12px 13px;
             }
 
-            .system-grid {
+            .system-grid,
+            .how-works-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -2787,14 +2970,13 @@
 
             <nav class="nav-links">
                 <a href="#system">Overview</a>
-                <a href="#tiers">Product</a>
-                <a href="#framework">Logic</a>
-                <a href="#outputs">Output</a>
-                <a href="#action">Execution</a>
+                <a href="#how-it-works">How it works</a>
+                <a href="#tiers">Levels</a>
+                <a href="#signal-example">Signal</a>
                 <a href="#access">Access</a>
             </nav>
 
-            <a class="btn btn-ghost" href="#system">ENTER SYSTEM</a>
+            <a class="btn btn-ghost" href="#access">Join channel</a>
         </div>
     </header>
 
@@ -2812,19 +2994,17 @@
                             <use href="#strctr-mark"></use>
                         </svg>
                     </div>
-                    <h1 data-motion="item">STRCTR</h1>
-                    <p class="hero-sub" data-motion="item">Market structure.</p>
-                    <p class="hero-sub" data-motion="item">Execution system.</p>
-                    <p class="hero-sub hero-sub--break" data-motion="item">Not signals.</p>
-                    <p class="hero-sub" data-motion="item">Decision engine.</p>
-                    <p class="hero-micro" data-motion="item">→ positioning leads</p>
+                    <p class="hero-line" data-motion="item">STRCTR</p>
+                    <h1 class="hero-headline" data-motion="item">Trade liquidity.<br />Not noise.</h1>
+                    <p class="hero-lead" data-motion="item">AI-powered signals based on real derivatives data — liquidity,
+                        open interest, and positioning.</p>
+                    <p class="hero-support" data-motion="item">Built for traders who understand how the market really
+                        moves.</p>
 
                     <div class="btn-row">
-                        <button class="btn btn-primary" type="button" data-cmd-open data-role="button-swap"><span
-                                class="default-label">ENTER SYSTEM</span><span class="hover-label">→
-                                loading...</span></button>
-                        <a class="btn btn-ghost" href="https://t.me/" target="_blank" rel="noopener noreferrer">ENTER
-                            LIVE FEED</a>
+                        <a class="btn btn-primary" href="https://t.me/" target="_blank" rel="noopener noreferrer">Join
+                            FREE channel</a>
+                        <a class="btn btn-ghost" href="#signal-example">View live signals</a>
                     </div>
                 </div>
 
@@ -2904,24 +3084,67 @@
             </div>
         </section>
 
-        <section class="section how-wrap" id="framework" aria-labelledby="howWorksTitle" data-motion="section">
+        <section class="section" id="how-it-works" data-motion="section">
             <div class="container">
-                <div class="how-card">
-                    <h2 id="howWorksTitle" class="how-head" data-motion="item">system logic</h2>
-                    <p class="how-lead" data-motion="item">input → structure → action</p>
-                    <div class="how-grid">
-                        <article class="how-step" data-motion="card">
-                            <h3 class="k" data-motion="item">Input</h3>
-                            <p class="v" data-motion="item">Liquidity / OI / CVD</p>
-                        </article>
-                        <article class="how-step" data-motion="card">
-                            <h3 class="k" data-motion="item">Engine</h3>
-                            <p class="v" data-motion="item">Structure → Scenario → Probability</p>
-                        </article>
-                        <article class="how-step" data-motion="card">
-                            <h3 class="k" data-motion="item">Output</h3>
-                            <p class="v" data-motion="item">Execution / Levels / Behavior</p>
-                        </article>
+                <div class="section-head reveal">
+                    <div>
+                        <div class="section-sigil">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="#strctr-mark"></use>
+                            </svg>
+                            <span data-motion="item">flow</span>
+                        </div>
+                        <h2 data-motion="item">How it works</h2>
+                        <p data-motion="item">From raw market data to actionable output.</p>
+                    </div>
+                </div>
+                <div class="how-works-grid">
+                    <article class="card reveal d2" data-motion="card">
+                        <h3 class="card-title-sm" data-motion="item">Liquidity mapping</h3>
+                        <p class="card-body-sm" data-motion="item">We track liquidation levels, liquidity clusters, and
+                            positioning across the market.</p>
+                    </article>
+                    <article class="card reveal d3" data-motion="card">
+                        <h3 class="card-title-sm" data-motion="item">AI processing</h3>
+                        <p class="card-body-sm" data-motion="item">Our system analyzes market structure, pressure, and
+                            timing in real time.</p>
+                    </article>
+                    <article class="card reveal d4" data-motion="card">
+                        <h3 class="card-title-sm" data-motion="item">Execution signals</h3>
+                        <p class="card-body-sm" data-motion="item">You get clear actions: enter, hold, reduce, exit — no
+                            guessing.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="signal-example" data-motion="section">
+            <div class="container">
+                <div class="section-head reveal">
+                    <div>
+                        <div class="section-sigil">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="#strctr-mark"></use>
+                            </svg>
+                            <span data-motion="item">preview</span>
+                        </div>
+                        <h2 data-motion="item">Signal example</h2>
+                        <p data-motion="item">What a live alert looks like in-channel.</p>
+                    </div>
+                </div>
+                <div class="signal-example-inner reveal">
+                    <div class="signal-tg" data-motion="item">
+                        <div class="tg-k">STRCTR · alert</div>
+                        <div>🧷 <span class="tg-accent">BTC LONG</span></div>
+                        <div>Entry: 65,800</div>
+                        <div>Context: Liquidity sweep + OI reset</div>
+                        <div>Bias: Long</div>
+                        <div>Action: ENTER_PARTIAL</div>
+                        <div>→ Target: 67,200</div>
+                    </div>
+                    <div class="signal-actions">
+                        <a class="btn btn-primary" href="https://t.me/" target="_blank" rel="noopener noreferrer">View
+                            full feed</a>
                     </div>
                 </div>
             </div>
@@ -3028,47 +3251,48 @@
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <use href="#strctr-mark"></use>
                             </svg>
-                            <span data-motion="item">access</span>
+                            <span data-motion="item">levels</span>
                         </div>
-                        <h2 data-motion="item">access</h2>
-                        <p data-motion="item">
-                            SEE · UNDERSTAND · ACT
-                        </p>
+                        <h2 data-motion="item">Levels</h2>
+                        <p data-motion="item">Choose depth of access. Upgrade when you need more.</p>
                     </div>
                 </div>
 
                 <div class="tiers">
                     <article class="tier tier-free reveal d2" data-motion="card">
                         <div class="name" data-motion="item">FREE</div>
-                        <h3 class="layer-title" data-motion="item">Observer</h3>
-                        <ul class="layer-points">
-                            <li data-motion="item">→ SEE</li>
+                        <h3 class="layer-title" data-motion="item">Surface</h3>
+                        <ul class="levels-list">
+                            <li data-motion="item">Delayed signals</li>
+                            <li data-motion="item">Basic context</li>
+                            <li data-motion="item">Telegram access</li>
                         </ul>
-                        <p class="tier-price" data-motion="item">Free</p>
-                        <p class="tier-billing" data-motion="item">see structure</p>
                     </article>
 
                     <article class="tier tier-pro reveal d3" data-motion="card">
                         <div class="name" data-motion="item">PRO</div>
-                        <h3 class="layer-title" data-motion="item">Interpreter</h3>
-                        <ul class="layer-points">
-                            <li data-motion="item">→ UNDERSTAND</li>
-                            <li data-motion="item">scenario · probability · structure</li>
+                        <h3 class="layer-title" data-motion="item">Live</h3>
+                        <ul class="levels-list">
+                            <li data-motion="item">Real-time signals</li>
+                            <li data-motion="item">Full context</li>
+                            <li data-motion="item">Priority alerts</li>
                         </ul>
-                        <p class="tier-price" data-motion="item">$39 / month</p>
-                        <p class="tier-billing" data-motion="item">billed via Stripe</p>
                     </article>
 
                     <article class="tier tier-core reveal d4" data-motion="card">
                         <div class="name" data-motion="item">CORE</div>
-                        <div class="core-live-label" data-motion="item">RESTRICTED</div>
-                        <h3 class="layer-title" data-motion="item">Operator</h3>
-                        <ul class="layer-points">
-                            <li data-motion="item">→ ACT</li>
+                        <div class="core-live-label" data-motion="item">FULL SYSTEM</div>
+                        <h3 class="layer-title" data-motion="item">Execution</h3>
+                        <ul class="levels-list">
+                            <li data-motion="item">Full execution system</li>
+                            <li data-motion="item">Position management</li>
+                            <li data-motion="item">Institutional model</li>
                         </ul>
-                        <p class="tier-price" data-motion="item">Application required</p>
-                        <p class="tier-billing" data-motion="item">restricted access</p>
                     </article>
+                </div>
+                <div class="tiers-cta reveal">
+                    <button type="button" class="btn btn-primary" data-open-paywall
+                        aria-haspopup="dialog" aria-controls="paywallModal">Upgrade access</button>
                 </div>
             </div>
         </section>
@@ -3218,39 +3442,47 @@
             </div>
         </section>
 
+        <section class="section" id="start-cta" data-motion="section">
+            <div class="container">
+                <div class="final-cta-box reveal">
+                    <h2 data-motion="item">Start with FREE access</h2>
+                    <p data-motion="item">No cost. No commitment. Just signals.</p>
+                    <a class="btn btn-primary" href="https://t.me/" target="_blank" rel="noopener noreferrer"
+                        data-motion="item">Join Telegram</a>
+                </div>
+            </div>
+        </section>
+
         <section class="section" id="access" data-motion="section">
             <div class="container">
                 <div class="cta reveal">
                     <div class="cta-grid">
                         <div class="cta-intro-col">
-                            <div class="eyebrow"><span class="dot"></span> telegram surface</div>
-                            <h3 data-motion="item">access the system</h3>
+                            <div class="eyebrow"><span class="dot"></span> telegram</div>
+                            <h3 data-motion="item">Get the feed</h3>
                             <p class="cta-intro-desktop" data-motion="item">
-                                real-time decision flow.<br>
-                                no signals.<br>
-                                no noise.
+                                Same channel as the hero — live signals,<br>
+                                structured context,<br>
+                                execution-ready output.
                             </p>
-                            <p class="cta-intro-mobile" data-motion="item">real-time flow. no signals. no noise.</p>
-                            <p class="cta-note">this is the surface</p>
-                            <p class="cta-note">full feed runs elsewhere</p>
+                            <p class="cta-intro-mobile" data-motion="item">Live signals and structured context. One
+                                channel.</p>
+                            <p class="cta-note">delayed tier free · upgrade for real-time</p>
                         </div>
 
                         <div class="cta-box">
-                            <div class="tiny" data-motion="item">access</div>
+                            <div class="tiny" data-motion="item">channel</div>
                             <div class="cta-status pulse"><span class="dot" data-role="live-dot"></span> live stream •
                                 active</div>
                             <div class="copy" data-motion="item">
-                                real-time decision flow.<br>
-                                no signals.<br>
-                                no noise.
+                                Join on Telegram.<br>
+                                Upgrade access when you need more depth.
                             </div>
                             <div class="btn-row cta-actions">
-                                <a class="btn btn-primary" href="#" role="button" data-cmd-open
-                                    data-role="cta-connect"><span class="default-label">ENTER SYSTEM</span><span
-                                        class="hover-label">→
-                                        loading...</span><span class="active-label">&gt; entering...</span></a>
-                                <a class="btn btn-ghost" href="https://t.me/" target="_blank"
-                                    rel="noopener noreferrer">ENTER LIVE FEED</a>
+                                <a class="btn btn-primary" href="https://t.me/" target="_blank"
+                                    rel="noopener noreferrer">Join FREE channel</a>
+                                <button type="button" class="btn btn-ghost" data-open-paywall aria-haspopup="dialog"
+                                    aria-controls="paywallModal">Upgrade access</button>
                             </div>
                         </div>
                     </div>
@@ -3354,12 +3586,15 @@
                     autocomplete="off" />
                 <div class="cmd-list" id="cmdList">
                     <button class="cmd-item" type="button" data-target="#system">Go: Overview</button>
-                    <button class="cmd-item" type="button" data-target="#tiers">Go: Product</button>
-                    <button class="cmd-item" type="button" data-target="#framework">Go: Logic</button>
+                    <button class="cmd-item" type="button" data-target="#how-it-works">Go: How it works</button>
+                    <button class="cmd-item" type="button" data-target="#signal-example">Go: Signal example</button>
+                    <button class="cmd-item" type="button" data-target="#tiers">Go: Levels</button>
                     <button class="cmd-item" type="button" data-target="#outputs">Go: Output</button>
                     <button class="cmd-item" type="button" data-target="#action">Go: Execution</button>
+                    <button class="cmd-item" type="button" data-target="#start-cta">Go: Start</button>
                     <button class="cmd-item" type="button" data-target="#access">Go: Access</button>
-                    <button class="cmd-item" type="button" data-link="https://t.me/">ENTER LIVE FEED</button>
+                    <button class="cmd-item" type="button" data-link="https://t.me/">Join FREE channel</button>
+                    <button class="cmd-item" type="button" data-open-paywall>Upgrade access</button>
                     <button class="cmd-item" type="button" data-operator-apply>Request: Operator access</button>
                 </div>
             </div>
@@ -3557,6 +3792,9 @@
             };
 
             document.getElementById('btnUnlockAccess')?.addEventListener('click', openPaywall);
+            document.querySelectorAll('[data-open-paywall]').forEach((btn) => {
+                btn.addEventListener('click', openPaywall);
+            });
 
             document.querySelectorAll('[data-paywall-close]').forEach((btn) => {
                 btn.addEventListener('click', () => paywallModal?.close());
@@ -3722,6 +3960,11 @@
                         closePalette();
                         return;
                     }
+                    if (item.hasAttribute('data-open-paywall')) {
+                        openPaywall();
+                        closePalette();
+                        return;
+                    }
                     const targetSelector = item.getAttribute('data-target');
                     const link = item.getAttribute('data-link');
 
@@ -3743,9 +3986,6 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             initStrctrMotion();
-            document.querySelector('a[data-role="cta-connect"]')?.addEventListener('click', (e) => {
-                e.preventDefault();
-            });
         });
     </script>
 </body>
