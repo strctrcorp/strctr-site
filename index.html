@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>STRCTR — Decision system for liquidity and execution</title>
+    <title>STRCTR — structure, liquidity, execution</title>
     <meta name="description"
-        content="STRCTR — a cold, structured decision system for liquidity, trap, structure break, and execution." />
+        content="STRCTR — market structure, positioning, and execution output. Cold. Minimal. System-first." />
     <style>
         :root {
             --bg: #0B0B0C;
@@ -648,6 +648,19 @@
             line-height: 1.35;
             letter-spacing: .06em;
             text-transform: none;
+        }
+
+        .hero-sub.hero-sub--break {
+            margin-top: 14px;
+        }
+
+        .hero-micro {
+            max-width: 560px;
+            margin: 12px 0 0;
+            color: rgba(138, 144, 153, 0.88);
+            font-size: 13px;
+            letter-spacing: 0.06em;
+            line-height: 1.45;
         }
 
         .hero-line {
@@ -1606,6 +1619,14 @@
             color: #e5e7eb;
         }
 
+        .how-lead {
+            margin: -6px 0 18px;
+            max-width: 640px;
+            color: rgba(229, 231, 235, 0.72);
+            font-size: 14px;
+            line-height: 1.45;
+        }
+
         .how-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1729,6 +1750,18 @@
 
         .cta-intro-mobile {
             display: none;
+        }
+
+        .cta-note {
+            margin: 14px 0 0;
+            font-size: 12px;
+            line-height: 1.45;
+            color: var(--muted);
+            letter-spacing: 0.04em;
+        }
+
+        .cta-note+.cta-note {
+            margin-top: 6px;
         }
 
         .cta-box {
@@ -2585,8 +2618,11 @@
                         </svg>
                     </div>
                     <h1 data-motion="item">STRCTR</h1>
-                    <p class="hero-sub" data-motion="item">Market structure. Execution system.</p>
-                    <p class="hero-sub" data-motion="item">Not signals. Decision engine.</p>
+                    <p class="hero-sub" data-motion="item">Market structure.</p>
+                    <p class="hero-sub" data-motion="item">Execution system.</p>
+                    <p class="hero-sub hero-sub--break" data-motion="item">Not signals.</p>
+                    <p class="hero-sub" data-motion="item">Decision engine.</p>
+                    <p class="hero-micro" data-motion="item">→ positioning leads</p>
 
                     <div class="btn-row">
                         <button class="btn btn-primary" type="button" data-cmd-open data-role="button-swap"><span
@@ -2676,7 +2712,8 @@
         <section class="section how-wrap" id="framework" aria-labelledby="howWorksTitle" data-motion="section">
             <div class="container">
                 <div class="how-card">
-                    <h2 id="howWorksTitle" class="how-head" data-motion="item">How the system makes decisions.</h2>
+                    <h2 id="howWorksTitle" class="how-head" data-motion="item">system logic</h2>
+                    <p class="how-lead" data-motion="item">input → structure → action</p>
                     <div class="how-grid">
                         <article class="how-step" data-motion="card">
                             <h3 class="k" data-motion="item">Input</h3>
@@ -2703,11 +2740,11 @@
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <use href="#strctr-mark"></use>
                             </svg>
-                            <span data-motion="item">System Proof</span>
+                            <span data-motion="item">forces</span>
                         </div>
-                        <h2 data-motion="item">What drives the decision.</h2>
+                        <h2 data-motion="item">underlying forces</h2>
                         <p data-motion="item">
-                            Liquidity. Positioning. Execution.
+                            liquidity. positioning. execution.
                         </p>
                     </div>
                 </div>
@@ -2715,17 +2752,17 @@
                 <div class="trust-grid">
                     <article class="card trust-card reveal d2" data-motion="card">
                         <h3 class="trust-title" data-motion="item">LIQUIDITY</h3>
-                        <p class="trust-copy" data-motion="item">Liquidity sweeps define direction</p>
+                        <p class="trust-copy" data-motion="item">defines direction</p>
                     </article>
 
                     <article class="card trust-card reveal d3" data-motion="card">
                         <h3 class="trust-title" data-motion="item">POSITIONING</h3>
-                        <p class="trust-copy" data-motion="item">Crowding creates traps</p>
+                        <p class="trust-copy" data-motion="item">creates pressure</p>
                     </article>
 
                     <article class="card trust-card reveal d4" data-motion="card">
                         <h3 class="trust-title" data-motion="item">EXECUTION</h3>
-                        <p class="trust-copy" data-motion="item">State logic controls actions</p>
+                        <p class="trust-copy" data-motion="item">resolves imbalance</p>
                     </article>
                 </div>
             </div>
@@ -2739,11 +2776,11 @@
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <use href="#strctr-mark"></use>
                             </svg>
-                            <span data-motion="item">Product Surface</span>
+                            <span data-motion="item">layers</span>
                         </div>
-                        <h2 data-motion="item">One engine. Three product surfaces.</h2>
+                        <h2 data-motion="item">three layers</h2>
                         <p data-motion="item">
-                            Scenario, execution, stream.
+                            scenario. execution. stream.
                         </p>
                     </div>
                 </div>
@@ -2753,39 +2790,36 @@
                         <div class="card-head">
                             <div>
                                 <h3 class="card-title" data-motion="item">Scenario</h3>
-                                <div class="card-sub" data-motion="item">Market direction + probabilities</div>
+                                <div class="card-sub" data-motion="item">direction / probability</div>
                             </div>
                             <div class="pill">Main</div>
                         </div>
                         <pre data-motion="item">Scenario
-→ market direction
-→ probabilities</pre>
+→ direction / probability</pre>
                     </div>
 
                     <div class="card featured reveal d3" data-motion="card" data-role="core-card">
                         <div class="card-head">
                             <div>
                                 <h3 class="card-title" data-motion="item">Execution</h3>
-                                <div class="card-sub" data-motion="item">Position behavior</div>
+                                <div class="card-sub" data-motion="item">enter / manage / exit</div>
                             </div>
                             <div class="pill blue">Core</div>
                         </div>
                         <pre data-motion="item">Execution
-→ enter / add / reduce / exit
-→ position behavior</pre>
+→ enter / manage / exit</pre>
                     </div>
 
                     <div class="card reveal d4" data-motion="card">
                         <div class="card-head">
                             <div>
                                 <h3 class="card-title" data-motion="item">Stream</h3>
-                                <div class="card-sub" data-motion="item">Real-time output<br>Telegram feed</div>
+                                <div class="card-sub" data-motion="item">real-time output</div>
                             </div>
                             <div class="pill">Live</div>
                         </div>
                         <pre data-motion="item">Stream
-→ real-time output
-→ telegram feed</pre>
+→ real-time output</pre>
                     </div>
                 </div>
             </div>
@@ -2799,11 +2833,11 @@
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <use href="#strctr-mark"></use>
                             </svg>
-                            <span data-motion="item">Access Levels</span>
+                            <span data-motion="item">access</span>
                         </div>
-                        <h2 data-motion="item">Access levels.</h2>
+                        <h2 data-motion="item">access</h2>
                         <p data-motion="item">
-                            Free, Pro, Core.
+                            see. understand. act.
                         </p>
                     </div>
                 </div>
@@ -2813,27 +2847,24 @@
                         <div class="name" data-motion="item">FREE</div>
                         <h3 class="layer-title" data-motion="item">Observer</h3>
                         <ul class="layer-points">
-                            <li data-motion="item">→ See the market</li>
+                            <li data-motion="item">→ see</li>
                         </ul>
                     </article>
 
                     <article class="tier tier-pro reveal d3" data-motion="card">
                         <div class="name" data-motion="item">PRO</div>
-                        <h3 class="layer-title" data-motion="item">Decision Layer</h3>
+                        <h3 class="layer-title" data-motion="item">Interpreter</h3>
                         <ul class="layer-points">
-                            <li data-motion="item">→ Understand the market</li>
+                            <li data-motion="item">→ understand</li>
                         </ul>
                     </article>
 
                     <article class="tier tier-core reveal d4" data-motion="card">
                         <div class="name" data-motion="item">CORE</div>
                         <div class="core-live-label" data-motion="item">LIVE SYSTEM</div>
-                        <h3 class="layer-title" data-motion="item">Execution System</h3>
-                        <p data-motion="item">
-                            ENTER → ADD → REDUCE → EXIT
-                        </p>
+                        <h3 class="layer-title" data-motion="item">Operator</h3>
                         <ul class="layer-points">
-                            <li data-motion="item">→ Act in the market</li>
+                            <li data-motion="item">→ act</li>
                         </ul>
                     </article>
                 </div>
@@ -2848,9 +2879,10 @@
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <use href="#strctr-mark"></use>
                             </svg>
-                            <span data-motion="item">Output Schema</span>
+                            <span data-motion="item">output</span>
                         </div>
-                        <h2 data-motion="item">Output, structured.</h2>
+                        <h2 data-motion="item">state → action</h2>
+                        <p data-motion="item">structured output</p>
                     </div>
                 </div>
 
@@ -2867,21 +2899,21 @@
                     </div>
 
                     <div class="card reveal d3" data-motion="card">
-                        <div class="out-k" data-motion="item">Context</div>
+                        <div class="out-k" data-motion="item">State</div>
                         <div class="out-v" data-motion="item">
-                            Scenario<br>
-                            Stage<br>
-                            Timing<br>
-                            Confidence
+                            scenario<br>
+                            stage<br>
+                            timing<br>
+                            confidence
                         </div>
                     </div>
 
                     <div class="card reveal d4" data-motion="card">
                         <div class="out-k" data-motion="item">Plan</div>
                         <div class="out-v" data-motion="item">
-                            Levels<br>
-                            Invalidation<br>
-                            Add / Reduce logic
+                            levels<br>
+                            invalidation<br>
+                            add / reduce
                         </div>
                     </div>
                 </div>
@@ -2900,7 +2932,7 @@
                         </div>
                         <h2 data-motion="item">System in action.</h2>
                         <p data-motion="item">
-                            Asset. Scenario. Stage. Action. Result.
+                            compressed state trace.
                         </p>
                     </div>
                 </div>
@@ -2914,19 +2946,19 @@
                         <div class="trade-list">
                             <div class="trade-row">
                                 <div class="k">Scenario</div>
-                                <div class="v" data-motion="item">Up Trap → Down</div>
+                                <div class="v" data-motion="item">up trap → down</div>
                             </div>
                             <div class="trade-row">
                                 <div class="k">Stage</div>
-                                <div class="v" data-motion="item">Confirmation</div>
+                                <div class="v" data-motion="item">confirmation</div>
                             </div>
                             <div class="trade-row">
                                 <div class="k">Action</div>
-                                <div class="v" data-motion="item">ENTER → ADD → HOLD</div>
+                                <div class="v" data-motion="item">enter → add → hold</div>
                             </div>
                             <div class="trade-row">
                                 <div class="k">Result</div>
-                                <div class="v result" data-motion="item">T1 filled<br>Residual reduced</div>
+                                <div class="v result" data-motion="item">partial taken</div>
                             </div>
                         </div>
                     </article>
@@ -2939,20 +2971,19 @@
                         <div class="trade-list">
                             <div class="trade-row">
                                 <div class="k">Scenario</div>
-                                <div class="v" data-motion="item">Range Failure → Continuation Up</div>
+                                <div class="v" data-motion="item">continuation up</div>
                             </div>
                             <div class="trade-row">
                                 <div class="k">Stage</div>
-                                <div class="v" data-motion="item">Trigger</div>
+                                <div class="v" data-motion="item">trigger</div>
                             </div>
                             <div class="trade-row">
                                 <div class="k">Action</div>
-                                <div class="v" data-motion="item">ENTER → HOLD → REDUCE</div>
+                                <div class="v" data-motion="item">enter → hold → reduce</div>
                             </div>
                             <div class="trade-row">
                                 <div class="k">Result</div>
-                                <div class="v result" data-motion="item">Protection triggered<br>Invalidation untouched
-                                </div>
+                                <div class="v result" data-motion="item">protection active</div>
                             </div>
                         </div>
                     </article>
@@ -2965,19 +2996,19 @@
                         <div class="trade-list">
                             <div class="trade-row">
                                 <div class="k">Scenario</div>
-                                <div class="v" data-motion="item">Liquidity Sweep Below → Reclaim</div>
+                                <div class="v" data-motion="item">sweep → reclaim</div>
                             </div>
                             <div class="trade-row">
                                 <div class="k">Stage</div>
-                                <div class="v" data-motion="item">Setup → Confirmation</div>
+                                <div class="v" data-motion="item">setup → confirm</div>
                             </div>
                             <div class="trade-row">
                                 <div class="k">Action</div>
-                                <div class="v" data-motion="item">ENTER → EXIT → RE-ENTER</div>
+                                <div class="v" data-motion="item">enter → exit → re-enter</div>
                             </div>
                             <div class="trade-row">
                                 <div class="k">Result</div>
-                                <div class="v result" data-motion="item">Failure closed fast<br>Re-entry accepted</div>
+                                <div class="v result" data-motion="item">re-entry accepted</div>
                             </div>
                         </div>
                     </article>
@@ -2990,22 +3021,26 @@
                 <div class="cta reveal">
                     <div class="cta-grid">
                         <div class="cta-intro-col">
-                            <div class="eyebrow"><span class="dot"></span> Telegram-first launch model</div>
-                            <h3 data-motion="item">Access the system.</h3>
+                            <div class="eyebrow"><span class="dot"></span> telegram surface</div>
+                            <h3 data-motion="item">access the system</h3>
                             <p class="cta-intro-desktop" data-motion="item">
-                                Real-time decision flow.<br>
-                                No signals. No noise.
+                                real-time decision flow.<br>
+                                no signals.<br>
+                                no noise.
                             </p>
-                            <p class="cta-intro-mobile" data-motion="item">Real-time decision flow. No noise.</p>
+                            <p class="cta-intro-mobile" data-motion="item">real-time flow. no signals. no noise.</p>
+                            <p class="cta-note">this is the surface</p>
+                            <p class="cta-note">full feed runs elsewhere</p>
                         </div>
 
                         <div class="cta-box">
-                            <div class="tiny" data-motion="item">System Access</div>
-                            <div class="cta-status pulse"><span class="dot" data-role="live-dot"></span> Live System •
-                                Active Feed</div>
+                            <div class="tiny" data-motion="item">access</div>
+                            <div class="cta-status pulse"><span class="dot" data-role="live-dot"></span> live stream •
+                                active</div>
                             <div class="copy" data-motion="item">
-                                Real-time decision flow.<br>
-                                No signals. No noise.
+                                real-time decision flow.<br>
+                                no signals.<br>
+                                no noise.
                             </div>
                             <div class="btn-row cta-actions">
                                 <a class="btn btn-primary" href="#" role="button" data-cmd-open
@@ -3021,8 +3056,8 @@
 
                 <footer class="footer">
                     <div class="footer-line">
-                        <div data-motion="item">STRCTR — Not signals. Decision system.</div>
-                        <div data-motion="item">Black / White / Blue • Telegram-first • Dashboard-ready</div>
+                        <div data-motion="item">STRCTR — structure, not signals.</div>
+                        <div data-motion="item">black / white / blue · telegram · surface</div>
                     </div>
                     <div class="footer-legal">
                         <a href="/terms.html">Terms</a><span class="footer-legal-sep" aria-hidden="true">·</span><a
@@ -3057,25 +3092,25 @@
         <dialog id="paywallModal" class="paywall-dialog" aria-labelledby="paywallTitle">
             <div class="paywall-inner">
                 <button type="button" class="paywall-close" data-paywall-close aria-label="Close">×</button>
-                <p id="paywallTitle" class="paywall-copy">You are viewing the surface layer.<br />Unlock deeper market
-                    logic or full execution behavior.</p>
+                <p id="paywallTitle" class="paywall-copy">Surface layer.<br />Unlock structure or full execution path.
+                </p>
                 <div class="paywall-actions">
                     <div class="paywall-cta-block">
-                        <span class="paywall-layer-label">Decision Layer</span>
+                        <span class="paywall-layer-label">Interpreter</span>
                         <button type="button" class="btn btn-primary paywall-btn-pro" data-checkout-tier="pro">
-                            <span class="paywall-plan-title">Unlock Decision Layer (PRO)</span>
+                            <span class="paywall-plan-title">Unlock Interpreter (PRO)</span>
                             <span class="paywall-plan-price">$39/month · billed via Stripe</span>
                         </button>
                     </div>
                     <div class="paywall-cta-block">
-                        <span class="paywall-layer-label">Execution System</span>
+                        <span class="paywall-layer-label">Operator</span>
                         <button type="button" class="btn btn-primary paywall-btn-core" data-checkout-tier="core">
-                            <span class="paywall-plan-title">Unlock Execution System (CORE)</span>
+                            <span class="paywall-plan-title">Unlock Operator (CORE)</span>
                             <span class="paywall-plan-price">$119/month · billed via Stripe</span>
                         </button>
                     </div>
                 </div>
-                <p class="paywall-note">Secure checkout. Subscription status syncs after payment.</p>
+                <p class="paywall-note">Stripe checkout. Status syncs after payment.</p>
             </div>
         </dialog>
 
@@ -3084,7 +3119,7 @@
             <div class="paywall-inner checkout-feedback-inner">
                 <button type="button" class="paywall-close" data-checkout-feedback-close aria-label="Close">×</button>
                 <p id="checkoutSuccessTitle" class="paywall-copy checkout-feedback-title">Access unlocked</p>
-                <p class="checkout-feedback-body">Your subscription is active. Full STRCTR system is now available.</p>
+                <p class="checkout-feedback-body">Access active. Full surface unlocked.</p>
                 <div class="paywall-actions checkout-feedback-actions">
                     <button type="button" class="btn btn-primary paywall-btn-core"
                         id="checkoutSuccessContinue">Continue</button>
@@ -3097,7 +3132,7 @@
             <div class="paywall-inner checkout-feedback-inner">
                 <button type="button" class="paywall-close" data-checkout-feedback-close aria-label="Close">×</button>
                 <p id="checkoutCanceledTitle" class="paywall-copy checkout-feedback-title">Checkout canceled</p>
-                <p class="checkout-feedback-body">You can continue in FREE layer or unlock deeper access anytime.</p>
+                <p class="checkout-feedback-body">FREE layer. Unlock when ready.</p>
                 <div class="paywall-actions checkout-feedback-actions">
                     <button type="button" class="btn btn-ghost" id="checkoutCanceledBack">Back</button>
                 </div>
@@ -3119,7 +3154,7 @@
                     <button class="cmd-item" type="button" data-target="#outputs">Go: Output</button>
                     <button class="cmd-item" type="button" data-target="#action">Go: Execution</button>
                     <button class="cmd-item" type="button" data-target="#access">Go: Access</button>
-                    <button class="cmd-item" type="button" data-link="https://t.me/">View Signals</button>
+                    <button class="cmd-item" type="button" data-link="https://t.me/">View feed</button>
                     <button class="cmd-item" type="button" data-link="https://t.me/">Open Telegram</button>
                 </div>
             </div>
@@ -3241,15 +3276,14 @@
                     delete dlg.dataset.successMode;
                     if (title) title.textContent = 'Access unlocked';
                     if (body) {
-                        body.textContent =
-                            'Your subscription is active. Full STRCTR system is now available.';
+                        body.textContent = 'Access active. Full surface unlocked.';
                     }
                 } else {
                     delete dlg.dataset.tier;
                     dlg.dataset.successMode = 'generic';
                     if (title) title.textContent = 'Access activated';
                     if (body) {
-                        body.textContent = 'Your access is active. Continue to explore STRCTR.';
+                        body.textContent = 'Access active.';
                     }
                 }
                 dlg.showModal();
