@@ -2670,8 +2670,8 @@
             }
 
             .hero-watermark svg {
-                width: min(72vw, 360px);
-                height: min(72vw, 360px);
+                width: min(72%, 360px);
+                height: min(72%, 360px);
             }
 
             .section>.container::before {
@@ -3193,6 +3193,78 @@
 
             .footer-line {
                 padding-top: 12px;
+            }
+
+            html,
+            body {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .container {
+                width: 100%;
+                max-width: var(--max);
+                margin-left: auto;
+                margin-right: auto;
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .hero .container.hero-grid {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 8px;
+                width: 100%;
+                max-width: var(--max);
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-copy {
+                padding-left: 0;
+                padding-right: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .hero-grid>div:not(.hero-copy) {
+                width: 100%;
+                max-width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .social-proof-strip {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .hero-watermark svg {
+                width: min(72%, 360px);
+                height: min(72%, 360px);
+            }
+
+            .glossary-pop {
+                width: min(360px, calc(100% - 28px));
+            }
+
+            .cmd-dialog {
+                width: min(620px, calc(100% - 28px));
+            }
+
+            .paywall-dialog {
+                width: min(460px, calc(100% - 28px));
+            }
+
+            .telegram-gate-dialog {
+                width: min(520px, calc(100% - 28px));
+            }
+
+            #coreApplyModal .paywall-inner {
+                max-width: min(420px, calc(100% - 40px));
             }
         }
     </style>
