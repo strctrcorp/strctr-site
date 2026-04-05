@@ -80,13 +80,6 @@ export function initStrctrIntelligence({ root, reducedMotion }) {
       letter-spacing: 0.025em;
     }
 
-    html.strctr-v8 .panel-top-left [data-role="refresh-status"] {
-      color: rgba(209, 213, 220, 0.92);
-      opacity: 1;
-      font-size: 11px;
-      letter-spacing: 0.04em;
-    }
-
     #accessTierBadge.strctr-intel-proc {
       opacity: 1;
     }
