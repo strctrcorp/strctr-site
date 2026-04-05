@@ -302,12 +302,15 @@
             padding: 0 24px;
             font-weight: 500;
             letter-spacing: 0.02em;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, border-color 0.18s ease,
+                background 0.2s ease;
         }
 
         .btn-primary:hover {
+            transform: translateY(-1px);
             background: linear-gradient(180deg, #3f87f7 0%, #2a66eb 100%);
             filter: brightness(1.06);
-            box-shadow: 0 0 24px rgba(59, 130, 246, 0.32);
+            box-shadow: 0 6px 20px rgba(77, 99, 255, 0.25);
         }
 
         .btn-ghost {
@@ -1047,6 +1050,17 @@
             width: 100%;
         }
 
+        .hero-cta-helper {
+            margin: 6px auto 0;
+            max-width: 540px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            color: rgba(120, 128, 142, 0.88);
+            line-height: 1.35;
+        }
+
         .hero .btn-row .btn-primary,
         .signal-actions .btn-primary,
         .tier-actions .btn-primary,
@@ -1060,7 +1074,8 @@
 
         .social-proof-strip {
             text-align: center;
-            padding-top: 4px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 20px;
             padding-bottom: 28px;
             padding-inline: 16px;
             color: rgba(180, 186, 195, 0.92);
@@ -1624,6 +1639,76 @@
             display: none;
         }
 
+        .preview-feed-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, .045);
+        }
+
+        .preview-feed-left {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .preview-feed-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4d63ff;
+            flex-shrink: 0;
+            animation: previewFeedPulse 1.6s infinite ease-in-out;
+        }
+
+        .preview-feed-title {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(200, 208, 218, 0.88);
+        }
+
+        .preview-feed-updated {
+            font-size: 10px;
+            letter-spacing: 0.05em;
+            color: rgba(148, 156, 168, 0.78);
+            white-space: nowrap;
+        }
+
+        @keyframes previewFeedPulse {
+
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .sys-trace-log {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, .045);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+                monospace;
+            font-size: 10px;
+            line-height: 1.5;
+            letter-spacing: 0.03em;
+            color: rgba(160, 168, 182, 0.52);
+        }
+
+        .sys-trace-line+.sys-trace-line {
+            margin-top: 2px;
+        }
+
         .sys-terminal .panel-top {
             margin-bottom: 18px;
             padding-bottom: 14px;
@@ -1825,26 +1910,14 @@
             position: absolute;
             left: 0;
             right: 0;
-            top: -8px;
+            top: 0;
             height: 1px;
-            background:
-                linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, .095) 20%, var(--break-divider-main) 50%, rgba(255, 255, 255, .095) 80%, transparent 100%),
-                linear-gradient(135deg, transparent 40%, rgba(59, 130, 246, .24) 48%, rgba(59, 130, 246, .24) 52%, transparent 60%) center / 24px 6px no-repeat,
-                linear-gradient(315deg, transparent 40%, var(--break-divider-soft) 48%, var(--break-divider-soft) 52%, transparent 60%) center / 42px 6px no-repeat;
+            background: rgba(255, 255, 255, 0.04);
             pointer-events: none;
         }
 
         .section+.section::after {
-            content: "";
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            width: 10px;
-            height: 10px;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, transparent 38%, rgba(59, 130, 246, .26) 48%, rgba(59, 130, 246, .26) 52%, transparent 62%);
-            opacity: .32;
-            pointer-events: none;
+            display: none;
         }
 
         .section-head {
@@ -2595,11 +2668,14 @@
             background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
             border-color: rgba(59, 130, 246, 0.95);
             box-shadow: var(--btn-primary-glow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, border-color 0.18s ease,
+                background 0.2s ease;
         }
 
         .cta .btn-primary:hover {
+            transform: translateY(-1px);
             filter: brightness(1.06);
-            box-shadow: 0 0 26px rgba(59, 130, 246, 0.32);
+            box-shadow: 0 6px 20px rgba(77, 99, 255, 0.25);
             background: linear-gradient(180deg, #3f87f7 0%, #2a66eb 100%);
         }
 
@@ -2997,6 +3073,11 @@
                 align-items: stretch;
                 width: 100%;
                 gap: 11px;
+            }
+
+            .hero-cta-helper {
+                margin-top: 4px;
+                font-size: 10px;
             }
 
             .hero .btn {
@@ -3421,8 +3502,7 @@
                     </nav>
 
                     <a class="btn btn-ghost" href="https://t.me/strctr_system" target="_blank"
-                        rel="noopener noreferrer">JOIN
-                        FREE FEED</a>
+                        rel="noopener noreferrer">View live feed</a>
                 </div>
             </header>
 
@@ -3443,15 +3523,16 @@
                                 </div>
                                 <p class="hero-line" data-motion="item">STRCTR</p>
                                 <h1 class="hero-headline" data-motion="item">STRUCTURE BREAK</h1>
-                                <p class="hero-support" data-motion="item">A real-time liquidity signal system.</p>
-                                <p class="hero-lead" data-motion="item">We don’t predict.<br />We detect where price
-                                    must move.</p>
+                                <p class="hero-support" data-motion="item">Liquidity structure, live.</p>
+                                <p class="hero-lead" data-motion="item">We don’t predict.<br />We track where liquidity
+                                    forces price to move.</p>
                                 <p class="hero-support" data-motion="item">Liquidity → Trap → Break → Execution</p>
 
                                 <div class="btn-row">
                                     <a class="btn btn-primary" href="https://t.me/strctr_system" target="_blank"
-                                        rel="noopener noreferrer">JOIN FREE FEED</a>
+                                        rel="noopener noreferrer">View live feed (Telegram)</a>
                                 </div>
+                                <p class="hero-cta-helper" data-motion="item">No signup. Opens instantly.</p>
                             </div>
                         </div>
 
@@ -3460,6 +3541,13 @@
                             <div class="hero-stack reveal d2">
                                 <div class="panel panel-updating sys-terminal">
                                     <div class="panel-update-line" aria-hidden="true"></div>
+                                    <div class="preview-feed-bar" data-motion="item">
+                                        <div class="preview-feed-left">
+                                            <span class="preview-feed-dot" aria-hidden="true"></span>
+                                            <span class="preview-feed-title">LIVE FEED</span>
+                                        </div>
+                                        <span class="preview-feed-updated">Last update: 2 min ago</span>
+                                    </div>
                                     <div class="panel-top">
                                         <div class="panel-top-left">
                                             <span class="panel-label">STRCTR / SYSTEM</span>
@@ -3534,6 +3622,12 @@
                                                 </div>
                                             </div>
                                         </section>
+                                        <div class="sys-trace-log" aria-label="Execution trace" data-motion="item">
+                                            <div class="sys-trace-line">14:32 — Liquidity formed</div>
+                                            <div class="sys-trace-line">14:41 — Trap developed</div>
+                                            <div class="sys-trace-line">14:44 — Break confirmed</div>
+                                            <div class="sys-trace-line">14:45 — Entry triggered</div>
+                                        </div>
                                         <div data-role="ambient-lines" aria-hidden="true">
                                             <div class="strctr-system-line"></div>
                                         </div>
@@ -3547,7 +3641,7 @@
 
                 <div class="social-proof-strip">
                     <div class="container">
-                        <p>Used by traders tracking real liquidity — not indicators.</p>
+                        <p>Liquidity first. Not chart markup.</p>
                     </div>
                 </div>
 
@@ -3579,8 +3673,7 @@
                                 <h3 class="card-title-sm" data-motion="item">Execution triggers</h3>
                             </article>
                         </div>
-                        <p class="how-works-desc reveal" data-motion="item">Liquidity, positioning, flow — tracked live.
-                        </p>
+                        <p class="how-works-desc reveal" data-motion="item">Liquidity, positioning, flow — live.</p>
                     </div>
                 </section>
 
@@ -3595,7 +3688,7 @@
                                     <span data-motion="item">preview</span>
                                 </div>
                                 <h2 data-motion="item">Signal example</h2>
-                                <p data-motion="item">What a live alert looks like in-channel.</p>
+                                <p data-motion="item">Raw output from the channel.</p>
                             </div>
                         </div>
                         <div class="signal-example-inner reveal">
@@ -3611,7 +3704,7 @@
                             </div>
                             <div class="signal-actions">
                                 <a class="btn btn-primary" href="https://t.me/strctr_system" target="_blank"
-                                    rel="noopener noreferrer">JOIN FREE FEED</a>
+                                    rel="noopener noreferrer">View live feed (Telegram)</a>
                             </div>
                         </div>
                     </div>
@@ -3643,7 +3736,7 @@
                                 </ul>
                                 <div class="tier-actions">
                                     <a class="btn btn-primary" href="https://t.me/strctr_system" target="_blank"
-                                        rel="noopener noreferrer" data-motion="item">JOIN FREE FEED</a>
+                                        rel="noopener noreferrer" data-motion="item">View live feed (Telegram)</a>
                                 </div>
                             </article>
 
@@ -3695,9 +3788,7 @@
                                     <span data-motion="item">System in Action</span>
                                 </div>
                                 <h2 data-motion="item">System in action.</h2>
-                                <p data-motion="item">
-                                    compressed state trace.
-                                </p>
+                                <p data-motion="item">State → execution. Compressed.</p>
                             </div>
                         </div>
 
@@ -3724,6 +3815,10 @@
                                         <div class="k">Result</div>
                                         <div class="v result" data-motion="item">partial taken</div>
                                     </div>
+                                    <div class="trade-row trade-row--proof">
+                                        <div class="k">Outcome</div>
+                                        <div class="v" data-motion="item">→ −2.8% · 35m</div>
+                                    </div>
                                 </div>
                             </article>
                         </div>
@@ -3738,12 +3833,11 @@
                                     <div class="eyebrow"><span class="dot"></span> telegram</div>
                                     <h3 data-motion="item">Telegram channel</h3>
                                     <p class="cta-intro-desktop" data-motion="item">
-                                        One channel. Structure-first alerts.<br>
+                                        One channel. Structure-first output.<br>
                                         No noise. No indicators.
                                     </p>
-                                    <p class="cta-intro-mobile" data-motion="item">Live signals and structure context.
-                                        One
-                                        channel.</p>
+                                    <p class="cta-intro-mobile" data-motion="item">Structure context, live. One channel.
+                                    </p>
                                     <p class="cta-note">PRO and CORE — see pricing</p>
                                 </div>
 
@@ -3753,12 +3847,12 @@
                                         stream •
                                         active</div>
                                     <div class="copy" data-motion="item">
-                                        Open the free Telegram feed.<br>
-                                        Deeper tiers unlock when they launch.
+                                        Opens in Telegram.<br>
+                                        Paid tiers when live.
                                     </div>
                                     <div class="btn-row cta-actions">
                                         <a class="btn btn-primary" href="https://t.me/strctr_system" target="_blank"
-                                            rel="noopener noreferrer">JOIN FREE FEED</a>
+                                            rel="noopener noreferrer">View live feed (Telegram)</a>
                                     </div>
                                 </div>
                             </div>
@@ -3920,8 +4014,8 @@
                 <button class="cmd-item" type="button" data-target="#tiers">Go: Pricing</button>
                 <button class="cmd-item" type="button" data-target="#action">Go: Execution</button>
                 <button class="cmd-item" type="button" data-target="#access">Go: Access</button>
-                <button class="cmd-item" type="button" data-link="https://t.me/strctr_system">JOIN FREE
-                    FEED</button>
+                <button class="cmd-item" type="button" data-link="https://t.me/strctr_system">View live feed
+                        (Telegram)</button>
                 <button class="cmd-item" type="button" data-open-paywall>Access levels (PRO / CORE)</button>
                 <button class="cmd-item" type="button" data-link="https://t.me/strctr_access_bot?start=core">Apply
                     for CORE</button>
