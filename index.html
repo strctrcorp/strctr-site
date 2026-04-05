@@ -26,8 +26,8 @@
             --radius: 26px;
             --radius-sm: 16px;
             --max: 1240px;
-            --section-pad: 64px;
-            --block-gap: 32px;
+            --section-pad: 92px;
+            --block-gap: 40px;
             --grid-gap: 24px;
             --module-border: rgba(31, 41, 55, .35);
             --module-border-soft: rgba(31, 41, 55, .28);
@@ -1011,7 +1011,7 @@
         }
 
         .how-works-desc {
-            margin: 20px 0 0;
+            margin: 32px 0 0;
             max-width: 720px;
             font-size: 13px;
             line-height: 1.55;
@@ -1158,12 +1158,11 @@
             position: absolute;
             inset: -26px -24px -22px -24px;
             background:
-                radial-gradient(88% 72% at 64% 38%, rgba(59, 130, 246, .12), transparent 70%),
-                radial-gradient(70% 56% at 36% 60%, rgba(255, 255, 255, .04), transparent 76%);
-            opacity: .28;
+                radial-gradient(88% 72% at 64% 38%, rgba(59, 130, 246, .06), transparent 72%);
+            opacity: .14;
             pointer-events: none;
             z-index: -1;
-            filter: saturate(95%);
+            filter: saturate(88%);
         }
 
         .panel {
@@ -1503,6 +1502,163 @@
             word-spacing: .03em;
         }
 
+        /* Hero: trading terminal — single shell, STATE → EXECUTION → PLAN */
+        .sys-body {
+            position: relative;
+            z-index: 1;
+            padding-top: 2px;
+        }
+
+        .sys-section {
+            margin: 0;
+        }
+
+        .sys-section + .sys-section {
+            margin-top: 22px;
+            padding-top: 22px;
+            border-top: 1px solid rgba(255, 255, 255, .065);
+        }
+
+        .sys-section-label {
+            margin: 0 0 14px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(148, 156, 168, 0.95);
+        }
+
+        .sys-state-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .sys-terminal.panel {
+            border-radius: 18px;
+            padding: 18px 20px 21px;
+            background: var(--panel);
+            border-color: rgba(255, 255, 255, .09);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, .035),
+                0 0 0 1px rgba(255, 255, 255, .07);
+        }
+
+        .sys-terminal.panel::before {
+            display: none;
+        }
+
+        .sys-terminal.panel::after {
+            display: none;
+        }
+
+        .sys-terminal .panel-top {
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, .065);
+        }
+
+        .sys-terminal .live-terminal {
+            padding: 6px 0;
+            border: none;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            gap: 10px;
+            color: rgba(200, 220, 245, 0.92);
+        }
+
+        .sys-terminal .live-terminal .dot {
+            flex-shrink: 0;
+        }
+
+        .sys-terminal .panel-update-line {
+            opacity: 0.1;
+            left: 16px;
+            right: 16px;
+            top: 6px;
+        }
+
+        .sys-terminal .sys-term-grid.term-grid {
+            display: block;
+            margin: 0;
+            gap: 0;
+        }
+
+        .sys-terminal .term-stat.sys-term-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 20px;
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 12px 0;
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            border-bottom: 1px solid rgba(255, 255, 255, .05);
+            transition: none;
+        }
+
+        .sys-terminal .term-stat.sys-term-row:last-child {
+            border-bottom: none;
+        }
+
+        .sys-terminal .term-stat.sys-term-row .k {
+            flex: 0 0 auto;
+            margin: 0;
+            letter-spacing: 0.14em;
+            font-size: 10px;
+            color: rgba(156, 163, 175, 0.88);
+        }
+
+        .sys-terminal .term-stat.sys-term-row .v {
+            text-align: right;
+            font-size: 15px;
+            font-weight: 560;
+            margin: 0;
+        }
+
+        .sys-terminal .plan.sys-plan-block {
+            margin: 0;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .sys-terminal .plan.sys-plan-block .v {
+            font-size: 13px;
+            line-height: 1.55;
+            letter-spacing: 0.02em;
+            margin: 0;
+        }
+
+        .sys-terminal .state {
+            font-size: 34px;
+            margin-top: 8px;
+        }
+
+        .sys-terminal .pill.blue {
+            box-shadow: none;
+            border-color: rgba(59, 130, 246, 0.35);
+            background: rgba(59, 130, 246, 0.06);
+            padding: 6px 10px;
+            font-size: 10px;
+        }
+
+        .sys-terminal .term-stat.is-locked::after {
+            top: 50%;
+        }
+
         .mini-stream {
             border: 1px solid var(--module-border);
             border-radius: 24px 24px 22px 24px;
@@ -1591,7 +1747,7 @@
         }
 
         .section+.section {
-            margin-top: 40px;
+            margin-top: 88px;
         }
 
         .section+.section::before {
@@ -1671,17 +1827,27 @@
         }
 
         .system-grid,
-        .action-grid,
-        .outputs {
+        .action-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: var(--grid-gap);
         }
 
+        #action .action-grid {
+            grid-template-columns: 1fr;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         .how-works-grid {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: var(--grid-gap);
+            gap: calc(var(--grid-gap) + 8px);
+        }
+
+        .how-works-grid .card {
+            padding: 26px 22px;
         }
 
         .how-works-grid .card-title-sm {
@@ -1859,15 +2025,6 @@
                 linear-gradient(180deg, rgba(255, 255, 255, .025), rgba(255, 255, 255, .012));
         }
 
-        #outputs .outputs>.card {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background:
-                linear-gradient(135deg, transparent 0 10px, var(--cut-line) 10px 11px, transparent 11px) top right / var(--cut-size-lg) var(--cut-size-lg) no-repeat,
-                linear-gradient(180deg, rgba(255, 255, 255, .02), rgba(255, 255, 255, .012));
-        }
-
         .card-head {
             display: flex;
             justify-content: space-between;
@@ -1945,8 +2102,8 @@
         }
 
         .metric:hover,
-        .term-stat:hover,
-        .plan:hover,
+        .term-stat:not(.sys-term-row):hover,
+        .plan:not(.sys-plan-block):hover,
         .stream-item:hover,
         .card:hover {
             transform: translateY(-2px);
@@ -2149,80 +2306,6 @@
             margin: 0;
             color: #b7b7b7;
             line-height: 1.62;
-        }
-
-        .outputs .card {
-            padding: 24px;
-        }
-
-        .out-k {
-            font-size: 11px;
-            color: rgba(229, 231, 235, 0.5);
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            margin-bottom: 11px;
-            line-height: 1.3;
-        }
-
-        .out-v {
-            font-size: 20px;
-            font-weight: 540;
-            color: #e5e7eb;
-            line-height: 1.4;
-            word-spacing: .04em;
-            font-variant-numeric: tabular-nums;
-        }
-
-        #trust .strctr-process {
-            max-width: 720px;
-            margin: 0 auto;
-        }
-
-        .strctr-process-label {
-            margin: 0 0 14px;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: rgba(148, 156, 168, 0.92);
-        }
-
-        .strctr-process-lead {
-            margin: 0 0 26px;
-            font-size: 15px;
-            font-weight: 500;
-            line-height: 1.55;
-            letter-spacing: 0.01em;
-            color: rgba(210, 218, 228, 0.94);
-        }
-
-        .strctr-process-steps {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .strctr-process-steps li {
-            display: grid;
-            grid-template-columns: 28px minmax(0, 1fr);
-            gap: 14px;
-            align-items: baseline;
-            padding: 14px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 1.45;
-            letter-spacing: 0.02em;
-            color: rgba(229, 231, 235, 0.92);
-        }
-
-        .strctr-process-steps .strctr-process-idx {
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            color: rgba(59, 130, 246, 0.75);
-            font-variant-numeric: tabular-nums;
         }
 
         .trade-head {
@@ -2730,7 +2813,6 @@
             .system-grid,
             .how-works-grid,
             .tiers,
-            .outputs,
             .how-grid {
                 grid-template-columns: 1fr
             }
@@ -2748,7 +2830,7 @@
             }
 
             .section {
-                padding-top: 16px
+                padding-top: 56px
             }
 
             .hero-watermark {
@@ -2906,12 +2988,12 @@
 
             .hero-stack::before {
                 inset: -6px -6px -4px -6px;
-                opacity: 0.22;
+                opacity: 0.1;
             }
 
-            .hero-stack .panel {
-                padding: 13px 14px 11px 13px;
-                border-radius: 22px 22px 20px 22px;
+            .hero-stack .sys-terminal.panel {
+                padding: 13px 14px 14px 13px;
+                border-radius: 16px;
             }
 
             .hero-stack .panel-top {
@@ -2941,31 +3023,30 @@
                 justify-content: space-between;
             }
 
-            .hero-stack .live {
-                padding: 6px 10px;
-                font-size: 11px;
+            .hero-stack .live-terminal {
+                font-size: 9px;
+                letter-spacing: 0.14em;
             }
 
-            .hero-stack .terminal {
-                padding: 14px 15px 13px 15px;
-                border-radius: 18px 18px 16px 18px;
+            .sys-section + .sys-section {
+                margin-top: 18px;
+                padding-top: 18px;
             }
 
-            .hero-stack .terminal-head {
-                margin-bottom: 10px;
+            .sys-terminal .state {
+                font-size: 28px;
             }
 
-            .hero-stack .term-grid {
-                gap: 10px;
-                margin-bottom: 10px;
+            .sys-terminal .term-stat.sys-term-row .v {
+                font-size: 14px;
             }
 
             .section {
-                padding-top: 12px;
+                padding-top: 56px;
             }
 
             .section+.section {
-                margin-top: 8px;
+                margin-top: 48px;
             }
 
             .section-head {
@@ -2988,17 +3069,12 @@
             .system-grid,
             .how-works-grid,
             .action-grid,
-            .outputs,
             .tiers,
             .how-grid {
                 gap: 12px;
             }
 
             .card {
-                padding: 20px 18px;
-            }
-
-            .outputs .card {
                 padding: 20px 18px;
             }
 
@@ -3077,16 +3153,6 @@
                 margin: 0 0 10px;
             }
 
-            .strctr-process-lead {
-                margin-bottom: 20px;
-                font-size: 14px;
-            }
-
-            .strctr-process-steps li {
-                padding: 12px 0;
-                font-size: 13px;
-            }
-
             .action-grid {
                 grid-template-columns: 1fr;
                 gap: 14px;
@@ -3142,14 +3208,6 @@
             .action-grid .trade-row .v {
                 font-size: 14px;
                 line-height: 1.62;
-            }
-
-            .out-k {
-                margin-bottom: 8px;
-            }
-
-            .out-v {
-                line-height: 1.72;
             }
 
             .how-wrap {
@@ -3415,69 +3473,77 @@
                 <div class="hero-panel-col">
                     <p class="panel-label" data-motion="item">LIVE SIGNAL PREVIEW</p>
                     <div class="hero-stack reveal d2">
-                    <div class="panel panel-updating">
+                    <div class="panel panel-updating sys-terminal">
                         <div class="panel-update-line" aria-hidden="true"></div>
                         <div class="panel-top">
                             <div class="panel-top-left">
-                                <span class="panel-label">System Panel — Live</span>
+                                <span class="panel-label">STRCTR / SYSTEM</span>
                                 <span class="access-badge" id="accessTierBadge" aria-live="polite">FREE</span>
                                 <span class="panel-label" data-role="refresh-status" aria-hidden="true"></span>
                             </div>
                             <div class="panel-top-right">
-                                <div class="live pulse"><span class="dot live-dot" data-role="live-dot"></span> Core
-                                    stream online</div>
+                                <div class="live live-terminal"><span class="dot live-dot" data-role="live-dot"></span>
+                                    LIVE STREAM ACTIVE</div>
                             </div>
                         </div>
 
-                        <div class="terminal">
-                            <div class="terminal-head">
-                                <div>
-                                    <div class="asset">BTC —
-                                        <button class="glossary-term" type="button"
-                                            popovertarget="glossary-structure-break">Structure Break</button>
+                        <div class="sys-body">
+                            <section class="sys-section" aria-label="State">
+                                <div class="sys-section-label">STATE</div>
+                                <div class="sys-state-head">
+                                    <div>
+                                        <div class="asset">BTC —
+                                            <button class="glossary-term" type="button"
+                                                popovertarget="glossary-structure-break">Structure Break</button>
+                                        </div>
+                                        <div class="state" data-role="refreshable">SHORT</div>
                                     </div>
-                                    <div class="state" data-role="refreshable">SHORT</div>
+                                    <div class="pill blue">Confirmation</div>
                                 </div>
-                                <div class="pill blue">Confirmation</div>
-                            </div>
-
-                            <div class="term-grid term-grid-paywall">
-                                <div class="term-stat" data-min-access="0">
-                                    <div class="k">Scenario</div>
+                                <div class="term-stat sys-term-row" data-min-access="0">
+                                    <div class="k">SCENARIO</div>
                                     <div class="v" data-role="refreshable">Up
                                         <button class="glossary-term" type="button"
                                             popovertarget="glossary-trap">Trap</button>
                                         → Down
                                     </div>
                                 </div>
-                                <div class="term-stat" data-min-access="0">
-                                    <div class="k">Stage</div>
+                                <div class="term-stat sys-term-row" data-min-access="0">
+                                    <div class="k">STAGE</div>
                                     <div class="v" data-role="refreshable">Confirmation</div>
                                 </div>
-                                <div class="term-stat" data-min-access="1">
-                                    <div class="k">Probability</div>
+                            </section>
+
+                            <section class="sys-section" aria-label="Execution">
+                                <div class="sys-section-label">EXECUTION</div>
+                                <div class="term-grid term-grid-paywall sys-term-grid">
+                                <div class="term-stat sys-term-row" data-min-access="1">
+                                    <div class="k">PROBABILITY</div>
                                     <div class="v"><span id="liveConfidence" data-role="refreshable">82%</span></div>
                                 </div>
-                                <div class="term-stat" data-min-access="1">
-                                    <div class="k">Timing</div>
+                                <div class="term-stat sys-term-row" data-min-access="1">
+                                    <div class="k">TIMING</div>
                                     <div class="v" data-role="refreshable">Optimal</div>
                                 </div>
-                                <div class="term-stat term-stat-wide" data-min-access="2">
-                                    <div class="k">Entry</div>
+                                <div class="term-stat sys-term-row term-stat-wide" data-min-access="2">
+                                    <div class="k">ENTRY</div>
                                     <div class="v"><span data-role="locked-swap"
                                             data-hover-text="upgrade required">Partial ·
                                             2 zones</span></div>
                                 </div>
-                            </div>
-
-                            <div class="plan" data-min-access="2">
-                                <div class="k">Position plan</div>
-                                <div class="v">
-                                    Add → acceptance<br>
-                                    Reduce → failure<br>
-                                    Exit → invalidation
                                 </div>
-                            </div>
+                            </section>
+
+                            <section class="sys-section" aria-label="Plan">
+                                <div class="sys-section-label">PLAN</div>
+                                <div class="plan sys-plan-block" data-min-access="2">
+                                    <div class="v">
+                                        Add → acceptance<br>
+                                        Reduce → failure<br>
+                                        Exit → invalidation
+                                    </div>
+                                </div>
+                            </section>
                             <div data-role="ambient-lines" aria-hidden="true">
                                 <div class="strctr-system-line"></div>
                             </div>
@@ -3506,25 +3572,24 @@
                             <span data-motion="item">flow</span>
                         </div>
                         <h2 data-motion="item">How it works</h2>
-                        <p data-motion="item">The sequence behind every move.</p>
+                        <p data-motion="item">One sequence.</p>
                     </div>
                 </div>
                 <div class="how-works-grid">
                     <article class="card reveal d2" data-motion="card">
-                        <h3 class="card-title-sm" data-motion="item">1. Liquidity builds (levels form)</h3>
+                        <h3 class="card-title-sm" data-motion="item">Liquidity forms</h3>
                     </article>
                     <article class="card reveal d2" data-motion="card">
-                        <h3 class="card-title-sm" data-motion="item">2. Traders get trapped (false move)</h3>
+                        <h3 class="card-title-sm" data-motion="item">Trap develops</h3>
                     </article>
                     <article class="card reveal d3" data-motion="card">
-                        <h3 class="card-title-sm" data-motion="item">3. Structure breaks (confirmation)</h3>
+                        <h3 class="card-title-sm" data-motion="item">Break confirms</h3>
                     </article>
                     <article class="card reveal d4" data-motion="card">
-                        <h3 class="card-title-sm" data-motion="item">4. Execution triggers (entry / management)</h3>
+                        <h3 class="card-title-sm" data-motion="item">Execute position</h3>
                     </article>
                 </div>
-                <p class="how-works-desc reveal" data-motion="item">We track this in real time using liquidity,
-                    positioning and flow.</p>
+                <p class="how-works-desc reveal" data-motion="item">Liquidity, positioning, flow — tracked live.</p>
             </div>
         </section>
 
@@ -3557,26 +3622,6 @@
                         <a class="btn btn-primary" href="https://t.me/strctr_system" target="_blank"
                             rel="noopener noreferrer">JOIN FREE FEED</a>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="trust" data-motion="section">
-            <div class="container">
-                <div class="strctr-process reveal">
-                    <p class="strctr-process-label" data-motion="item">HOW STRCTR WORKS</p>
-                    <p class="strctr-process-lead" data-motion="item">Liquidity builds the path. Positioning creates
-                        pressure. Execution resolves the move.</p>
-                    <ul class="strctr-process-steps" role="list">
-                        <li data-motion="item"><span class="strctr-process-idx" aria-hidden="true">1</span><span>Liquidity
-                                maps the target</span></li>
-                        <li data-motion="item"><span class="strctr-process-idx" aria-hidden="true">2</span><span>Crowd gets
-                                trapped</span></li>
-                        <li data-motion="item"><span class="strctr-process-idx" aria-hidden="true">3</span><span>Break
-                                confirms direction</span></li>
-                        <li data-motion="item"><span class="strctr-process-idx" aria-hidden="true">4</span><span>Execution
-                                follows imbalance</span></li>
-                    </ul>
                 </div>
             </div>
         </section>
@@ -3704,55 +3749,6 @@
             </div>
         </section>
 
-        <section class="section" id="outputs" data-motion="section">
-            <div class="container">
-                <div class="section-head reveal">
-                    <div>
-                        <div class="section-sigil">
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <use href="#strctr-mark"></use>
-                            </svg>
-                            <span data-motion="item">output</span>
-                        </div>
-                        <h2 data-motion="item">state → action</h2>
-                        <p data-motion="item">structured output</p>
-                    </div>
-                </div>
-
-                <div class="outputs">
-                    <div class="card reveal d2" data-motion="card">
-                        <div class="out-k" data-motion="item">Action</div>
-                        <div class="out-v" data-motion="item">
-                            ENTER<br>
-                            ADD<br>
-                            HOLD<br>
-                            REDUCE<br>
-                            EXIT
-                        </div>
-                    </div>
-
-                    <div class="card reveal d3" data-motion="card">
-                        <div class="out-k" data-motion="item">State</div>
-                        <div class="out-v" data-motion="item">
-                            scenario<br>
-                            stage<br>
-                            timing<br>
-                            confidence
-                        </div>
-                    </div>
-
-                    <div class="card reveal d4" data-motion="card">
-                        <div class="out-k" data-motion="item">Plan</div>
-                        <div class="out-v" data-motion="item">
-                            levels<br>
-                            invalidation<br>
-                            add / reduce
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <section class="section" id="action" data-motion="section">
             <div class="container">
                 <div class="section-head reveal">
@@ -3792,56 +3788,6 @@
                             <div class="trade-row">
                                 <div class="k">Result</div>
                                 <div class="v result" data-motion="item">partial taken</div>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="card reveal d3" data-motion="card">
-                        <div class="trade-head">
-                            <h3 class="trade-asset" data-motion="item">ETH</h3>
-                            <div class="pill">Managed</div>
-                        </div>
-                        <div class="trade-list">
-                            <div class="trade-row">
-                                <div class="k">Scenario</div>
-                                <div class="v" data-motion="item">continuation up</div>
-                            </div>
-                            <div class="trade-row">
-                                <div class="k">Stage</div>
-                                <div class="v" data-motion="item">trigger</div>
-                            </div>
-                            <div class="trade-row">
-                                <div class="k">Action</div>
-                                <div class="v" data-motion="item">enter → hold → reduce</div>
-                            </div>
-                            <div class="trade-row">
-                                <div class="k">Result</div>
-                                <div class="v result" data-motion="item">protection active</div>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="card reveal d4" data-motion="card">
-                        <div class="trade-head">
-                            <h3 class="trade-asset" data-motion="item">SOL</h3>
-                            <div class="pill">Re-entry</div>
-                        </div>
-                        <div class="trade-list">
-                            <div class="trade-row">
-                                <div class="k">Scenario</div>
-                                <div class="v" data-motion="item">sweep → reclaim</div>
-                            </div>
-                            <div class="trade-row">
-                                <div class="k">Stage</div>
-                                <div class="v" data-motion="item">setup → confirm</div>
-                            </div>
-                            <div class="trade-row">
-                                <div class="k">Action</div>
-                                <div class="v" data-motion="item">enter → exit → re-enter</div>
-                            </div>
-                            <div class="trade-row">
-                                <div class="k">Result</div>
-                                <div class="v result" data-motion="item">re-entry accepted</div>
                             </div>
                         </div>
                     </article>
@@ -4046,7 +3992,6 @@
                     <button class="cmd-item" type="button" data-target="#how-it-works">Go: How it works</button>
                     <button class="cmd-item" type="button" data-target="#signal-example">Go: Example</button>
                     <button class="cmd-item" type="button" data-target="#tiers">Go: Pricing</button>
-                    <button class="cmd-item" type="button" data-target="#outputs">Go: Output</button>
                     <button class="cmd-item" type="button" data-target="#action">Go: Execution</button>
                     <button class="cmd-item" type="button" data-target="#start-cta">Go: Start</button>
                     <button class="cmd-item" type="button" data-target="#access">Go: Access</button>
@@ -4327,7 +4272,7 @@
                 coreApplyDone?.classList.add('is-visible');
             });
 
-            document.querySelector('.hero-stack .terminal')?.addEventListener('click', (e) => {
+            document.querySelector('.hero-stack .sys-body')?.addEventListener('click', (e) => {
                 const locked = e.target.closest('.term-stat.is-locked, .plan.is-locked');
                 if (locked) {
                     e.preventDefault();
