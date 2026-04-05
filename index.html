@@ -1048,7 +1048,6 @@
         }
 
         .hero .btn-row .btn-primary,
-        .final-cta-box .btn-primary,
         .signal-actions .btn-primary,
         .tier-actions .btn-primary,
         .cta-actions .btn-primary {
@@ -1057,15 +1056,6 @@
             margin-left: auto;
             margin-right: auto;
             box-sizing: border-box;
-        }
-
-        .hero-cta-note {
-            margin: 14px 0 0;
-            max-width: 440px;
-            font-size: 12px;
-            letter-spacing: 0.06em;
-            color: rgba(148, 156, 168, 0.88);
-            line-height: 1.45;
         }
 
         .social-proof-strip {
@@ -1906,7 +1896,6 @@
             line-height: 1.4;
         }
 
-        .system-grid,
         .action-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2027,33 +2016,6 @@
             justify-content: center;
         }
 
-        .final-cta-box {
-            text-align: center;
-            max-width: 520px;
-            margin: 0 auto;
-            padding: 36px 28px;
-            border: 1px solid rgba(59, 130, 246, 0.22);
-            border-radius: 24px;
-            background:
-                linear-gradient(180deg, rgba(59, 130, 246, 0.06), transparent 55%),
-                var(--module-bg);
-            box-shadow: var(--module-shadow), var(--module-inset), 0 0 40px rgba(59, 130, 246, 0.08);
-        }
-
-        .final-cta-box h2 {
-            margin: 0 0 10px;
-            font-size: clamp(26px, 2.6vw, 34px);
-            font-weight: 720;
-            letter-spacing: -0.02em;
-        }
-
-        .final-cta-box p {
-            margin: 0 0 20px;
-            color: rgba(229, 231, 235, 0.78);
-            font-size: 15px;
-            line-height: 1.5;
-        }
-
         .tiers {
             display: grid;
             grid-template-columns: .95fr 1fr 1.15fr;
@@ -2094,15 +2056,6 @@
         .card.featured::after {
             background: linear-gradient(135deg, transparent 38%, rgba(59, 130, 246, .5) 48%, rgba(59, 130, 246, .5) 52%, transparent 62%);
             opacity: .65;
-        }
-
-        #system .system-grid>.card {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background:
-                linear-gradient(135deg, transparent 0 10px, var(--cut-line) 10px 11px, transparent 11px) top right / var(--cut-size-lg) var(--cut-size-lg) no-repeat,
-                linear-gradient(180deg, rgba(255, 255, 255, .025), rgba(255, 255, 255, .012));
         }
 
         .card-head {
@@ -2890,7 +2843,6 @@
                 opacity: .3;
             }
 
-            .system-grid,
             .how-works-grid,
             .tiers,
             .how-grid {
@@ -3146,7 +3098,6 @@
                 line-height: 1.55;
             }
 
-            .system-grid,
             .how-works-grid,
             .action-grid,
             .tiers,
@@ -3166,55 +3117,8 @@
                 padding: 12px 13px;
             }
 
-            .system-grid,
             .how-works-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .system-grid>.card {
-                min-width: 0;
-                padding: 14px 13px 13px 14px;
-            }
-
-            .system-grid .card-head {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: flex-start;
-                justify-content: space-between;
-                gap: 8px 10px;
-                margin-bottom: 8px;
-            }
-
-            .system-grid .card-head>div:first-child {
-                flex: 1 1 auto;
-                min-width: 0;
-            }
-
-            .system-grid .card-title {
-                font-size: 17px;
-                line-height: 1.1;
-            }
-
-            .system-grid .card-sub {
-                margin-top: 3px;
-                line-height: 1.2;
-            }
-
-            .system-grid .card-head .pill {
-                flex: 0 0 auto;
-                align-self: flex-start;
-                margin-top: 2px;
-                padding: 6px 10px;
-                font-size: 10px;
-                letter-spacing: 0.11em;
-                line-height: 1.2;
-            }
-
-            .system-grid .card pre {
-                padding: 10px 11px;
-                font-size: 12px;
-                line-height: 1.52;
-                border-radius: 12px;
             }
 
             .tier {
@@ -3509,7 +3413,7 @@
                     </div>
 
                     <nav class="nav-links">
-                        <a href="#system">Overview</a>
+                        <a href="#hero">Overview</a>
                         <a href="#how-it-works">How it works</a>
                         <a href="#tiers">Pricing</a>
                         <a href="#signal-example">Example</a>
@@ -3523,7 +3427,7 @@
             </header>
 
             <main>
-                <section class="hero" data-motion="section">
+                <section class="hero" id="hero" data-motion="section">
                     <div class="hero-watermark" aria-hidden="true">
                         <svg viewBox="0 0 24 24">
                             <use href="#strctr-mark"></use>
@@ -3548,8 +3452,6 @@
                                     <a class="btn btn-primary" href="https://t.me/strctr_system" target="_blank"
                                         rel="noopener noreferrer">JOIN FREE FEED</a>
                                 </div>
-                                <p class="hero-cta-note" data-motion="item">Live signals. Real-time structure. No noise.
-                                </p>
                             </div>
                         </div>
 
@@ -3674,7 +3576,7 @@
                                 <h3 class="card-title-sm" data-motion="item">Break confirms</h3>
                             </article>
                             <article class="card reveal d4" data-motion="card">
-                                <h3 class="card-title-sm" data-motion="item">Execute position</h3>
+                                <h3 class="card-title-sm" data-motion="item">Execution triggers</h3>
                             </article>
                         </div>
                         <p class="how-works-desc reveal" data-motion="item">Liquidity, positioning, flow — tracked live.
@@ -3710,63 +3612,6 @@
                             <div class="signal-actions">
                                 <a class="btn btn-primary" href="https://t.me/strctr_system" target="_blank"
                                     rel="noopener noreferrer">JOIN FREE FEED</a>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="section" id="system" data-motion="section">
-                    <div class="container">
-                        <div class="section-head reveal">
-                            <div>
-                                <div class="section-sigil">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <use href="#strctr-mark"></use>
-                                    </svg>
-                                    <span data-motion="item">layers</span>
-                                </div>
-                                <h2 data-motion="item">three layers</h2>
-                                <p data-motion="item">
-                                    scenario. execution. stream.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="system-grid">
-                            <div class="card reveal d2" data-motion="card">
-                                <div class="card-head">
-                                    <div>
-                                        <h3 class="card-title" data-motion="item">Scenario</h3>
-                                        <div class="card-sub" data-motion="item">direction / probability</div>
-                                    </div>
-                                    <div class="pill">Main</div>
-                                </div>
-                                <pre data-motion="item">Scenario
-→ direction / probability</pre>
-                            </div>
-
-                            <div class="card featured reveal d3" data-motion="card" data-role="core-card">
-                                <div class="card-head">
-                                    <div>
-                                        <h3 class="card-title" data-motion="item">Execution</h3>
-                                        <div class="card-sub" data-motion="item">enter / manage / exit</div>
-                                    </div>
-                                    <div class="pill blue">Core</div>
-                                </div>
-                                <pre data-motion="item">Execution
-→ enter / manage / exit</pre>
-                            </div>
-
-                            <div class="card reveal d4" data-motion="card">
-                                <div class="card-head">
-                                    <div>
-                                        <h3 class="card-title" data-motion="item">Stream</h3>
-                                        <div class="card-sub" data-motion="item">real-time output</div>
-                                    </div>
-                                    <div class="pill">Live</div>
-                                </div>
-                                <pre data-motion="item">Stream
-→ real-time output</pre>
                             </div>
                         </div>
                     </div>
@@ -3881,17 +3726,6 @@
                                     </div>
                                 </div>
                             </article>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="section" id="start-cta" data-motion="section">
-                    <div class="container">
-                        <div class="final-cta-box reveal">
-                            <h2 data-motion="item">Get the free feed</h2>
-                            <p data-motion="item">One channel. Structure-first alerts.</p>
-                            <a class="btn btn-primary" href="https://t.me/strctr_system" target="_blank"
-                                rel="noopener noreferrer" data-motion="item">JOIN FREE FEED</a>
                         </div>
                     </div>
                 </section>
@@ -4080,13 +3914,12 @@
             <input id="cmdInput" class="cmd-input" type="text" placeholder="Type command or filter actions..."
                 autocomplete="off" />
             <div class="cmd-list" id="cmdList">
-                <button class="cmd-item" type="button" data-target="#system">Go: Overview</button>
-                <button class="cmd-item" type="button" data-target="#how-it-works">Go: How it works</button>
-                <button class="cmd-item" type="button" data-target="#signal-example">Go: Example</button>
-                <button class="cmd-item" type="button" data-target="#tiers">Go: Pricing</button>
-                <button class="cmd-item" type="button" data-target="#action">Go: Execution</button>
-                <button class="cmd-item" type="button" data-target="#start-cta">Go: Start</button>
-                <button class="cmd-item" type="button" data-target="#access">Go: Access</button>
+                    <button class="cmd-item" type="button" data-target="#hero">Go: Overview</button>
+                    <button class="cmd-item" type="button" data-target="#how-it-works">Go: How it works</button>
+                    <button class="cmd-item" type="button" data-target="#signal-example">Go: Example</button>
+                    <button class="cmd-item" type="button" data-target="#tiers">Go: Pricing</button>
+                    <button class="cmd-item" type="button" data-target="#action">Go: Execution</button>
+                    <button class="cmd-item" type="button" data-target="#access">Go: Access</button>
                 <button class="cmd-item" type="button" data-link="https://t.me/strctr_system">JOIN FREE
                     FEED</button>
                 <button class="cmd-item" type="button" data-open-paywall>Access levels (PRO / CORE)</button>
