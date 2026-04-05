@@ -47,7 +47,9 @@
         }
 
         html {
-            scroll-behavior: smooth
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            width: 100%;
         }
 
         body {
@@ -99,6 +101,14 @@
             margin: 0 auto;
             padding-left: 32px;
             padding-right: 32px;
+        }
+
+        .page-shell {
+            width: 100%;
+        }
+
+        .page-shell-inner {
+            width: 100%;
         }
 
         .eyebrow {
@@ -279,7 +289,7 @@
         }
 
         .glossary-pop {
-            width: min(360px, calc(100vw - 28px));
+            width: min(360px, calc(100% - 28px));
             margin: 0;
             padding: 12px 13px;
             border-radius: 12px;
@@ -301,7 +311,7 @@
         }
 
         .cmd-dialog {
-            width: min(620px, calc(100vw - 28px));
+            width: min(620px, calc(100% - 28px));
             padding: 0;
             border: 1px solid rgba(255, 255, 255, .12);
             border-radius: 16px;
@@ -316,7 +326,7 @@
         }
 
         .paywall-dialog {
-            width: min(460px, calc(100vw - 28px));
+            width: min(460px, calc(100% - 28px));
             padding: 0;
             border: 1px solid rgba(59, 130, 246, 0.22);
             border-radius: 16px;
@@ -331,7 +341,7 @@
         }
 
         .telegram-gate-dialog {
-            width: min(520px, calc(100vw - 28px));
+            width: min(520px, calc(100% - 28px));
             max-height: min(92vh, 720px);
         }
 
@@ -605,7 +615,7 @@
         }
 
         #coreApplyModal .paywall-inner {
-            max-width: min(420px, calc(100vw - 40px));
+            max-width: min(420px, calc(100% - 40px));
         }
 
         .core-form {
@@ -2644,11 +2654,6 @@
         }
 
         @media (max-width: 760px) {
-            .container {
-                padding-left: 16px;
-                padding-right: 16px;
-            }
-
             .nav-links {
                 display: none
             }
@@ -3195,31 +3200,44 @@
                 padding-top: 12px;
             }
 
-            html,
             body {
                 width: 100%;
                 max-width: 100%;
             }
 
-            .container {
+            .page-shell {
+                display: flex;
+                justify-content: center;
                 width: 100%;
-                max-width: var(--max);
+                padding-inline: 16px;
+                box-sizing: border-box;
+            }
+
+            .page-shell-inner {
+                width: 100%;
+                max-width: 430px;
                 margin-left: auto;
                 margin-right: auto;
-                padding-left: 16px;
-                padding-right: 16px;
+                box-sizing: border-box;
+                min-width: 0;
+            }
+
+            .page-shell-inner .container {
+                width: 100%;
+                max-width: none;
+                margin-left: 0;
+                margin-right: 0;
+                padding-left: 0;
+                padding-right: 0;
             }
 
             .hero .container.hero-grid {
                 display: flex;
                 flex-direction: column;
-                align-items: center;
+                align-items: stretch;
                 justify-content: flex-start;
                 gap: 8px;
                 width: 100%;
-                max-width: var(--max);
-                margin-left: auto;
-                margin-right: auto;
             }
 
             .hero-copy {
@@ -3234,12 +3252,19 @@
                 max-width: 100%;
                 display: flex;
                 flex-direction: column;
-                align-items: center;
+                align-items: stretch;
             }
 
-            .social-proof-strip {
-                padding-left: 16px;
-                padding-right: 16px;
+            .hero-watermark {
+                width: 100%;
+                max-width: 100%;
+                left: 0;
+                right: 0;
+                margin-left: auto;
+                margin-right: auto;
+                padding-left: 0;
+                padding-right: 0;
+                justify-content: center;
             }
 
             .hero-watermark svg {
@@ -3247,24 +3272,25 @@
                 height: min(72%, 360px);
             }
 
-            .glossary-pop {
-                width: min(360px, calc(100% - 28px));
+            .social-proof-strip {
+                padding-left: 0;
+                padding-right: 0;
             }
 
-            .cmd-dialog {
-                width: min(620px, calc(100% - 28px));
+            .social-proof-strip .container {
+                padding-left: 0;
+                padding-right: 0;
             }
 
-            .paywall-dialog {
-                width: min(460px, calc(100% - 28px));
+            .panel,
+            .hero-stack {
+                width: 100%;
+                max-width: 100%;
             }
 
-            .telegram-gate-dialog {
-                width: min(520px, calc(100% - 28px));
-            }
-
-            #coreApplyModal .paywall-inner {
-                max-width: min(420px, calc(100% - 40px));
+            .section .card,
+            .tier {
+                min-width: 0;
             }
         }
     </style>
@@ -3285,6 +3311,8 @@
         </defs>
     </svg>
 
+    <div class="page-shell">
+        <div class="page-shell-inner">
     <header class="header">
         <div class="container nav">
             <div class="brand">
@@ -3866,6 +3894,10 @@
             buy/sell pressure imbalance across aggressive flow.
         </div>
 
+    </main>
+        </div>
+    </div>
+
         <dialog id="paywallModal" class="paywall-dialog" aria-labelledby="paywallTitle">
             <div class="paywall-inner">
                 <button type="button" class="paywall-close" data-paywall-close aria-label="Close">×</button>
@@ -3991,7 +4023,6 @@
                 </div>
             </div>
         </dialog>
-    </main>
     <script>
         (function () {
             const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
