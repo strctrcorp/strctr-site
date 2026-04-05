@@ -1671,7 +1671,6 @@
         }
 
         .system-grid,
-        .trust-grid,
         .action-grid,
         .outputs {
             display: grid;
@@ -1849,12 +1848,6 @@
         .card.featured::after {
             background: linear-gradient(135deg, transparent 38%, rgba(59, 130, 246, .5) 48%, rgba(59, 130, 246, .5) 52%, transparent 62%);
             opacity: .65;
-        }
-
-        #trust .trust-grid .card {
-            background:
-                linear-gradient(135deg, transparent 0 10px, var(--cut-line) 10px 11px, transparent 11px) top right / var(--cut-size-lg) var(--cut-size-lg) no-repeat,
-                linear-gradient(180deg, rgba(255, 255, 255, .02), rgba(255, 255, 255, .012));
         }
 
         #system .system-grid>.card {
@@ -2180,26 +2173,56 @@
             font-variant-numeric: tabular-nums;
         }
 
-        .trust-card .card-sub {
-            margin-top: 0;
-            margin-bottom: 8px;
+        #trust .strctr-process {
+            max-width: 720px;
+            margin: 0 auto;
         }
 
-        .trust-title {
-            margin: 0 0 10px;
-            font-size: 20px;
-            font-weight: 660;
-            letter-spacing: -.025em;
-            line-height: 1.2;
+        .strctr-process-label {
+            margin: 0 0 14px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(148, 156, 168, 0.92);
         }
 
-        .trust-copy {
+        .strctr-process-lead {
+            margin: 0 0 26px;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.55;
+            letter-spacing: 0.01em;
+            color: rgba(210, 218, 228, 0.94);
+        }
+
+        .strctr-process-steps {
             margin: 0;
-            color: rgba(229, 231, 235, 0.88);
-            line-height: 1.4;
-            font-size: 18px;
-            font-weight: 520;
-            max-width: 42ch;
+            padding: 0;
+            list-style: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .strctr-process-steps li {
+            display: grid;
+            grid-template-columns: 28px minmax(0, 1fr);
+            gap: 14px;
+            align-items: baseline;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.45;
+            letter-spacing: 0.02em;
+            color: rgba(229, 231, 235, 0.92);
+        }
+
+        .strctr-process-steps .strctr-process-idx {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: rgba(59, 130, 246, 0.75);
+            font-variant-numeric: tabular-nums;
         }
 
         .trade-head {
@@ -2963,7 +2986,6 @@
             }
 
             .system-grid,
-            .trust-grid,
             .how-works-grid,
             .action-grid,
             .outputs,
@@ -3055,12 +3077,14 @@
                 margin: 0 0 10px;
             }
 
-            .trust-title {
-                margin: 0 0 7px;
+            .strctr-process-lead {
+                margin-bottom: 20px;
+                font-size: 14px;
             }
 
-            .trust-copy {
-                line-height: 1.62;
+            .strctr-process-steps li {
+                padding: 12px 0;
+                font-size: 13px;
             }
 
             .action-grid {
@@ -3539,36 +3563,20 @@
 
         <section class="section" id="trust" data-motion="section">
             <div class="container">
-                <div class="section-head reveal">
-                    <div>
-                        <div class="section-sigil">
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <use href="#strctr-mark"></use>
-                            </svg>
-                            <span data-motion="item">forces</span>
-                        </div>
-                        <h2 data-motion="item">underlying forces</h2>
-                        <p data-motion="item">
-                            liquidity. positioning. execution.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="trust-grid">
-                    <article class="card trust-card reveal d2" data-motion="card">
-                        <h3 class="trust-title" data-motion="item">LIQUIDITY</h3>
-                        <p class="trust-copy" data-motion="item">defines direction</p>
-                    </article>
-
-                    <article class="card trust-card reveal d3" data-motion="card">
-                        <h3 class="trust-title" data-motion="item">POSITIONING</h3>
-                        <p class="trust-copy" data-motion="item">creates pressure</p>
-                    </article>
-
-                    <article class="card trust-card reveal d4" data-motion="card">
-                        <h3 class="trust-title" data-motion="item">EXECUTION</h3>
-                        <p class="trust-copy" data-motion="item">resolves imbalance</p>
-                    </article>
+                <div class="strctr-process reveal">
+                    <p class="strctr-process-label" data-motion="item">HOW STRCTR WORKS</p>
+                    <p class="strctr-process-lead" data-motion="item">Liquidity builds the path. Positioning creates
+                        pressure. Execution resolves the move.</p>
+                    <ul class="strctr-process-steps" role="list">
+                        <li data-motion="item"><span class="strctr-process-idx" aria-hidden="true">1</span><span>Liquidity
+                                maps the target</span></li>
+                        <li data-motion="item"><span class="strctr-process-idx" aria-hidden="true">2</span><span>Crowd gets
+                                trapped</span></li>
+                        <li data-motion="item"><span class="strctr-process-idx" aria-hidden="true">3</span><span>Break
+                                confirms direction</span></li>
+                        <li data-motion="item"><span class="strctr-process-idx" aria-hidden="true">4</span><span>Execution
+                                follows imbalance</span></li>
+                    </ul>
                 </div>
             </div>
         </section>
