@@ -49,7 +49,7 @@
             box-sizing: border-box
         }
 
-        /* Single document scrollport on body: html uses overflow-x: clip (not hidden) so CSS does not create a second vertical scrollport on the root. */
+        /* Single viewport scroll: avoid overflow-y: auto on both html and body (that can create a double scrollbar). */
         html {
             margin: 0;
             padding: 0;
@@ -58,7 +58,6 @@
             min-height: 100%;
             width: 100%;
             overflow-x: clip;
-            overflow-y: visible;
             background: #05070d;
             color-scheme: dark;
         }
@@ -80,7 +79,6 @@
             min-height: 100%;
             width: 100%;
             overflow-x: hidden;
-            overflow-y: auto;
             color: var(--text);
             font-size: 14px;
             line-height: 1.5;
@@ -417,14 +415,16 @@
             max-height: none;
         }
 
-        /* Scroll only when the telegram gate dialog is actually open */
+        /* Scroll only when the telegram gate dialog is actually open; closed dialog is display:none (no layout / scroll). */
         .telegram-gate-dialog[open] {
             max-height: min(92vh, 720px);
+            overflow: hidden;
         }
 
         .telegram-gate-dialog[open] .paywall-inner {
             max-height: min(92vh, 720px);
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .telegram-gate-body {
@@ -1057,29 +1057,6 @@
             box-sizing: border-box;
         }
 
-        .social-proof-strip {
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-            padding-top: 20px;
-            padding-bottom: 28px;
-            padding-inline: 16px;
-            color: rgba(180, 186, 195, 0.92);
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            line-height: 1.5;
-        }
-
-        @media (min-width: 769px) {
-            .social-proof-strip {
-                padding-inline: 24px;
-            }
-        }
-
-        .social-proof-strip p {
-            margin: 0;
-        }
-
         .how-works-desc {
             margin: 32px 0 0;
             max-width: 720px;
@@ -1260,32 +1237,6 @@
             pointer-events: none;
         }
 
-        .panel-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
-            margin-bottom: 16px;
-        }
-
-        .panel-top-left {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .panel-top-right {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-left: auto;
-        }
-
         .panel-label {
             font-size: 12px;
             color: var(--muted);
@@ -1302,35 +1253,6 @@
             border: 1px solid rgba(59, 130, 246, 0.28);
             background: rgba(59, 130, 246, 0.08);
             color: #bfdbfe;
-        }
-
-        [data-role="refresh-status"] {
-            display: inline-block;
-            vertical-align: middle;
-            box-sizing: border-box;
-            flex: 0 0 170px;
-            width: 170px;
-            min-width: 170px;
-            max-width: 170px;
-            min-height: 1.35em;
-            line-height: 1.35;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            opacity: 1;
-            letter-spacing: 0.04em;
-        }
-
-        .hero-stack .panel-top {
-            flex-wrap: nowrap;
-            align-items: center;
-        }
-
-        .hero-stack .panel-top-left {
-            flex-wrap: nowrap;
-            align-items: center;
-            min-width: 0;
-            flex: 1 1 auto;
         }
 
         .btn-unlock {
@@ -1628,9 +1550,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
+            gap: 10px 14px;
             flex-wrap: wrap;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             padding-bottom: 10px;
             border-bottom: 1px solid rgba(255, 255, 255, .045);
         }
@@ -1640,6 +1562,19 @@
             align-items: center;
             gap: 8px;
             min-width: 0;
+        }
+
+        .preview-feed-right {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            min-width: 0;
+        }
+
+        .preview-feed-right .access-badge {
+            flex-shrink: 0;
         }
 
         .preview-feed-dot {
@@ -1676,28 +1611,6 @@
             50% {
                 opacity: 1;
             }
-        }
-
-        .sys-trace-log {
-            margin-top: 12px;
-            padding-top: 10px;
-            border-top: 1px solid rgba(255, 255, 255, .045);
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
-                monospace;
-            font-size: 10px;
-            line-height: 1.5;
-            letter-spacing: 0.03em;
-            color: rgba(160, 168, 182, 0.52);
-        }
-
-        .sys-trace-line+.sys-trace-line {
-            margin-top: 2px;
-        }
-
-        .sys-terminal .panel-top {
-            margin-bottom: 18px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, .065);
         }
 
         .sys-terminal .panel-update-line {
@@ -1780,62 +1693,6 @@
 
         .sys-terminal .term-stat.is-locked::after {
             top: 50%;
-        }
-
-        .mini-stream {
-            border: 1px solid var(--module-border);
-            border-radius: 24px 24px 22px 24px;
-            background:
-                linear-gradient(135deg, transparent 0 10px, var(--cut-line) 10px 11px, transparent 11px) top right / var(--cut-size-lg) var(--cut-size-lg) no-repeat,
-                var(--module-bg);
-            padding: 16px;
-            box-shadow: var(--module-shadow), var(--module-inset);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stream-head {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            align-items: center;
-            margin-bottom: 14px;
-        }
-
-        .stream-title {
-            font-size: 12px;
-            color: var(--muted);
-            letter-spacing: .14em;
-            text-transform: uppercase;
-        }
-
-        .stream-list {
-            display: grid;
-            gap: 12px
-        }
-
-        .stream-item {
-            border: 1px solid var(--module-border-soft);
-            border-radius: 16px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, .018), rgba(255, 255, 255, .012));
-            padding: 13px 14px;
-            box-shadow: 0 0 0 1px rgba(255, 255, 255, .014), 0 8px 18px rgba(0, 0, 0, .24);
-            transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
-        }
-
-        .stream-item .tag {
-            font-size: 10px;
-            color: #9a9a9a;
-            letter-spacing: .13em;
-            text-transform: uppercase;
-            margin-bottom: 9px;
-        }
-
-        .stream-item .line {
-            font-size: 14px;
-            line-height: 1.8;
-            color: #e5e5e5;
-            word-spacing: .04em;
         }
 
         .section {
@@ -1964,7 +1821,7 @@
         }
 
         .signal-example-inner {
-            max-width: 480px;
+            max-width: 440px;
             margin: 0 auto;
         }
 
@@ -1972,39 +1829,91 @@
             margin: 0 0 14px;
         }
 
-        .signal-feed-stack {
+        .signal-feed-channel {
             display: flex;
             flex-direction: column;
-            gap: 11px;
-        }
-
-        .signal-feed-stack .signal-tg {
-            padding: 14px 16px;
-            font-size: 12px;
-            line-height: 1.55;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
-            box-shadow: var(--module-shadow), var(--module-inset), 0 0 28px rgba(59, 130, 246, 0.08);
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.12));
+            box-shadow: var(--module-shadow), var(--module-inset);
         }
 
-        .signal-feed-stack .signal-tg .tg-k {
-            margin-bottom: 8px;
+        .signal-feed-card {
+            margin: 0;
+            padding: 11px 13px 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.055);
+            font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+            font-size: 11px;
+            line-height: 1.45;
+            letter-spacing: 0.02em;
+            color: rgba(229, 231, 235, 0.92);
+            text-align: left;
+        }
+
+        .signal-feed-card:first-child {
+            border-top: 0;
+        }
+
+        .signal-feed-card__meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 7px;
+        }
+
+        .signal-feed-card__src {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(148, 156, 168, 0.88);
+        }
+
+        .signal-feed-card__time {
             font-size: 10px;
+            font-variant-numeric: tabular-nums;
+            color: rgba(148, 156, 168, 0.65);
         }
 
-        .signal-tg--update {
+        .signal-feed-card__lead {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #f3f4f6;
+            letter-spacing: 0.03em;
+        }
+
+        .signal-feed-card__sym {
+            color: rgba(203, 213, 225, 0.95);
+        }
+
+        .signal-feed-card__lines {
+            display: grid;
+            gap: 3px;
+            color: rgba(200, 208, 218, 0.88);
+        }
+
+        .signal-feed-card--long {
+            border-left: 3px solid rgba(59, 130, 246, 0.55);
+            padding-left: 12px;
+        }
+
+        .signal-feed-card--short {
+            border-left: 3px solid rgba(248, 113, 113, 0.45);
+            padding-left: 12px;
+        }
+
+        .signal-feed-card--update {
+            border-left: 3px solid rgba(251, 191, 36, 0.55);
+            padding-left: 12px;
             background:
-                linear-gradient(165deg, rgba(251, 191, 36, 0.06), transparent 46%),
-                linear-gradient(180deg, #16140f, #0e0d0a);
-            border-color: rgba(251, 191, 36, 0.14);
-            box-shadow: var(--module-shadow), var(--module-inset), 0 0 24px rgba(251, 191, 36, 0.06);
+                linear-gradient(165deg, rgba(251, 191, 36, 0.05), transparent 48%),
+                rgba(0, 0, 0, 0.08);
         }
 
-        .signal-tg--update .tg-k {
-            color: rgba(253, 224, 171, 0.88);
-        }
-
-        .signal-tg--update .tg-accent {
-            color: #fcd34d;
+        .signal-feed-card--update .signal-feed-card__lead {
+            color: rgba(253, 224, 171, 0.95);
         }
 
         .tier-positioning {
@@ -2014,33 +1923,6 @@
             letter-spacing: 0.04em;
             color: rgba(200, 210, 222, 0.75);
             line-height: 1.4;
-        }
-
-        .signal-tg {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            background:
-                linear-gradient(165deg, rgba(59, 130, 246, 0.07), transparent 42%),
-                linear-gradient(180deg, #141a22, #0c1014);
-            box-shadow: var(--module-shadow), var(--module-inset), 0 0 48px rgba(59, 130, 246, 0.1);
-            padding: 18px 20px;
-            font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
-            font-size: 13px;
-            line-height: 1.65;
-            color: #e5e7eb;
-            text-align: left;
-        }
-
-        .signal-tg .tg-k {
-            color: rgba(147, 197, 253, 0.95);
-            font-size: 11px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .signal-tg .tg-accent {
-            color: #93c5fd;
         }
 
         .signal-actions {
@@ -2483,7 +2365,6 @@
 
         .panel::after,
         .terminal::before,
-        .mini-stream::before,
         .tier::before {
             content: "";
             position: absolute;
@@ -3060,27 +2941,6 @@
                 border-radius: 16px;
             }
 
-            .hero-stack .panel-top {
-                margin-bottom: 10px;
-                flex-direction: column;
-                align-items: flex-start;
-                flex-wrap: nowrap;
-            }
-
-            .hero-stack .panel-top-left {
-                flex-wrap: wrap;
-                width: 100%;
-            }
-
-            .hero-stack .panel-top-left [data-role="refresh-status"] {
-                flex: 0 0 auto;
-                flex-basis: 100%;
-                width: 100%;
-                min-width: 0;
-                max-width: none;
-                min-height: 1.35em;
-            }
-
             .sys-section+.sys-section {
                 margin-top: 18px;
                 padding-top: 18px;
@@ -3343,6 +3203,15 @@
             .tier {
                 min-width: 0;
             }
+
+            .preview-feed-updated {
+                white-space: normal;
+                text-align: right;
+            }
+
+            .signal-feed-card {
+                padding: 10px 11px 11px;
+            }
         }
     </style>
 </head>
@@ -3419,7 +3288,7 @@
                         </div>
 
                         <div class="hero-panel-col">
-                            <p class="panel-label" data-motion="item">LIVE SIGNAL PREVIEW</p>
+                            <p class="panel-label" data-motion="item">Signal preview</p>
                             <div class="hero-stack reveal d2">
                                 <div class="panel panel-updating sys-terminal">
                                     <div class="panel-update-line" aria-hidden="true"></div>
@@ -3428,15 +3297,10 @@
                                             <span class="preview-feed-dot" aria-hidden="true"></span>
                                             <span class="preview-feed-title">LIVE FEED</span>
                                         </div>
-                                        <span class="preview-feed-updated">Last update: 2 min ago</span>
-                                    </div>
-                                    <div class="panel-top">
-                                        <div class="panel-top-left">
-                                            <span class="panel-label">STRCTR / SYSTEM</span>
+                                        <div class="preview-feed-right">
                                             <span class="access-badge" id="accessTierBadge"
                                                 aria-live="polite">FREE</span>
-                                            <span class="panel-label" data-role="refresh-status"
-                                                aria-hidden="true"></span>
+                                            <span class="preview-feed-updated">Last update: 2 min ago</span>
                                         </div>
                                     </div>
 
@@ -3499,12 +3363,6 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <div class="sys-trace-log" aria-label="Execution trace" data-motion="item">
-                                            <div class="sys-trace-line">14:32 — Liquidity formed</div>
-                                            <div class="sys-trace-line">14:41 — Trap developed</div>
-                                            <div class="sys-trace-line">14:44 — Break confirmed</div>
-                                            <div class="sys-trace-line">14:45 — Entry triggered</div>
-                                        </div>
                                         <div data-role="ambient-lines" aria-hidden="true">
                                             <div class="strctr-system-line"></div>
                                         </div>
@@ -3515,12 +3373,6 @@
                         </div>
                     </div>
                 </section>
-
-                <div class="social-proof-strip">
-                    <div class="container">
-                        <p>Liquidity first. Not chart markup.</p>
-                    </div>
-                </div>
 
                 <section class="section" id="how-it-works" data-motion="section">
                     <div class="container">
@@ -3565,37 +3417,48 @@
                                     <span data-motion="item">feed</span>
                                 </div>
                                 <h2 data-motion="item">Channel output</h2>
-                                <p data-motion="item">Sequential lines from the live stream.</p>
+                                <p data-motion="item">Three consecutive posts from the feed.</p>
                             </div>
                         </div>
                         <div class="signal-example-inner reveal">
-                            <p class="panel-label" data-motion="item">Feed fragment</p>
-                            <div class="signal-feed-stack">
-                                <div class="signal-tg" data-motion="item">
-                                    <div class="tg-k">STRCTR · alert</div>
-                                    <div>🧷 <span class="tg-accent">BTC LONG</span></div>
-                                    <div>Entry: 65,800</div>
-                                    <div>Context: Liquidity sweep + OI reset</div>
-                                    <div>Bias: Long</div>
-                                    <div>Action: ENTER_PARTIAL</div>
-                                    <div>→ Target: 67,200</div>
-                                </div>
-                                <div class="signal-tg" data-motion="item">
-                                    <div class="tg-k">STRCTR · alert</div>
-                                    <div>🧷 <span class="tg-accent">BTC SHORT</span></div>
-                                    <div>Entry: 66,420</div>
-                                    <div>Context: Break failure + reclaim lost</div>
-                                    <div>Bias: Short</div>
-                                    <div>Action: ENTER</div>
-                                    <div>→ Target: 64,100</div>
-                                </div>
-                                <div class="signal-tg signal-tg--update" data-motion="item">
-                                    <div class="tg-k">STRCTR · update</div>
-                                    <div><span class="tg-accent">BTC SHORT</span> · position open</div>
-                                    <div>Action: REDUCE</div>
-                                    <div>Size: 50% · lock +1.1R</div>
-                                    <div>Reason: momentum stall at prior low</div>
-                                </div>
+                            <p class="panel-label" data-motion="item">Mini feed</p>
+                            <div class="signal-feed-channel" role="list">
+                                <article class="signal-feed-card signal-feed-card--long" data-motion="item">
+                                    <div class="signal-feed-card__meta">
+                                        <span class="signal-feed-card__src">STRCTR</span>
+                                        <time class="signal-feed-card__time" datetime="2026-04-05T14:02">14:02</time>
+                                    </div>
+                                    <div class="signal-feed-card__lead"><span class="signal-feed-card__sym">BTC</span>
+                                        LONG · entry alert</div>
+                                    <div class="signal-feed-card__lines">
+                                        <div>65,800 · partial · sweep + OI reset</div>
+                                        <div>→ 67,200</div>
+                                    </div>
+                                </article>
+                                <article class="signal-feed-card signal-feed-card--short" data-motion="item">
+                                    <div class="signal-feed-card__meta">
+                                        <span class="signal-feed-card__src">STRCTR</span>
+                                        <time class="signal-feed-card__time" datetime="2026-04-05T14:18">14:18</time>
+                                    </div>
+                                    <div class="signal-feed-card__lead"><span class="signal-feed-card__sym">BTC</span>
+                                        SHORT · entry alert</div>
+                                    <div class="signal-feed-card__lines">
+                                        <div>66,420 · full · break failure + reclaim lost</div>
+                                        <div>→ 64,100</div>
+                                    </div>
+                                </article>
+                                <article class="signal-feed-card signal-feed-card--update" data-motion="item">
+                                    <div class="signal-feed-card__meta">
+                                        <span class="signal-feed-card__src">STRCTR</span>
+                                        <time class="signal-feed-card__time" datetime="2026-04-05T14:21">14:21</time>
+                                    </div>
+                                    <div class="signal-feed-card__lead"><span class="signal-feed-card__sym">BTC</span>
+                                        SHORT · reduce / exit</div>
+                                    <div class="signal-feed-card__lines">
+                                        <div>50% off · lock +1.1R</div>
+                                        <div>momentum stall at prior low</div>
+                                    </div>
+                                </article>
                             </div>
                             <div class="signal-actions">
                                 <a class="btn btn-primary" href="https://t.me/strctr_system" target="_blank"
@@ -3692,9 +3555,8 @@
 
                                 <div class="cta-box">
                                     <div class="tiny" data-motion="item">channel</div>
-                                    <div class="cta-status pulse"><span class="dot" data-role="live-dot"></span> live
-                                        stream •
-                                        active</div>
+                                    <div class="cta-status"><span class="dot" data-role="live-dot"></span> Public
+                                        Telegram</div>
                                     <div class="copy" data-motion="item">
                                         Opens in Telegram.<br>
                                         Paid tiers when live.
@@ -3843,7 +3705,7 @@
             </div>
             <div class="telegram-gate-actions">
                 <button type="button" class="btn btn-primary" id="telegramGateEnter">Enter feed</button>
-                <button type="button" class="telegram-gate-cancel" data-telegram-gate-close">Cancel</button>
+                <button type="button" class="telegram-gate-cancel" data-telegram-gate-close>Cancel</button>
             </div>
         </div>
     </dialog>
