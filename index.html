@@ -54,6 +54,7 @@
 
         body {
             margin: 0;
+            width: 100%;
             color: var(--text);
             font-size: 14px;
             line-height: 1.5;
@@ -99,12 +100,13 @@
             width: 100%;
             max-width: var(--max);
             margin: 0 auto;
-            padding-left: 32px;
-            padding-right: 32px;
+            padding-left: 0;
+            padding-right: 0;
         }
 
         .page-shell {
             width: 100%;
+            min-height: 100vh;
         }
 
         .page-shell-inner {
@@ -142,6 +144,13 @@
             background: rgba(0, 0, 0, .72);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(255, 255, 255, .05);
+            padding-inline: 16px;
+        }
+
+        @media (min-width: 769px) {
+            .header {
+                padding-inline: 24px;
+            }
         }
 
         .nav {
@@ -789,9 +798,17 @@
         }
 
         .hero {
-            padding: 80px 0 48px;
+            padding-top: 80px;
+            padding-bottom: 48px;
+            padding-inline: 16px;
             position: relative;
             overflow: hidden;
+        }
+
+        @media (min-width: 769px) {
+            .hero {
+                padding-inline: 24px;
+            }
         }
 
         .hero::before {
@@ -819,8 +836,8 @@
         }
 
         .hero-watermark svg {
-            width: min(50vw, 580px);
-            height: min(50vw, 580px);
+            width: min(50%, 580px);
+            height: min(50%, 580px);
             color: #d6d6d6;
         }
 
@@ -831,6 +848,19 @@
             align-items: stretch;
             position: relative;
             z-index: 1;
+        }
+
+        .hero-inner {
+            width: 100%;
+            max-width: 760px;
+            margin-left: auto;
+            margin-right: auto;
+            min-width: 0;
+        }
+
+        .hero-panel-col {
+            width: 100%;
+            min-width: 0;
         }
 
         .hero-grid>div>.panel-label {
@@ -851,7 +881,8 @@
         }
 
         .hero-copy {
-            padding-left: 8px;
+            padding-left: 0;
+            padding-right: 0;
             padding-top: 12px;
             text-align: center;
             display: grid;
@@ -931,6 +962,21 @@
 
         .hero .btn-row {
             margin-top: 22px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .hero .btn-row .btn-primary,
+        .final-cta-box .btn-primary,
+        .signal-actions .btn-primary,
+        .tier-actions .btn-primary,
+        .cta-actions .btn-primary {
+            width: 100%;
+            max-width: 540px;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
         }
 
         .hero-cta-note {
@@ -944,12 +990,20 @@
 
         .social-proof-strip {
             text-align: center;
-            padding: 4px 32px 28px;
+            padding-top: 4px;
+            padding-bottom: 28px;
+            padding-inline: 16px;
             color: rgba(180, 186, 195, 0.92);
             font-size: 12px;
             font-weight: 500;
             letter-spacing: 0.05em;
             line-height: 1.5;
+        }
+
+        @media (min-width: 769px) {
+            .social-proof-strip {
+                padding-inline: 24px;
+            }
         }
 
         .social-proof-strip p {
@@ -1507,7 +1561,14 @@
 
         .section {
             position: relative;
-            padding: var(--section-pad) 0 0;
+            padding-top: var(--section-pad);
+            padding-inline: 16px;
+        }
+
+        @media (min-width: 769px) {
+            .section {
+                padding-inline: 24px;
+            }
         }
 
         .section>.container {
@@ -2794,6 +2855,7 @@
             .hero .btn-row {
                 margin-top: 2px;
                 justify-self: stretch;
+                justify-content: center;
                 flex-direction: column;
                 align-items: stretch;
                 width: 100%;
@@ -3205,32 +3267,6 @@
                 max-width: 100%;
             }
 
-            .page-shell {
-                display: flex;
-                justify-content: center;
-                width: 100%;
-                padding-inline: 16px;
-                box-sizing: border-box;
-            }
-
-            .page-shell-inner {
-                width: 100%;
-                max-width: 430px;
-                margin-left: auto;
-                margin-right: auto;
-                box-sizing: border-box;
-                min-width: 0;
-            }
-
-            .page-shell-inner .container {
-                width: 100%;
-                max-width: none;
-                margin-left: 0;
-                margin-right: 0;
-                padding-left: 0;
-                padding-right: 0;
-            }
-
             .hero .container.hero-grid {
                 display: flex;
                 flex-direction: column;
@@ -3240,19 +3276,15 @@
                 width: 100%;
             }
 
-            .hero-copy {
-                padding-left: 0;
-                padding-right: 0;
+            .hero-inner {
                 width: 100%;
-                max-width: 100%;
             }
 
-            .hero-grid>div:not(.hero-copy) {
-                width: 100%;
-                max-width: 100%;
+            .hero-panel-col {
                 display: flex;
                 flex-direction: column;
                 align-items: stretch;
+                width: 100%;
             }
 
             .hero-watermark {
@@ -3270,16 +3302,6 @@
             .hero-watermark svg {
                 width: min(72%, 360px);
                 height: min(72%, 360px);
-            }
-
-            .social-proof-strip {
-                padding-left: 0;
-                padding-right: 0;
-            }
-
-            .social-proof-strip .container {
-                padding-left: 0;
-                padding-right: 0;
             }
 
             .panel,
@@ -3345,6 +3367,7 @@
                 </svg>
             </div>
             <div class="container hero-grid">
+                <div class="hero-inner">
                 <div class="hero-copy reveal">
                     <div class="hero-logo" aria-hidden="true">
                         <svg viewBox="0 0 24 24">
@@ -3363,8 +3386,9 @@
                     </div>
                     <p class="hero-cta-note" data-motion="item">Live signals. Real-time structure. No noise.</p>
                 </div>
+                </div>
 
-                <div>
+                <div class="hero-panel-col">
                     <p class="panel-label" data-motion="item">LIVE SIGNAL PREVIEW</p>
                     <div class="hero-stack reveal d2">
                     <div class="panel panel-updating">
