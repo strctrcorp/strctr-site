@@ -1972,6 +1972,41 @@
             margin: 0 0 14px;
         }
 
+        .signal-feed-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+
+        .signal-feed-stack .signal-tg {
+            padding: 14px 16px;
+            font-size: 12px;
+            line-height: 1.55;
+            border-radius: 12px;
+            box-shadow: var(--module-shadow), var(--module-inset), 0 0 28px rgba(59, 130, 246, 0.08);
+        }
+
+        .signal-feed-stack .signal-tg .tg-k {
+            margin-bottom: 8px;
+            font-size: 10px;
+        }
+
+        .signal-tg--update {
+            background:
+                linear-gradient(165deg, rgba(251, 191, 36, 0.06), transparent 46%),
+                linear-gradient(180deg, #16140f, #0e0d0a);
+            border-color: rgba(251, 191, 36, 0.14);
+            box-shadow: var(--module-shadow), var(--module-inset), 0 0 24px rgba(251, 191, 36, 0.06);
+        }
+
+        .signal-tg--update .tg-k {
+            color: rgba(253, 224, 171, 0.88);
+        }
+
+        .signal-tg--update .tg-accent {
+            color: #fcd34d;
+        }
+
         .tier-positioning {
             margin: 0 0 10px;
             font-size: 12px;
@@ -3344,7 +3379,7 @@
                         <a href="#hero">Overview</a>
                         <a href="#how-it-works">How it works</a>
                         <a href="#tiers">Pricing</a>
-                        <a href="#signal-example">Example</a>
+                        <a href="#signal-example">Output</a>
                         <a href="#access">Access</a>
                     </nav>
 
@@ -3527,22 +3562,40 @@
                                     <svg viewBox="0 0 24 24" aria-hidden="true">
                                         <use href="#strctr-mark"></use>
                                     </svg>
-                                    <span data-motion="item">preview</span>
+                                    <span data-motion="item">feed</span>
                                 </div>
-                                <h2 data-motion="item">Signal example</h2>
-                                <p data-motion="item">Raw output from the channel.</p>
+                                <h2 data-motion="item">Channel output</h2>
+                                <p data-motion="item">Sequential lines from the live stream.</p>
                             </div>
                         </div>
                         <div class="signal-example-inner reveal">
-                            <p class="panel-label" data-motion="item">Live alert example</p>
-                            <div class="signal-tg" data-motion="item">
-                                <div class="tg-k">STRCTR · alert</div>
-                                <div>🧷 <span class="tg-accent">BTC LONG</span></div>
-                                <div>Entry: 65,800</div>
-                                <div>Context: Liquidity sweep + OI reset</div>
-                                <div>Bias: Long</div>
-                                <div>Action: ENTER_PARTIAL</div>
-                                <div>→ Target: 67,200</div>
+                            <p class="panel-label" data-motion="item">Feed fragment</p>
+                            <div class="signal-feed-stack">
+                                <div class="signal-tg" data-motion="item">
+                                    <div class="tg-k">STRCTR · alert</div>
+                                    <div>🧷 <span class="tg-accent">BTC LONG</span></div>
+                                    <div>Entry: 65,800</div>
+                                    <div>Context: Liquidity sweep + OI reset</div>
+                                    <div>Bias: Long</div>
+                                    <div>Action: ENTER_PARTIAL</div>
+                                    <div>→ Target: 67,200</div>
+                                </div>
+                                <div class="signal-tg" data-motion="item">
+                                    <div class="tg-k">STRCTR · alert</div>
+                                    <div>🧷 <span class="tg-accent">BTC SHORT</span></div>
+                                    <div>Entry: 66,420</div>
+                                    <div>Context: Break failure + reclaim lost</div>
+                                    <div>Bias: Short</div>
+                                    <div>Action: ENTER</div>
+                                    <div>→ Target: 64,100</div>
+                                </div>
+                                <div class="signal-tg signal-tg--update" data-motion="item">
+                                    <div class="tg-k">STRCTR · update</div>
+                                    <div><span class="tg-accent">BTC SHORT</span> · position open</div>
+                                    <div>Action: REDUCE</div>
+                                    <div>Size: 50% · lock +1.1R</div>
+                                    <div>Reason: momentum stall at prior low</div>
+                                </div>
                             </div>
                             <div class="signal-actions">
                                 <a class="btn btn-primary" href="https://t.me/strctr_system" target="_blank"
@@ -3806,7 +3859,7 @@
             <div class="cmd-list" id="cmdList">
                 <button class="cmd-item" type="button" data-target="#hero">Go: Overview</button>
                 <button class="cmd-item" type="button" data-target="#how-it-works">Go: How it works</button>
-                <button class="cmd-item" type="button" data-target="#signal-example">Go: Example</button>
+                <button class="cmd-item" type="button" data-target="#signal-example">Go: Channel output</button>
                 <button class="cmd-item" type="button" data-target="#tiers">Go: Pricing</button>
                 <button class="cmd-item" type="button" data-target="#access">Go: Access</button>
                 <button class="cmd-item" type="button" data-link="https://t.me/strctr_system">View live feed
