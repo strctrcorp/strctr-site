@@ -49,7 +49,7 @@
             box-sizing: border-box
         }
 
-        /* Root: overflow-x hidden on html for mobile chrome; pair with body scroll only (see body). */
+        /* Single document scrollport on body: html uses overflow-x: clip (not hidden) so CSS does not create a second vertical scrollport on the root. */
         html {
             margin: 0;
             padding: 0;
@@ -57,12 +57,10 @@
             height: auto;
             min-height: 100%;
             width: 100%;
-            overflow-x: hidden;
+            overflow-x: clip;
             overflow-y: visible;
             background: #05070d;
             color-scheme: dark;
-            scrollbar-color: rgba(120, 140, 255, 0.35) transparent;
-            scrollbar-width: thin;
         }
 
         /* Full-viewport base so overscroll / safe-area letterboxing stays dark (esp. iOS). */
@@ -73,19 +71,6 @@
             z-index: -1;
             background: #05070d;
             pointer-events: none;
-        }
-
-        html::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        html::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        html::-webkit-scrollbar-thumb {
-            background: rgba(120, 140, 255, 0.3);
-            border-radius: 10px;
         }
 
         body {
@@ -1715,23 +1700,6 @@
             border-bottom: 1px solid rgba(255, 255, 255, .065);
         }
 
-        .sys-terminal .live-terminal {
-            padding: 6px 0;
-            border: none;
-            background: transparent;
-            border-radius: 0;
-            box-shadow: none;
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 0.16em;
-            gap: 10px;
-            color: rgba(200, 220, 245, 0.92);
-        }
-
-        .sys-terminal .live-terminal .dot {
-            flex-shrink: 0;
-        }
-
         .sys-terminal .panel-update-line {
             opacity: 0.1;
             left: 16px;
@@ -1967,19 +1935,6 @@
             max-width: 760px;
             color: rgba(229, 231, 235, 0.72);
             line-height: 1.4;
-        }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: var(--grid-gap);
-        }
-
-        #action .action-grid {
-            grid-template-columns: 1fr;
-            max-width: 520px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .how-works-grid {
@@ -2423,56 +2378,6 @@
             margin: 0;
             color: #b7b7b7;
             line-height: 1.62;
-        }
-
-        .trade-head {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 14px;
-        }
-
-        .trade-asset {
-            margin: 0;
-            font-size: 24px;
-            line-height: 1;
-            letter-spacing: -.04em;
-            font-weight: 620;
-        }
-
-        .trade-list {
-            display: grid;
-            gap: 8px;
-        }
-
-        .trade-row {
-            display: grid;
-            grid-template-columns: 98px 1fr;
-            align-items: baseline;
-            gap: 12px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(255, 255, 255, .045);
-        }
-
-        .trade-row .k {
-            font-size: 11px;
-            color: rgba(229, 231, 235, 0.5);
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            line-height: 1.35;
-        }
-
-        .trade-row .v {
-            font-size: 14px;
-            color: #e2e2e2;
-            line-height: 1.6;
-            letter-spacing: .005em;
-        }
-
-        .trade-row .v.result {
-            color: #dbe5ff;
-            font-weight: 560;
         }
 
         .how-wrap {
@@ -3141,17 +3046,6 @@
                 min-height: 1.35em;
             }
 
-            .hero-stack .panel-top-right {
-                margin-left: 0;
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .hero-stack .live-terminal {
-                font-size: 9px;
-                letter-spacing: 0.14em;
-            }
-
             .sys-section+.sys-section {
                 margin-top: 18px;
                 padding-top: 18px;
@@ -3191,7 +3085,6 @@
             }
 
             .how-works-grid,
-            .action-grid,
             .tiers,
             .how-grid {
                 gap: 12px;
@@ -3227,63 +3120,6 @@
 
             .tier p {
                 margin: 0 0 10px;
-            }
-
-            .action-grid {
-                grid-template-columns: 1fr;
-                gap: 14px;
-            }
-
-            .action-grid>.card {
-                padding: 18px 17px 17px 18px;
-                min-width: 0;
-            }
-
-            .action-grid .trade-head {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                justify-content: space-between;
-                gap: 10px 12px;
-                margin-bottom: 14px;
-            }
-
-            .action-grid .trade-asset {
-                flex: 1 1 auto;
-                min-width: 0;
-                font-size: 26px;
-                line-height: 1.05;
-            }
-
-            .action-grid .trade-head .pill {
-                flex: 0 0 auto;
-                max-width: 100%;
-                padding: 7px 11px;
-                font-size: 10px;
-                letter-spacing: 0.11em;
-                line-height: 1.25;
-                white-space: normal;
-                text-align: center;
-            }
-
-            .action-grid .trade-list {
-                gap: 10px;
-            }
-
-            .action-grid .trade-row {
-                grid-template-columns: minmax(72px, 92px) minmax(0, 1fr);
-                gap: 12px 14px;
-                align-items: start;
-                padding-top: 10px;
-            }
-
-            .action-grid .trade-row .k {
-                line-height: 1.35;
-            }
-
-            .action-grid .trade-row .v {
-                font-size: 14px;
-                line-height: 1.62;
             }
 
             .how-wrap {
@@ -3567,11 +3403,6 @@
                                             <span class="panel-label" data-role="refresh-status"
                                                 aria-hidden="true"></span>
                                         </div>
-                                        <div class="panel-top-right">
-                                            <div class="live live-terminal"><span class="dot live-dot"
-                                                    data-role="live-dot"></span>
-                                                LIVE STREAM ACTIVE</div>
-                                        </div>
                                     </div>
 
                                     <div class="sys-body">
@@ -3790,54 +3621,6 @@
                     </div>
                 </section>
 
-                <section class="section" id="action" data-motion="section">
-                    <div class="container">
-                        <div class="section-head reveal">
-                            <div>
-                                <div class="section-sigil">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <use href="#strctr-mark"></use>
-                                    </svg>
-                                    <span data-motion="item">System in Action</span>
-                                </div>
-                                <h2 data-motion="item">System in action.</h2>
-                                <p data-motion="item">State → execution. Compressed.</p>
-                            </div>
-                        </div>
-
-                        <div class="action-grid">
-                            <article class="card reveal d2" data-motion="card">
-                                <div class="trade-head">
-                                    <h3 class="trade-asset" data-motion="item">BTC</h3>
-                                    <div class="pill blue">Closed</div>
-                                </div>
-                                <div class="trade-list">
-                                    <div class="trade-row">
-                                        <div class="k">Scenario</div>
-                                        <div class="v" data-motion="item">up trap → down</div>
-                                    </div>
-                                    <div class="trade-row">
-                                        <div class="k">Stage</div>
-                                        <div class="v" data-motion="item">confirmation</div>
-                                    </div>
-                                    <div class="trade-row">
-                                        <div class="k">Action</div>
-                                        <div class="v" data-motion="item">enter → add → hold</div>
-                                    </div>
-                                    <div class="trade-row">
-                                        <div class="k">Result</div>
-                                        <div class="v result" data-motion="item">partial taken</div>
-                                    </div>
-                                    <div class="trade-row trade-row--proof">
-                                        <div class="k">Outcome</div>
-                                        <div class="v" data-motion="item">→ −2.8% · 35m</div>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </section>
-
                 <section class="section" id="access" data-motion="section">
                     <div class="container">
                         <div class="cta reveal">
@@ -4025,7 +3808,6 @@
                 <button class="cmd-item" type="button" data-target="#how-it-works">Go: How it works</button>
                 <button class="cmd-item" type="button" data-target="#signal-example">Go: Example</button>
                 <button class="cmd-item" type="button" data-target="#tiers">Go: Pricing</button>
-                <button class="cmd-item" type="button" data-target="#action">Go: Execution</button>
                 <button class="cmd-item" type="button" data-target="#access">Go: Access</button>
                 <button class="cmd-item" type="button" data-link="https://t.me/strctr_system">View live feed
                     (Telegram)</button>
@@ -4197,7 +3979,7 @@
 
             function scrollToPostCheckoutSection(tier) {
                 let sel = '#access';
-                if (tier === 'core') sel = '#action';
+                if (tier === 'core') sel = '#signal-example';
                 else if (tier === 'pro') sel = '#access';
                 const el = document.querySelector(sel);
                 el?.scrollIntoView({
