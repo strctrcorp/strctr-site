@@ -46,15 +46,38 @@
             box-sizing: border-box
         }
 
+        /* Single vertical scroll on the document: avoid overflow-x:hidden on html alone (it forces overflow-y:auto on the root and can create a second scrollbar next to body). */
         html {
             scroll-behavior: smooth;
-            overflow-x: hidden;
+            height: auto;
+            min-height: 100%;
             width: 100%;
+            overflow-x: clip;
+            overflow-y: visible;
+            scrollbar-color: rgba(120, 140, 255, 0.35) transparent;
+            scrollbar-width: thin;
+        }
+
+        html::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        html::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        html::-webkit-scrollbar-thumb {
+            background: rgba(120, 140, 255, 0.3);
+            border-radius: 10px;
         }
 
         body {
             margin: 0;
+            height: auto;
+            min-height: 100%;
             width: 100%;
+            overflow-x: clip;
+            overflow-y: auto;
             color: var(--text);
             font-size: 14px;
             line-height: 1.5;
@@ -65,7 +88,6 @@
                 linear-gradient(180deg, #0F0F10 0%, #0B0B0C 42%, #09090a 100%);
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
-            overflow-x: hidden;
         }
 
         body::before {
@@ -107,10 +129,12 @@
         .page-shell {
             width: 100%;
             min-height: 100vh;
+            overflow: visible;
         }
 
         .page-shell-inner {
             width: 100%;
+            overflow: visible;
         }
 
         .eyebrow {
