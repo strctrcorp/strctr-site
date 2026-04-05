@@ -3687,8 +3687,9 @@
                             <li data-motion="item">Real-time updates</li>
                         </ul>
                         <div class="tier-actions">
-                            <button type="button" class="btn btn-primary paywall-btn-operator-apply" data-motion="item"
-                                data-core-apply>Apply</button>
+                            <a class="btn btn-primary paywall-btn-operator-apply" data-motion="item"
+                                href="https://t.me/strctr_access_bot?start=core" target="_blank"
+                                rel="noopener noreferrer">Apply</a>
                         </div>
                     </article>
                 </div>
@@ -3938,8 +3939,9 @@
                         <span class="paywall-block-role">CORE</span>
                         <p class="paywall-block-desc">Execution system · position management · real-time</p>
                         <p class="paywall-block-meta">Application required</p>
-                        <button type="button" class="btn btn-primary paywall-btn-operator-apply"
-                            data-core-apply>Apply</button>
+                        <a class="btn btn-primary paywall-btn-operator-apply"
+                            href="https://t.me/strctr_access_bot?start=core" target="_blank"
+                            rel="noopener noreferrer">Apply</a>
                     </div>
                 </div>
                 <p class="paywall-note">CORE: application review. PRO: launching soon.</p>
@@ -4043,7 +4045,8 @@
                     <button class="cmd-item" type="button" data-link="https://t.me/strctr_system">JOIN FREE
                         FEED</button>
                     <button class="cmd-item" type="button" data-open-paywall>Access levels (PRO / CORE)</button>
-                    <button class="cmd-item" type="button" data-core-apply>Apply for CORE</button>
+                    <button class="cmd-item" type="button" data-link="https://t.me/strctr_access_bot?start=core">Apply
+                        for CORE</button>
                 </div>
             </div>
         </dialog>
@@ -4053,7 +4056,10 @@
             const isDev = localStorage.getItem('strctrDev') === '1';
             if (isDev) document.documentElement.classList.add('strctr-dev');
 
+            /* Routing: FREE → public channel; PRO/CORE → access bot deep links */
             const TELEGRAM_FEED_URL = 'https://t.me/strctr_system';
+            const TELEGRAM_PRO_URL = 'https://t.me/strctr_access_bot?start=pro';
+            const TELEGRAM_CORE_URL = 'https://t.me/strctr_access_bot?start=core';
 
             const items = document.querySelectorAll('.reveal');
             if (items.length) {
@@ -4288,23 +4294,9 @@
             const coreApplyForm = document.getElementById('coreApplyForm');
             const coreApplyDone = document.getElementById('coreApplyDone');
 
-            function openCoreApply() {
-                if (!coreApplyModal) return;
-                coreApplyForm?.classList.remove('is-hidden');
-                coreApplyDone?.classList.remove('is-visible');
-                coreApplyForm?.reset();
-                paywallModal?.close();
-                coreApplyModal.showModal();
-            }
-
             function closeCoreApply() {
                 coreApplyModal?.close();
             }
-
-            document.querySelectorAll('[data-core-apply]').forEach((btn) => {
-                if (btn.classList.contains('cmd-item')) return;
-                btn.addEventListener('click', () => openCoreApply());
-            });
 
             coreApplyModal?.querySelectorAll('[data-core-apply-close]').forEach((btn) => {
                 btn.addEventListener('click', () => closeCoreApply());
@@ -4348,6 +4340,11 @@
             document.getElementById('checkoutSuccessContinue')?.addEventListener('click', () => {
                 const dlg = checkoutSuccessModal;
                 const raw = dlg?.dataset.tier;
+                if (raw === 'pro') {
+                    window.open(TELEGRAM_PRO_URL, '_blank', 'noopener,noreferrer');
+                } else if (raw === 'core') {
+                    window.open(TELEGRAM_CORE_URL, '_blank', 'noopener,noreferrer');
+                }
                 if (raw === 'pro' || raw === 'core') {
                     applyAccessTier(raw);
                 } else {
@@ -4442,11 +4439,6 @@
 
             cmdItems.forEach((item) => {
                 item.addEventListener('click', () => {
-                    if (item.hasAttribute('data-core-apply')) {
-                        openCoreApply();
-                        closePalette();
-                        return;
-                    }
                     if (item.hasAttribute('data-open-paywall')) {
                         openPaywall();
                         closePalette();
