@@ -1048,8 +1048,7 @@
 
         .hero .btn-row .btn-primary,
         .signal-actions .btn-primary,
-        .tier-actions .btn-primary,
-        .cta-actions .btn-primary {
+        .tier-actions .btn-primary {
             width: 100%;
             max-width: 540px;
             margin-left: auto;
@@ -1494,7 +1493,7 @@
             word-spacing: .03em;
         }
 
-        /* Hero: trading terminal — single shell, STATE → EXECUTION → PLAN */
+        /* Hero: compact system snapshot — state + scenario + stage + one execution posture line */
         .sys-body {
             position: relative;
             z-index: 1;
@@ -1509,6 +1508,23 @@
             margin-top: 22px;
             padding-top: 22px;
             border-top: 1px solid rgba(255, 255, 255, .065);
+        }
+
+        .hero-stack .sys-terminal .sys-section+.sys-section {
+            margin-top: 16px;
+            padding-top: 16px;
+        }
+
+        .sys-section--exec-note .sys-section-label {
+            margin-bottom: 8px;
+        }
+
+        .sys-snapshot-note {
+            margin: 0;
+            font-size: 11px;
+            line-height: 1.5;
+            letter-spacing: 0.03em;
+            color: rgba(180, 188, 198, 0.9);
         }
 
         .sys-section-label {
@@ -1530,7 +1546,7 @@
 
         .sys-terminal.panel {
             border-radius: 18px;
-            padding: 18px 20px 21px;
+            padding: 16px 18px 17px;
             background: var(--panel);
             border-color: rgba(255, 255, 255, .09);
             box-shadow:
@@ -1620,12 +1636,6 @@
             top: 6px;
         }
 
-        .sys-terminal .sys-term-grid.term-grid {
-            display: block;
-            margin: 0;
-            gap: 0;
-        }
-
         .sys-terminal .term-stat.sys-term-row {
             display: flex;
             justify-content: space-between;
@@ -1659,22 +1669,6 @@
             text-align: right;
             font-size: 15px;
             font-weight: 560;
-            margin: 0;
-        }
-
-        .sys-terminal .plan.sys-plan-block {
-            margin: 0;
-            padding: 0;
-            border: none;
-            border-radius: 0;
-            background: transparent;
-            box-shadow: none;
-        }
-
-        .sys-terminal .plan.sys-plan-block .v {
-            font-size: 13px;
-            line-height: 1.55;
-            letter-spacing: 0.02em;
             margin: 0;
         }
 
@@ -2411,141 +2405,6 @@
             pointer-events: none;
         }
 
-        .cta {
-            margin: 32px 0 64px;
-            border: 1px solid rgba(59, 130, 246, .34);
-            border-radius: 24px;
-            padding: 32px;
-            background:
-                radial-gradient(circle at 78% 22%, rgba(59, 130, 246, .18), transparent 34%),
-                radial-gradient(circle at 18% 78%, rgba(255, 255, 255, .04), transparent 42%),
-                linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .012));
-            box-shadow: 0 0 0 1px rgba(255, 255, 255, .03), 0 26px 72px rgba(0, 0, 0, .48), 0 0 18px rgba(59, 130, 246, .1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-grid {
-            display: grid;
-            grid-template-columns: 1.06fr .94fr;
-            gap: 24px;
-            align-items: start;
-        }
-
-        .cta-intro-col {
-            transform: translateY(4px);
-        }
-
-        .cta h3 {
-            margin: 0 0 12px;
-            font-size: clamp(30px, 4vw, 50px);
-            font-weight: 760;
-            line-height: 1.02;
-            letter-spacing: -0.02em;
-        }
-
-        .cta p {
-            margin: 0;
-            color: rgba(229, 231, 235, 0.75);
-            line-height: 1.4;
-            max-width: 720px;
-        }
-
-        .cta-intro-mobile {
-            display: none;
-        }
-
-        .cta-note {
-            margin: 14px 0 0;
-            font-size: 12px;
-            line-height: 1.45;
-            color: var(--muted);
-            letter-spacing: 0.04em;
-        }
-
-        .cta-note+.cta-note {
-            margin-top: 6px;
-        }
-
-        .cta-box {
-            border: 1px solid rgba(255, 255, 255, .1);
-            border-radius: 22px;
-            padding: 18px;
-            background:
-                linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .012)),
-                rgba(0, 0, 0, .5);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04), 0 16px 36px rgba(0, 0, 0, .34);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-box::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 88% 14%, rgba(59, 130, 246, .14), transparent 44%);
-            pointer-events: none;
-        }
-
-        .cta-actions {
-            margin-top: 16px;
-        }
-
-        .cta .btn-primary {
-            height: 52px;
-            padding: 0 28px;
-            font-size: 14px;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-            background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
-            border-color: rgba(59, 130, 246, 0.95);
-            box-shadow: var(--btn-primary-glow);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, border-color 0.18s ease,
-                background 0.2s ease;
-        }
-
-        .cta .btn-primary:hover {
-            transform: translateY(-1px);
-            filter: brightness(1.06);
-            box-shadow: 0 6px 20px rgba(77, 99, 255, 0.25);
-            background: linear-gradient(180deg, #3f87f7 0%, #2a66eb 100%);
-        }
-
-        .cta .btn-ghost {
-            height: 48px;
-            padding: 0 20px;
-        }
-
-        .cta .btn-ghost:hover {
-            background: rgba(255, 255, 255, 0.045);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .cta-status {
-            margin: 0 0 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 10px;
-            border-radius: 999px;
-            border: 1px solid rgba(59, 130, 246, .24);
-            background: rgba(59, 130, 246, .08);
-            color: #c8d8ff;
-            font-size: 10px;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            line-height: 1.2;
-        }
-
-        .cta-status .dot {
-            width: 6px;
-            height: 6px;
-        }
-
-        .live-dot {
-            animation: liveDotPulse 1.5s ease-in-out infinite;
-        }
-
         .panel-updating {
             position: relative;
         }
@@ -2560,36 +2419,6 @@
             opacity: .2;
             pointer-events: none;
             animation: panelUpdateLine 2.8s ease-in-out infinite;
-        }
-
-        .pulse {
-            position: relative;
-            isolation: isolate;
-        }
-
-        .pulse::after {
-            content: "";
-            position: absolute;
-            inset: -2px;
-            border-radius: inherit;
-            pointer-events: none;
-            opacity: 0;
-            box-shadow: 0 0 0 0 rgba(59, 130, 246, .18);
-            animation: pulseRing 2.6s ease-in-out infinite;
-        }
-
-        .tiny {
-            color: var(--muted);
-            font-size: 11px;
-            letter-spacing: .14em;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .copy {
-            font-size: 14px;
-            line-height: 1.8;
-            color: #e3e3e3;
         }
 
         .footer {
@@ -2656,35 +2485,6 @@
             transition-delay: 0.15s;
         }
 
-        @keyframes pulseRing {
-            0% {
-                opacity: 0;
-                box-shadow: 0 0 0 0 rgba(59, 130, 246, .14);
-            }
-
-            35% {
-                opacity: .55;
-                box-shadow: 0 0 0 6px rgba(59, 130, 246, .08);
-            }
-
-            100% {
-                opacity: 0;
-                box-shadow: 0 0 0 12px rgba(59, 130, 246, 0);
-            }
-        }
-
-        @keyframes liveDotPulse {
-
-            0%,
-            100% {
-                opacity: .45;
-            }
-
-            50% {
-                opacity: 1;
-            }
-        }
-
         @keyframes panelUpdateLine {
 
             0%,
@@ -2737,8 +2537,7 @@
         @media (max-width: 1080px) {
 
             .hero-grid,
-            .framework,
-            .cta-grid {
+            .framework {
                 grid-template-columns: 1fr
             }
 
@@ -2921,12 +2720,6 @@
                 box-sizing: border-box;
             }
 
-            .cta .btn-row {
-                flex-direction: column;
-                align-items: stretch;
-                width: 100%;
-            }
-
             .hero-stack {
                 gap: 8px;
             }
@@ -3043,90 +2836,6 @@
 
             .eyebrow {
                 padding: 6px 10px;
-            }
-
-            .cta {
-                margin: 10px 0 14px;
-                padding: 14px 12px 14px;
-            }
-
-            .cta .eyebrow {
-                display: none;
-            }
-
-            .cta .cta-intro-desktop {
-                display: none;
-            }
-
-            .cta .cta-intro-mobile {
-                display: block;
-                line-height: 1.45;
-                font-size: 14px;
-            }
-
-            .cta h3 {
-                margin: 0 0 4px;
-            }
-
-            .cta-grid {
-                gap: 8px;
-                align-items: stretch;
-            }
-
-            .cta-box {
-                width: 100%;
-                padding: 12px 12px 13px;
-                border-radius: 18px;
-            }
-
-            .cta-box .tiny,
-            .cta-box .copy {
-                display: none;
-            }
-
-            .cta-box .cta-status {
-                margin: 0 0 6px;
-            }
-
-            .cta .btn-row {
-                gap: 10px;
-            }
-
-            .cta .btn-primary,
-            .cta .btn-ghost {
-                box-sizing: border-box;
-            }
-
-            .cta .btn-primary {
-                width: 100%;
-                height: 46px;
-                padding: 0 14px;
-                font-size: 14px;
-                font-weight: 600;
-                letter-spacing: 0.07em;
-                box-shadow:
-                    0 3px 24px rgba(59, 130, 246, .34),
-                    0 0 0 1px rgba(59, 130, 246, .42) inset;
-            }
-
-            .cta .btn-ghost {
-                width: 100%;
-                height: 42px;
-                padding: 0 12px;
-                font-size: 12px;
-                font-weight: 600;
-                letter-spacing: 0.05em;
-                opacity: .9;
-                border-color: rgba(255, 255, 255, .12);
-                background: rgba(255, 255, 255, .02);
-            }
-
-            .cta .cta-actions {
-                margin-top: 8px;
-            }
-
-            .tiny {
-                margin-bottom: 7px;
             }
 
             #access .footer {
@@ -3288,7 +2997,7 @@
                         </div>
 
                         <div class="hero-panel-col">
-                            <p class="panel-label" data-motion="item">Signal preview</p>
+                            <p class="panel-label" data-motion="item">System snapshot</p>
                             <div class="hero-stack reveal d2">
                                 <div class="panel panel-updating sys-terminal">
                                     <div class="panel-update-line" aria-hidden="true"></div>
@@ -3332,36 +3041,10 @@
                                             </div>
                                         </section>
 
-                                        <section class="sys-section" aria-label="Execution">
+                                        <section class="sys-section sys-section--exec-note" aria-label="Execution posture">
                                             <div class="sys-section-label">EXECUTION</div>
-                                            <div class="term-grid term-grid-paywall sys-term-grid">
-                                                <div class="term-stat sys-term-row" data-min-access="1">
-                                                    <div class="k">PROBABILITY</div>
-                                                    <div class="v"><span id="liveConfidence"
-                                                            data-role="refreshable">82%</span></div>
-                                                </div>
-                                                <div class="term-stat sys-term-row" data-min-access="1">
-                                                    <div class="k">TIMING</div>
-                                                    <div class="v" data-role="refreshable">Optimal</div>
-                                                </div>
-                                                <div class="term-stat sys-term-row term-stat-wide" data-min-access="2">
-                                                    <div class="k">ENTRY</div>
-                                                    <div class="v"><span data-role="locked-swap"
-                                                            data-hover-text="upgrade required">Partial ·
-                                                            2 zones</span></div>
-                                                </div>
-                                            </div>
-                                        </section>
-
-                                        <section class="sys-section" aria-label="Plan">
-                                            <div class="sys-section-label">PLAN</div>
-                                            <div class="plan sys-plan-block" data-min-access="2">
-                                                <div class="v">
-                                                    Add → acceptance<br>
-                                                    Reduce → failure<br>
-                                                    Exit → invalidation
-                                                </div>
-                                            </div>
+                                            <p class="sys-snapshot-note">Standby — commitments follow structural
+                                                confirmation.</p>
                                         </section>
                                         <div data-role="ambient-lines" aria-hidden="true">
                                             <div class="strctr-system-line"></div>
@@ -3417,11 +3100,12 @@
                                     <span data-motion="item">feed</span>
                                 </div>
                                 <h2 data-motion="item">Channel output</h2>
-                                <p data-motion="item">Three consecutive posts from the feed.</p>
+                                <p data-motion="item">Real posts from the channel, in order — what live delivery looks
+                                    like.</p>
                             </div>
                         </div>
                         <div class="signal-example-inner reveal">
-                            <p class="panel-label" data-motion="item">Mini feed</p>
+                            <p class="panel-label" data-motion="item">Live excerpt</p>
                             <div class="signal-feed-channel" role="list">
                                 <article class="signal-feed-card signal-feed-card--long" data-motion="item">
                                     <div class="signal-feed-card__meta">
@@ -3539,37 +3223,7 @@
 
                 <section class="section" id="access" data-motion="section">
                     <div class="container">
-                        <div class="cta reveal">
-                            <div class="cta-grid">
-                                <div class="cta-intro-col">
-                                    <div class="eyebrow"><span class="dot"></span> telegram</div>
-                                    <h3 data-motion="item">Telegram channel</h3>
-                                    <p class="cta-intro-desktop" data-motion="item">
-                                        One channel. Structure-first output.<br>
-                                        No noise. No indicators.
-                                    </p>
-                                    <p class="cta-intro-mobile" data-motion="item">Structure context, live. One channel.
-                                    </p>
-                                    <p class="cta-note">PRO and CORE — see pricing</p>
-                                </div>
-
-                                <div class="cta-box">
-                                    <div class="tiny" data-motion="item">channel</div>
-                                    <div class="cta-status"><span class="dot" data-role="live-dot"></span> Public
-                                        Telegram</div>
-                                    <div class="copy" data-motion="item">
-                                        Opens in Telegram.<br>
-                                        Paid tiers when live.
-                                    </div>
-                                    <div class="btn-row cta-actions">
-                                        <a class="btn btn-primary" href="https://t.me/strctr_system" target="_blank"
-                                            rel="noopener noreferrer">View live feed (Telegram)</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <footer class="footer">
+                        <footer class="footer reveal">
                             <div class="footer-line">
                                 <div data-motion="item">STRCTR — structure, not signals.</div>
                                 <div data-motion="item">black / white / blue · telegram · surface</div>
